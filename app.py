@@ -1147,7 +1147,8 @@ def upload_image():
         "image": img_b64
     })
 
+
 if __name__ == '__main__':
     print("🧘 YogaVision Flask Server starting...")
-    print("📡 Open: http://127.0.0.1:5000")
-    app.run(debug=False, host='0.0.0.0', port=5000, threaded=True)
+    port = int(os.environ.get("PORT", 10000))  # Render uses dynamic port
+    app.run(debug=False, host='0.0.0.0', port=port, threaded=True)
