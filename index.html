@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YogaVision | AI Pose Detection System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Space+Mono:wght@400;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Hero */
+    .hero {
+      padding: 4rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      background: var(--pink);
+      border: var(--border-width) solid var(--border);
+      box-shadow: 3px 3px 0 var(--border);
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title {
+      font-size: 4rem;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title span {
+      background: var(--yellow);
+      padding: 0 0.3rem;
+    }
+
+    .hero-desc {
+      font-size: 1.15rem;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+      opacity: 0.85;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .hero-visual {
+      background: var(--yellow);
+      border: 4px solid var(--border);
+      box-shadow: 10px 10px 0 var(--border);
+      padding: 2.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-emoji {
+      font-size: 7rem;
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .hero-visual-label {
+      font-family: 'Caveat', cursive;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .live-badge {
+      position: absolute;
+      top: -15px;
+      right: 20px;
+      background: var(--pink);
+      border: 3px solid var(--border);
+      box-shadow: 3px 3px 0 var(--border);
+      padding: 0.3rem 0.8rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      border-radius: 50%;
+      animation: pulse-dot 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.7); }
+    }
+
+    .mini-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .mini-stat {
+      background: var(--white);
+      border: 3px solid var(--border);
+      box-shadow: 4px 4px 0 var(--border);
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .mini-stat-num { font-size: 2rem; font-weight: 700; }
+    .mini-stat-label { font-size: 0.8rem; font-weight: 600; opacity: 0.7; text-transform: uppercase; }
+
+    /* FEATURES STRIP */
+    .features-strip {
+      background: var(--border);
+      color: #fff;
+      overflow: hidden;
+      padding: 0.8rem 0;
+      border-top: 3px solid var(--border);
+      border-bottom: 3px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    .features-scroll {
+      display: flex;
+      gap: 3rem;
+      animation: scroll-left 20s linear infinite;
+      white-space: nowrap;
+    }
+
+    @keyframes scroll-left {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    .features-scroll span {
+      font-weight: 700;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* POSES GRID */
+    .poses-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .pose-icon { font-size: 3.5rem; margin-bottom: 1rem; display: block; }
+    .pose-name { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .pose-desc { font-size: 0.95rem; opacity: 0.8; margin-bottom: 1rem; }
+    .pose-accuracy {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.3rem 0.8rem;
+      background: var(--green);
+      border: 2px solid var(--border);
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    /* HOW IT WORKS */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+
+    .step-card {
+      background: var(--white);
+      border: 4px solid var(--border);
+      box-shadow: 6px 6px 0 var(--border);
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .step-number {
+      font-size: 4rem;
+      font-weight: 700;
+      color: var(--border);
+      opacity: 0.1;
+      position: absolute;
+      top: 0.5rem;
+      right: 1rem;
+      line-height: 1;
+    }
+
+    .step-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .step-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .step-desc { font-size: 0.9rem; opacity: 0.8; }
+
+    /* TECH SECTION */
+    .tech-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    /* CTA SECTION */
+    .cta-section {
+      background: var(--cyan);
+      border: 4px solid var(--border);
+      box-shadow: 10px 10px 0 var(--border);
+      padding: 4rem 3rem;
+      text-align: center;
+      margin: 3rem 0;
+    }
+
+    .cta-title { font-size: 3rem; font-weight: 700; margin-bottom: 1rem; }
+    .cta-desc { font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.85; }
+    .cta-btns { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+
+    @media (max-width: 1024px) {
+      .hero { grid-template-columns: 1fr; }
+      .steps-grid { grid-template-columns: repeat(2, 1fr); }
+      .poses-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .hero { padding: 2rem 1rem; }
+      .hero-title { font-size: 2.5rem; }
+      .steps-grid, .poses-grid { grid-template-columns: 1fr; }
+      .mini-stats { grid-template-columns: 1fr; }
+      .cta-section { padding: 2rem 1rem; }
+      .cta-title { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+      <div class="nav-content">
+        <a href="index.html" class="nav-brand">
+           Vinni Bhai 
+        </a>
+        <div class="nav-right">
+          <a href="index.html" class="nav-link active">Home</a>
+          <a href="poses.html" class="nav-link">Poses</a>
+          <a href="works.html" class="nav-link">How It Works</a>
+          <a href="demo.html" class="nav-link">Demo</a>
+          <a href="about.html" class="nav-link">About</a>
+          <a href="developer.html" class="nav-link">Developer</a>
+          <a href="demo.html" class="nav-cta">Try Now →</a>
+          <button class="theme-btn" id="theme-toggle">🌙</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="hero-left">
+        <div class="hero-tag">
+          <i class="fas fa-robot"></i> AI-Powered Detection
+        </div>
+        <h1 class="hero-title">
+          Real-Time<br>
+          <span>Yoga Pose</span><br>
+          Detection
+        </h1>
+        <p class="hero-desc">
+          Harness the power of MediaPipe and OpenCV to detect, classify, and provide feedback on yoga poses in real-time. Supports Warrior II, Tree Pose, T Pose, and more.
+        </p>
+        <div class="hero-btns">
+          <a href="demo.html" class="btn btn-primary"><i class="fas fa-play"></i> Live Demo</a>
+          <a href="how-it-works.html" class="btn btn-secondary"><i class="fas fa-book"></i> How It Works</a>
+          <a href="poses.html" class="btn btn-pink"><i class="fas fa-person-praying"></i> View Poses</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-visual">
+          <div class="live-badge"><span class="live-dot"></span> LIVE DETECTION</div>
+          <span class="hero-emoji">🧘‍♀️</span>
+          <div class="hero-visual-label">Pose Detected: Warrior II</div>
+          <div style="margin-top: 1rem;">
+            <div class="badge" style="background: var(--green);">✓ 94.2% Confidence</div>
+          </div>
+        </div>
+        <div class="mini-stats">
+          <div class="mini-stat">
+            <div class="mini-stat-num">3+</div>
+            <div class="mini-stat-label">Poses</div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-stat-num">60fps</div>
+            <div class="mini-stat-label">Real-Time</div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-stat-num">33</div>
+            <div class="mini-stat-label">Landmarks</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCROLLING STRIP -->
+    <div class="features-strip">
+      <div class="features-scroll">
+        <span>🧘 Warrior II Pose</span>
+        <span>🌳 Tree Pose</span>
+        <span>✈️ T Pose</span>
+        <span>🤖 MediaPipe</span>
+        <span>👁️ OpenCV</span>
+        <span>📐 Angle Calculation</span>
+        <span>⚡ Real-Time FPS</span>
+        <span>📸 Image & Video</span>
+        <span>🧘 Warrior II Pose</span>
+        <span>🌳 Tree Pose</span>
+        <span>✈️ T Pose</span>
+        <span>🤖 MediaPipe</span>
+        <span>👁️ OpenCV</span>
+        <span>📐 Angle Calculation</span>
+        <span>⚡ Real-Time FPS</span>
+        <span>📸 Image & Video</span>
+      </div>
+    </div>
+
+    <!-- DETECTED POSES -->
+    <div class="container">
+      <section class="section">
+        <h2 class="section-title">Detectable Poses</h2>
+        <div class="poses-grid">
+
+          <div class="pose-card">
+            <span class="pose-icon">🥋</span>
+            <div class="pose-name">Warrior II Pose</div>
+            <div class="pose-desc">Arms extended parallel to ground, one leg bent at 90–120°, other leg straight. A powerful standing posture.</div>
+            <div class="pose-accuracy"><i class="fas fa-bullseye"></i> 94% Accuracy</div>
+          </div>
+
+          <div class="pose-card">
+            <span class="pose-icon">🌳</span>
+            <div class="pose-name">Tree Pose</div>
+            <div class="pose-desc">One leg straight, the other bent with knee angled at 25–45°. A classic balancing posture requiring focus.</div>
+            <div class="pose-accuracy"><i class="fas fa-bullseye"></i> 91% Accuracy</div>
+          </div>
+
+          <div class="pose-card">
+            <span class="pose-icon">✈️</span>
+            <div class="pose-name">T Pose</div>
+            <div class="pose-desc">Both arms extended at 90° shoulder angle, both legs straight. Used as a reference/calibration pose.</div>
+            <div class="pose-accuracy"><i class="fas fa-bullseye"></i> 96% Accuracy</div>
+          </div>
+
+        </div>
+        <div style="margin-top: 2rem; text-align: center;">
+          <a href="poses.html" class="btn btn-secondary"><i class="fas fa-arrow-right"></i> See All Pose Details</a>
+        </div>
+      </section>
+
+      <!-- HOW IT WORKS STEPS -->
+      <section class="section">
+        <h2 class="section-title">How It Works</h2>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">01</div>
+            <div class="step-icon">📷</div>
+            <div class="step-title">Capture Input</div>
+            <div class="step-desc">Feed image, video file, or live webcam stream into the system via OpenCV.</div>
+          </div>
+          <div class="step-card">
+            <div class="step-number">02</div>
+            <div class="step-icon">🦴</div>
+            <div class="step-title">Detect Landmarks</div>
+            <div class="step-desc">MediaPipe Pose identifies 33 key body landmarks in 3D space with confidence scores.</div>
+          </div>
+          <div class="step-card">
+            <div class="step-number">03</div>
+            <div class="step-icon">📐</div>
+            <div class="step-title">Calculate Angles</div>
+            <div class="step-desc">Joint angles (shoulder, elbow, knee) are computed using arctangent mathematics.</div>
+          </div>
+          <div class="step-card">
+            <div class="step-number">04</div>
+            <div class="step-icon">✅</div>
+            <div class="step-title">Classify Pose</div>
+            <div class="step-desc">Angle thresholds determine which pose matches and display a coloured label on screen.</div>
+          </div>
+        </div>
+        <div style="margin-top: 2rem; text-align: center;">
+          <a href="how-it-works.html" class="btn btn-primary"><i class="fas fa-microscope"></i> Deep Dive</a>
+        </div>
+      </section>
+
+      <!-- TECH STACK -->
+      <section class="section">
+        <div class="highlight-strip">
+          <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem;">⚙️ Built With</h2>
+          <div class="tech-grid">
+            <span class="tag"><i class="fab fa-python"></i> Python</span>
+            <span class="tag">🤖 MediaPipe</span>
+            <span class="tag">👁️ OpenCV</span>
+            <span class="tag">📊 NumPy</span>
+            <span class="tag">📈 Matplotlib</span>
+            <span class="tag">📐 Math</span>
+            <span class="tag">⏱️ Time</span>
+            <span class="tag">🎥 VideoCapture</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- STATS -->
+      <section class="section">
+        <h2 class="section-title-center">System Performance</h2>
+        <div class="grid-4">
+          <div class="stat-card">
+            <div class="stat-number">33</div>
+            <div class="stat-label">Body Landmarks</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">3D</div>
+            <div class="stat-label">Spatial Detection</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">60fps</div>
+            <div class="stat-label">Live Processing</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">93%</div>
+            <div class="stat-label">Avg Accuracy</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <div class="cta-section">
+        <div class="cta-title">Ready to Try It?</div>
+        <div class="cta-desc">Experience real-time yoga pose detection live in your browser simulation or run the Python code locally.</div>
+        <div class="cta-btns">
+          <a href="demo.html" class="btn btn-secondary"><i class="fas fa-play"></i> Try Live Demo</a>
+          <a href="developer.html" class="btn btn-primary"><i class="fas fa-user"></i> Meet the Developer</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          🧘 YogaVision
+          <span>AI Pose Detection System</span>
+        </div>
+        <nav class="footer-nav">
+          <a href="index.html">Home</a>
+          <a href="poses.html">Poses</a>
+          <a href="how-it-works.html">How It Works</a>
+          <a href="demo.html">Demo</a>
+          <a href="about.html">About</a>
+          <a href="developer.html">Developer</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 YogaVision — Built with MediaPipe & OpenCV</span>
+        <span style="font-family: 'Space Mono', monospace; font-size: 0.85rem;">Python · AI · Computer Vision</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    // Theme toggle
+    const btn = document.getElementById('theme-toggle');
+    const body = document.body;
+    const saved = localStorage.getItem('yv-theme') || 'light';
+    body.setAttribute('data-theme', saved);
+    btn.textContent = saved === 'dark' ? '☀️' : '🌙';
+
+    btn.addEventListener('click', () => {
+      const current = body.getAttribute('data-theme');
+      const next = current === 'light' ? 'dark' : 'light';
+      body.setAttribute('data-theme', next);
+      localStorage.setItem('yv-theme', next);
+      btn.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+
+    // Navbar hide on scroll down
+    let last = 0;
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      const cur = window.scrollY;
+      nav.classList.toggle('hidden', cur > last && cur > 100);
+      last = cur;
+    });
+
+    // Fade in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('fade-in'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.pose-card, .step-card, .stat-card, .skill-box').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

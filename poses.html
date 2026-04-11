@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YogaVision | Yoga Poses</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Space+Mono:wght@400;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page-hero {
+      background: var(--pink);
+      border-bottom: 4px solid var(--border);
+      padding: 3rem 3rem 2rem;
+    }
+
+    .page-hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.3rem 0.8rem;
+      background: var(--white);
+      border: 3px solid var(--border);
+      box-shadow: 3px 3px 0 var(--border);
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .page-hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 0.75rem;
+    }
+
+    .page-hero-desc {
+      font-size: 1.1rem;
+      opacity: 0.85;
+      max-width: 600px;
+    }
+
+    /* POSE DETAIL CARD */
+    .pose-detail {
+      background: var(--white);
+      border: 4px solid var(--border);
+      box-shadow: 10px 10px 0 var(--border);
+      margin-bottom: 3rem;
+      overflow: hidden;
+    }
+
+    .pose-detail-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 2rem;
+      border-bottom: 4px solid var(--border);
+    }
+
+    .pose-detail:nth-child(1) .pose-detail-header { background: var(--cyan); }
+    .pose-detail:nth-child(2) .pose-detail-header { background: var(--yellow); }
+    .pose-detail:nth-child(3) .pose-detail-header { background: var(--green); }
+
+    .pose-big-icon {
+      font-size: 5rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .pose-header-info { flex: 1; }
+    .pose-header-name { font-size: 2rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .pose-header-alt { font-family: 'Space Mono', monospace; font-size: 0.95rem; opacity: 0.7; margin-bottom: 0.75rem; }
+
+    .pose-badges { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+    .pose-detail-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0;
+    }
+
+    .pose-col {
+      padding: 2rem;
+      border-right: 3px solid var(--border);
+    }
+
+    .pose-col:last-child { border-right: none; }
+
+    .pose-col-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.6;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .angle-rule {
+      background: var(--white);
+      border: 3px solid var(--border);
+      box-shadow: 3px 3px 0 var(--border);
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.75rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+    }
+
+    .angle-rule-joint {
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .angle-rule-range {
+      color: var(--text);
+      opacity: 0.7;
+    }
+
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.95rem;
+    }
+
+    .benefit-item i { color: var(--text); margin-top: 0.2rem; flex-shrink: 0; }
+
+    .tip-box {
+      background: var(--yellow);
+      border: 3px solid var(--border);
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    /* COMPARISON TABLE */
+    .compare-table {
+      background: var(--white);
+      border: 4px solid var(--border);
+      box-shadow: 8px 8px 0 var(--border);
+      overflow: hidden;
+    }
+
+    .compare-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .compare-table th {
+      background: var(--border);
+      color: #fff;
+      padding: 1rem 1.5rem;
+      text-align: left;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .compare-table td {
+      padding: 1rem 1.5rem;
+      border-bottom: 2px solid rgba(0,0,0,0.08);
+      font-size: 0.95rem;
+    }
+
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:nth-child(even) td { background: rgba(0,0,0,0.03); }
+
+    .acc-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .acc-bar {
+      flex: 1;
+      height: 12px;
+      background: rgba(0,0,0,0.1);
+      border: 2px solid var(--border);
+      border-radius: 0;
+      overflow: hidden;
+    }
+
+    .acc-bar-fill {
+      height: 100%;
+      background: var(--cyan);
+    }
+
+    @media (max-width: 900px) {
+      .pose-detail-body { grid-template-columns: 1fr; }
+      .pose-col { border-right: none; border-bottom: 3px solid var(--border); }
+      .pose-col:last-child { border-bottom: none; }
+      .page-hero-title { font-size: 2.5rem; }
+    }
+
+    @media (max-width: 600px) {
+      .pose-detail-header { flex-direction: column; text-align: center; }
+      .pose-badges { justify-content: center; }
+      .compare-table { overflow-x: auto; display: block; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+      <div class="nav-content">
+        <a href="index.html" class="nav-brand">POSES</a>
+        <div class="nav-right">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="poses.html" class="nav-link active">Poses</a>
+          <a href="works.html" class="nav-link">How It Works</a>
+          <a href="demo.html" class="nav-link">Demo</a>
+          <a href="about.html" class="nav-link">About</a>
+          <a href="developer.html" class="nav-link">Developer</a>
+          <a href="demo.html" class="nav-cta">Try Now →</a>
+          <button class="theme-btn" id="theme-toggle">🌙</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- PAGE HERO -->
+    <div class="page-hero">
+      <div class="page-hero-tag"><i class="fas fa-person-praying"></i> Pose Library</div>
+      <h1 class="page-hero-title">Detectable Yoga Poses</h1>
+      <p class="page-hero-desc">Explore the three yoga poses supported by the YogaVision detection system — with angle rules, detection logic, benefits, and tips.</p>
+    </div>
+
+    <div class="container">
+
+      <!-- WARRIOR II -->
+      <div class="pose-detail">
+        <div class="pose-detail-header">
+          <div class="pose-big-icon">🥋</div>
+          <div class="pose-header-info">
+            <div class="pose-header-name">Warrior II Pose</div>
+            <div class="pose-header-alt">Virabhadrasana II · Standing Warrior</div>
+            <div class="pose-badges">
+              <span class="badge" style="background:var(--green);">94% Accuracy</span>
+              <span class="badge" style="background:var(--pink);">Intermediate</span>
+              <span class="badge">Standing Pose</span>
+            </div>
+          </div>
+        </div>
+        <div class="pose-detail-body">
+          <div class="pose-col">
+            <div class="pose-col-title"><i class="fas fa-ruler-combined"></i> Angle Detection Rules</div>
+            <div class="angle-rule">
+              <div class="angle-rule-joint">Left Elbow Angle</div>
+              <div class="angle-rule-range">165° – 195° (straight arm)</div>
+            </div>
+            <div class="angle-rule">
+              <div class="angle-rule-joint">Right Elbow Angle</div>
+              <div class="angle-rule-range">165° – 195° (straight arm)</div>
+            </div>
+            <div class="angle-rule">
+              <div class="angle-rule-joint">Left/Right Shoulder</div>
+              <div class="angle-rule-range">80° – 110° (T-shape)</div>
+            </div>
+            <div class="angle-rule">
+              <div class="angle-rule-joint">One Knee (straight)</div>
+              <div class="angle-rule-range">165° – 195°</div>
+            </div>
+            <div class="angle-rule">
+              <div class="angle-rule-joint">Other Knee (bent)</div>
+              <div class="angle-rule-range">90° – 120°</div>
+            </div>
+          </div>
+          <div class="pose-col">
+            <div class="pose-col-title"><i class="fas fa-heart"></i> Health Benefits</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Strengthens legs, ankles, and feet</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Stretches hips, groin, and shoulders</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Improves stamina and concentration</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Opens chest and lungs</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Stimulates abdominal organs</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Relieves backache during pregnancy</div>
+          </div>
+          <div class="pose-col">
+            <div class="pose-col-title"><i class="fas fa-lightbulb"></i> Performance Tips</div>
+            <div class="tip-box">Keep front knee directly over ankle, not past the toes</div>
+            <div class="tip-box">Press outer edge of back foot firmly into the mat</div>
+            <div class="tip-box">Extend arms fully parallel to the ground</div>
+            <div class="tip-box">Relax shoulders away from ears</div>
+            <div class="tip-box">Gaze over your front middle finger</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TREE POSE -->
+      <div class="pose-detail">
+        <div class="pose-detail-header">
+          <div class="pose-big-icon">🌳</div>
+          <div class="pose-header-info">
+            <div class="pose-header-name">Tree Pose</div>
+            <div class="pose-header-alt">Vrikshasana · Balance Pose</div>
+            <div class="pose-badges">
+              <span class="badge" style="background:var(--green);">91% Accuracy</span>
+              <span class="badge" style="background:var(--yellow);">Beginner–Intermediate</span>
+              <span class="badge">Balancing Pose</span>
+            </div>
+          </div>
+        </div>
+        <div class="pose-detail-body">
+          <div class="pose-col">
+            <div class="pose-col-title"><i class="fas fa-ruler-combined"></i> Angle Detection Rules</div>
+            <div class="angle-rule">
+              <div class="angle-rule-joint">Standing Knee</div>
+              <div class="angle-rule-range">165° – 195° (leg straight)</div>
+            </div>
+            <div class="angle-rule">
+              <div class="angle-rule-joint">Bent Knee (left side)</div>
+              <div class="angle-rule-range">315° – 335°</div>
+            </div>
+            <div class="angle-rule">
+              <div class="angle-rule-joint">Bent Knee (right side)</div>
+              <div class="angle-rule-range">25° – 45°</div>
+            </div>
+          </div>
+          <div class="pose-col">
+            <div class="pose-col-title"><i class="fas fa-heart"></i> Health Benefits</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Improves balance and stability</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Strengthens thighs, calves, ankles</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Stretches inner thighs and groin</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Builds mental concentration</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Tones the abdominal muscles</div>
+          </div>
+          <div class="pose-col">
+            <div class="pose-col-title"><i class="fas fa-lightbulb"></i> Performance Tips</div>
+            <div class="tip-box">Fix your gaze on a single stationary point ahead</div>
+            <div class="tip-box">Place foot above OR below the knee, never on it</div>
+            <div class="tip-box">Press standing foot fully into the floor</div>
+            <div class="tip-box">Use a wall for support when starting out</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- T POSE -->
+      <div class="pose-detail">
+        <div class="pose-detail-header">
+          <div class="pose-big-icon">✈️</div>
+          <div class="pose-header-info">
+            <div class="pose-header-name">T Pose</div>
+            <div class="pose-header-alt">Tadasana Variation · Reference Pose</div>
+            <div class="pose-badges">
+              <span class="badge" style="background:var(--green);">96% Accuracy</span>
+              <span class="badge" style="background:var(--cyan);">Beginner</span>
+              <span class="badge">Calibration Pose</span>
+            </div>
+          </div>
+        </div>
+        <div class="pose-detail-body">
+          <div class="pose-col">
+            <div class="pose-col-title"><i class="fas fa-ruler-combined"></i> Angle Detection Rules</div>
+            <div class="angle-rule">
+              <div class="angle-rule-joint">Both Elbow Angles</div>
+              <div class="angle-rule-range">165° – 195° (straight arms)</div>
+            </div>
+            <div class="angle-rule">
+              <div class="angle-rule-joint">Both Shoulder Angles</div>
+              <div class="angle-rule-range">80° – 110° (extended out)</div>
+            </div>
+            <div class="angle-rule">
+              <div class="angle-rule-joint">Both Knee Angles</div>
+              <div class="angle-rule-range">160° – 195° (both legs straight)</div>
+            </div>
+          </div>
+          <div class="pose-col">
+            <div class="pose-col-title"><i class="fas fa-heart"></i> Health Benefits</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Excellent calibration/reference pose</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Opens chest and shoulder joints</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Improves posture awareness</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Stretches arms and spine</div>
+            <div class="benefit-item"><i class="fas fa-check-circle"></i> Used in 3D animation rigging</div>
+          </div>
+          <div class="pose-col">
+            <div class="pose-col-title"><i class="fas fa-lightbulb"></i> Performance Tips</div>
+            <div class="tip-box">Stand straight with feet hip-width apart</div>
+            <div class="tip-box">Extend arms fully at exactly shoulder height</div>
+            <div class="tip-box">Keep palms facing downward</div>
+            <div class="tip-box">Look straight ahead, chin parallel to floor</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPARISON TABLE -->
+      <section class="section">
+        <h2 class="section-title">Pose Comparison</h2>
+        <div class="compare-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Pose</th>
+                <th>Difficulty</th>
+                <th>Landmarks Used</th>
+                <th>Key Condition</th>
+                <th>Detection Accuracy</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>🥋 Warrior II</strong></td>
+                <td>Intermediate</td>
+                <td>Shoulders, Elbows, Wrists, Hips, Knees, Ankles</td>
+                <td>One knee bent 90–120°</td>
+                <td>
+                  <div class="acc-bar-wrap">
+                    <div class="acc-bar"><div class="acc-bar-fill" style="width: 94%;"></div></div>
+                    <span style="font-family:'Space Mono',monospace; font-size:0.85rem; font-weight:700;">94%</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>🌳 Tree Pose</strong></td>
+                <td>Beginner–Int.</td>
+                <td>Hips, Knees, Ankles</td>
+                <td>One knee bent 25–45°</td>
+                <td>
+                  <div class="acc-bar-wrap">
+                    <div class="acc-bar"><div class="acc-bar-fill" style="width: 91%;"></div></div>
+                    <span style="font-family:'Space Mono',monospace; font-size:0.85rem; font-weight:700;">91%</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>✈️ T Pose</strong></td>
+                <td>Beginner</td>
+                <td>Shoulders, Elbows, Wrists, Hips, Knees</td>
+                <td>Both legs + arms straight</td>
+                <td>
+                  <div class="acc-bar-wrap">
+                    <div class="acc-bar"><div class="acc-bar-fill" style="width: 96%;"></div></div>
+                    <span style="font-family:'Space Mono',monospace; font-size:0.85rem; font-weight:700;">96%</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <div style="text-align: center; margin: 3rem 0;">
+        <a href="demo.html" class="btn btn-primary" style="font-size:1.1rem; padding: 1rem 2rem;"><i class="fas fa-play"></i> Try Pose Detection Live</a>
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">🧘 YogaVision <span>AI Pose Detection System</span></div>
+        <nav class="footer-nav">
+          <a href="index.html">Home</a>
+          <a href="poses.html">Poses</a>
+          <a href="how-it-works.html">How It Works</a>
+          <a href="demo.html">Demo</a>
+          <a href="about.html">About</a>
+          <a href="developer.html">Developer</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 YogaVision — Built with MediaPipe & OpenCV</span>
+        <span style="font-family:'Space Mono',monospace; font-size:0.85rem;">Python · AI · Computer Vision</span>
+      </div>
+    </footer>
+
+  </div>
+  <script>
+    const btn = document.getElementById('theme-toggle');
+    const body = document.body;
+    const saved = localStorage.getItem('yv-theme') || 'light';
+    body.setAttribute('data-theme', saved);
+    btn.textContent = saved === 'dark' ? '☀️' : '🌙';
+    btn.addEventListener('click', () => {
+      const next = body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      body.setAttribute('data-theme', next);
+      localStorage.setItem('yv-theme', next);
+      btn.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+    let last = 0;
+    const nav = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      const cur = window.scrollY;
+      nav.classList.toggle('hidden', cur > last && cur > 100);
+      last = cur;
+    });
+  </script>
+</body>
+</html>

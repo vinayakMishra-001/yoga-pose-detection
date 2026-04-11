@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YogaVision | Live Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Space+Mono:wght@400;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page-hero {
+      background: var(--green);
+      border-bottom: 4px solid var(--border);
+      padding: 3rem 3rem 2rem;
+    }
+    .page-hero-tag {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.3rem 0.8rem; background: var(--white);
+      border: 3px solid var(--border); box-shadow: 3px 3px 0 var(--border);
+      font-weight: 700; font-size: 0.85rem; margin-bottom: 1rem;
+    }
+    .page-hero-title { font-size: 3.5rem; font-weight: 700; line-height: 1.1; margin-bottom: 0.75rem; }
+    .page-hero-desc { font-size: 1.1rem; opacity: 0.85; max-width: 600px; }
+
+    /* MODE TABS */
+    .mode-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 2rem;
+      border: 4px solid var(--border);
+      box-shadow: 6px 6px 0 var(--border);
+      overflow: hidden;
+      width: fit-content;
+    }
+    .mode-tab {
+      padding: 0.75rem 1.5rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: none;
+      border-right: 3px solid var(--border);
+      background: var(--white);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+    .mode-tab:last-child { border-right: none; }
+    .mode-tab.active { background: var(--cyan); }
+    .mode-tab:hover:not(.active) { background: var(--yellow); }
+
+    /* STATUS BAR */
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 1.2rem;
+      background: #1a1a1a;
+      border: 3px solid var(--border);
+      box-shadow: 4px 4px 0 var(--border);
+      margin-bottom: 1.5rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      color: #a8e6cf;
+    }
+    .status-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #666;
+      transition: background 0.3s;
+    }
+    .status-dot.online { background: #a8e6cf; box-shadow: 0 0 6px #a8e6cf; }
+    .status-dot.error  { background: #ff6b9d; box-shadow: 0 0 6px #ff6b9d; }
+
+    /* DEMO LAYOUT */
+    .demo-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    /* CAMERA PANEL */
+    .camera-panel {
+      background: #111;
+      border: 4px solid var(--border);
+      box-shadow: 10px 10px 0 var(--border);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .camera-feed {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Live webcam img tag */
+    #webcamImg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    /* Upload preview */
+    #uploadPreview {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: none;
+    }
+
+    /* Simulation canvas */
+    .skeleton-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .camera-placeholder {
+      color: rgba(255,255,255,0.3);
+      text-align: center;
+      z-index: 2;
+    }
+    .camera-placeholder i { font-size: 5rem; display: block; margin-bottom: 1rem; }
+    .camera-placeholder p { font-size: 1rem; }
+
+    .camera-overlay-pose {
+      position: absolute;
+      top: 1rem; left: 1rem;
+      background: rgba(0,0,0,0.85);
+      border: 3px solid;
+      padding: 0.5rem 1rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #fff;
+      font-family: 'Space Mono', monospace;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+
+    .camera-overlay-fps {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      background: rgba(0,0,0,0.7);
+      border: 2px solid #444;
+      padding: 0.25rem 0.6rem;
+      color: #a8e6cf;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      z-index: 10;
+    }
+
+    .camera-overlay-conf {
+      position: absolute;
+      bottom: 1rem; left: 1rem; right: 1rem;
+      z-index: 10;
+    }
+    .conf-bar-bg {
+      width: 100%; height: 8px;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.3);
+      overflow: hidden;
+    }
+    .conf-bar-fill { height: 100%; transition: width 0.5s ease; }
+    .conf-label {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 0.3rem;
+      color: rgba(255,255,255,0.8);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+    }
+
+    /* UPLOAD ZONE */
+    .upload-zone {
+      border: 4px dashed var(--border);
+      background: rgba(255,255,255,0.04);
+      padding: 3rem 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: rgba(255,255,255,0.5);
+      display: none;
+    }
+    .upload-zone:hover { background: rgba(168,230,207,0.08); border-color: #a8e6cf; }
+    .upload-zone i { font-size: 3rem; display: block; margin-bottom: 1rem; }
+    #fileInput { display: none; }
+
+    .camera-controls {
+      display: flex;
+      gap: 0.75rem;
+      padding: 1rem;
+      background: #1a1a1a;
+      border-top: 3px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .cam-btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 0.7rem;
+      border: 2px solid var(--border);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+    .cam-btn-start  { background: var(--green);  color: #000; }
+    .cam-btn-start:hover  { background: #7dd3a8; }
+    .cam-btn-stop   { background: var(--pink);   color: #000; }
+    .cam-btn-stop:hover   { background: #e0547e; }
+    .cam-btn-upload { background: var(--cyan);   color: #000; }
+    .cam-btn-upload:hover { background: #44c9e0; }
+    .cam-btn-sim    { background: var(--yellow); color: #000; }
+    .cam-btn-sim:hover    { background: #e8c430; }
+    .cam-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* SIDEBAR */
+    .sidebar-panel { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .info-card {
+      background: var(--white);
+      border: 4px solid var(--border);
+      box-shadow: 6px 6px 0 var(--border);
+      overflow: hidden;
+    }
+    .info-card-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 3px solid var(--border);
+      font-weight: 700;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .info-card:nth-child(1) .info-card-header { background: var(--yellow); }
+    .info-card:nth-child(2) .info-card-header { background: var(--pink);   }
+    .info-card:nth-child(3) .info-card-header { background: var(--cyan);   }
+    .info-card-body { padding: 1.5rem; }
+
+    /* POSE SELECTOR (simulation mode only) */
+    .pose-selector-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+    .pose-select-btn {
+      border: 3px solid var(--border);
+      padding: 1rem 0.75rem;
+      text-align: center;
+      cursor: pointer;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      background: var(--white);
+      box-shadow: 3px 3px 0 var(--border);
+      transition: all 0.2s;
+    }
+    .pose-select-btn:hover { transform: translate(3px,3px); box-shadow: 0 0 0 var(--border); }
+    .pose-select-btn.active { background: var(--cyan); box-shadow: 0 0 0; transform: translate(3px,3px); }
+    .pose-select-btn span { font-size: 2rem; display: block; margin-bottom: 0.4rem; }
+
+    /* ANGLE READOUTS */
+    .angle-readout {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 2px solid rgba(0,0,0,0.08);
+      font-size: 0.9rem;
+    }
+    .angle-readout:last-child { border-bottom: none; }
+    .angle-joint { font-weight: 600; }
+    .angle-value {
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.2rem 0.5rem;
+      border: 2px solid var(--border);
+      min-width: 55px;
+      text-align: center;
+      background: var(--white);
+      transition: background 0.4s;
+    }
+    .angle-value.ok   { background: var(--green);  }
+    .angle-value.warn { background: var(--yellow); }
+    .angle-value.bad  { background: var(--pink);   }
+
+    /* TIPS */
+    .tip-chip {
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      padding: 0.6rem 0; font-size: 0.88rem;
+      border-bottom: 2px solid rgba(0,0,0,0.07);
+    }
+    .tip-chip:last-child { border-bottom: none; }
+    .tip-chip i { color: var(--border); flex-shrink: 0; margin-top: 0.1rem; }
+
+    /* DEMO NOTE */
+    .demo-note {
+      background: var(--yellow);
+      border: 3px solid var(--border);
+      box-shadow: 4px 4px 0 var(--border);
+      padding: 1rem 1.5rem;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    /* LOADING SPINNER */
+    .spinner {
+      display: none;
+      width: 40px; height: 40px;
+      border: 4px solid rgba(168,230,207,0.2);
+      border-top-color: #a8e6cf;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      z-index: 20;
+    }
+    @keyframes spin { to { transform: translate(-50%,-50%) rotate(360deg); } }
+
+    @media (max-width: 1024px) { .demo-layout { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) {
+      .page-hero-title { font-size: 2.5rem; }
+      .pose-selector-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+      <div class="nav-content">
+        <a href="index.html" class="nav-brand">🧘 YogaVision</a>
+        <div class="nav-right">
+          <a href="index.html"     class="nav-link">Home</a>
+          <a href="poses.html"     class="nav-link">Poses</a>
+          <a href="works.html"     class="nav-link">How It Works</a>
+          <a href="demo.html"      class="nav-link active">Demo</a>
+          <a href="about.html"     class="nav-link">About</a>
+          <a href="developer.html" class="nav-link">Developer</a>
+          <a href="demo.html"      class="nav-cta">Try Now →</a>
+          <button class="theme-btn" id="theme-toggle">🌙</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="page-hero">
+      <div class="page-hero-tag"><i class="fas fa-play-circle"></i> Interactive Demo</div>
+      <h1 class="page-hero-title">Live Pose Detection</h1>
+      <p class="page-hero-desc">Use your webcam for real-time detection, upload an image, or explore the simulation — powered by your local Python + Flask backend.</p>
+    </div>
+
+    <div class="container">
+
+      <!-- STATUS BAR -->
+      <div class="status-bar">
+        <div class="status-dot" id="statusDot"></div>
+        <span id="statusText">Checking Flask server…</span>
+      </div>
+
+      <!-- MODE TABS -->
+      <div class="mode-tabs">
+        <button class="mode-tab active" id="tab-webcam"  onclick="setMode('webcam')">
+          <i class="fas fa-video"></i> Live Webcam
+        </button>
+        <button class="mode-tab" id="tab-upload" onclick="setMode('upload')">
+          <i class="fas fa-upload"></i> Upload Image
+        </button>
+        <button class="mode-tab" id="tab-sim"    onclick="setMode('sim')">
+          <i class="fas fa-cube"></i> Simulation
+        </button>
+      </div>
+
+      <div class="demo-layout">
+
+        <!-- CAMERA / FEED PANEL -->
+        <div class="camera-panel">
+          <div class="camera-feed" id="cameraFeed">
+
+            <!-- Webcam stream from Flask /video_feed -->
+            <img id="webcamImg" src="" alt="Webcam feed">
+
+            <!-- Upload result image -->
+            <img id="uploadPreview" src="" alt="Upload preview">
+
+            <!-- Simulation canvas -->
+            <canvas class="skeleton-canvas" id="skeletonCanvas"></canvas>
+
+            <!-- Upload drop zone (shown in upload mode when no image yet) -->
+            <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <p><strong>Click or drag an image here</strong></p>
+              <p style="font-size:0.85rem; margin-top:0.5rem; opacity:0.6;">JPG, PNG — Full body visible for best results</p>
+            </div>
+            <input type="file" id="fileInput" accept="image/*" onchange="handleUpload(event)">
+
+            <!-- Placeholder (default) -->
+            <div class="camera-placeholder" id="placeholder">
+              <i class="fas fa-person-walking"></i>
+              <p>Select a mode above to begin</p>
+            </div>
+
+            <!-- Loading spinner -->
+            <div class="spinner" id="spinner"></div>
+
+            <!-- Overlays -->
+            <div class="camera-overlay-pose" id="poseLabel" style="border-color:#a8e6cf;">
+              — Waiting —
+            </div>
+            <div class="camera-overlay-fps" id="fpsLabel">-- FPS</div>
+            <div class="camera-overlay-conf">
+              <div class="conf-label">
+                <span id="confText">Confidence: —</span>
+                <span id="poseText">—</span>
+              </div>
+              <div class="conf-bar-bg">
+                <div class="conf-bar-fill" id="confBar" style="width:0%; background:var(--green);"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CONTROLS -->
+          <div class="camera-controls">
+            <!-- Webcam controls -->
+            <button class="cam-btn cam-btn-start" id="btnStart"  onclick="startWebcam()">
+              <i class="fas fa-play"></i> Start Webcam
+            </button>
+            <button class="cam-btn cam-btn-stop"  id="btnStop"   onclick="stopWebcam()" disabled>
+              <i class="fas fa-stop"></i> Stop
+            </button>
+            <!-- Upload control -->
+            <button class="cam-btn cam-btn-upload" id="btnUpload" onclick="document.getElementById('fileInput').click()" style="display:none;">
+              <i class="fas fa-folder-open"></i> Choose Image
+            </button>
+            <!-- Sim controls -->
+            <button class="cam-btn cam-btn-sim"   id="btnSimStart"  onclick="startSimulation()" style="display:none;">
+              <i class="fas fa-play"></i> Start Sim
+            </button>
+            <button class="cam-btn cam-btn-stop"  id="btnSimStop"   onclick="stopSimulation()"  style="display:none;" disabled>
+              <i class="fas fa-stop"></i> Stop Sim
+            </button>
+          </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div class="sidebar-panel">
+
+          <!-- POSE SELECTOR (sim mode) -->
+          <div class="info-card" id="poseSelector">
+            <div class="info-card-header"><i class="fas fa-person-praying"></i> Pose Controls</div>
+            <div class="info-card-body">
+              <div class="pose-selector-grid" id="simPoseGrid">
+                <button class="pose-select-btn active" onclick="selectSimPose('warrior')" id="btn-warrior"><span>🥋</span>Warrior II</button>
+                <button class="pose-select-btn"        onclick="selectSimPose('tree')"    id="btn-tree">   <span>🌳</span>Tree Pose</button>
+                <button class="pose-select-btn"        onclick="selectSimPose('tpose')"   id="btn-tpose">  <span>✈️</span>T Pose</button>
+                <button class="pose-select-btn"        onclick="selectSimPose('unknown')" id="btn-unknown"><span>❓</span>Unknown</button>
+              </div>
+              <p id="liveNote" style="display:none; font-size:0.85rem; opacity:0.65; margin-top:0.75rem;">
+                <i class="fas fa-circle-info"></i> Live data from your Flask backend
+              </p>
+            </div>
+          </div>
+
+          <!-- ANGLE READOUTS -->
+          <div class="info-card">
+            <div class="info-card-header"><i class="fas fa-ruler-combined"></i> Joint Angle Readouts</div>
+            <div class="info-card-body">
+              <div class="angle-readout"><span class="angle-joint">Left Elbow</span>   <span class="angle-value" id="ang-le">—°</span></div>
+              <div class="angle-readout"><span class="angle-joint">Right Elbow</span>  <span class="angle-value" id="ang-re">—°</span></div>
+              <div class="angle-readout"><span class="angle-joint">Left Shoulder</span><span class="angle-value" id="ang-ls">—°</span></div>
+              <div class="angle-readout"><span class="angle-joint">Right Shoulder</span><span class="angle-value" id="ang-rs">—°</span></div>
+              <div class="angle-readout"><span class="angle-joint">Left Knee</span>    <span class="angle-value" id="ang-lk">—°</span></div>
+              <div class="angle-readout"><span class="angle-joint">Right Knee</span>   <span class="angle-value" id="ang-rk">—°</span></div>
+            </div>
+          </div>
+
+          <!-- TIPS -->
+          <div class="info-card">
+            <div class="info-card-header"><i class="fas fa-lightbulb"></i> Form Tips</div>
+            <div class="info-card-body" id="tips-panel">
+              <div class="tip-chip"><i class="fas fa-circle-info"></i>Start webcam or upload an image to get pose tips</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RUN LOCALLY SECTION -->
+      <section class="section">
+        <h2 class="section-title">Run Locally</h2>
+        <div style="background:var(--white); border:4px solid var(--border); box-shadow:8px 8px 0 var(--border); overflow:hidden;">
+          <div style="padding:2rem; border-bottom:3px solid var(--border);">
+            <p style="font-size:1rem; opacity:0.8; max-width:600px;">Install dependencies then run the Flask server. Open this page in your browser and all features connect automatically.</p>
+          </div>
+          <div style="background:#1a1a1a; color:#a8e6cf; font-family:'Space Mono',monospace; font-size:0.85rem; padding:2rem; line-height:2;">
+            <span style="color:#888;"># Install dependencies</span><br>
+            <span style="color:#ffd93d;">pip</span> install flask flask-cors mediapipe opencv-python numpy<br><br>
+            <span style="color:#888;"># Start the Flask server</span><br>
+            <span style="color:#ffd93d;">python</span> app.py<br><br>
+            <span style="color:#888;"># Open in browser</span><br>
+            <span style="color:#ff6b9d;">http://127.0.0.1:5000</span><br><br>
+            <span style="color:#888;"># Press ESC or click Stop to end webcam session</span>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /container -->
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">DEMO <span>AI Pose Detection System</span></div>
+        <nav class="footer-nav">
+          <a href="index.html">Home</a>
+          <a href="poses.html">Poses</a>
+          <a href="works.html">How It Works</a>
+          <a href="demo.html">Demo</a>
+          <a href="about.html">About</a>
+          <a href="developer.html">Developer</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 YogaVision — Built with MediaPipe & OpenCV</span>
+        <span style="font-family:'Space Mono',monospace; font-size:0.85rem;">Python · Flask · Computer Vision</span>
+      </div>
+    </footer>
+  </div><!-- /page-wrapper -->
+
+  <script>
+    const FLASK = 'http://127.0.0.1:5000';
+
+    // ─── Theme ───────────────────────────────────────────────────────────────
+    const themeBtn = document.getElementById('theme-toggle');
+    const saved = localStorage.getItem('yv-theme') || 'light';
+    document.body.setAttribute('data-theme', saved);
+    themeBtn.textContent = saved === 'dark' ? '☀️' : '🌙';
+    themeBtn.addEventListener('click', () => {
+      const next = document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      document.body.setAttribute('data-theme', next);
+      localStorage.setItem('yv-theme', next);
+      themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+
+    // ─── Navbar hide on scroll ────────────────────────────────────────────────
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const cur = window.scrollY;
+      document.getElementById('navbar').classList.toggle('hidden', cur > lastScroll && cur > 100);
+      lastScroll = cur;
+    });
+
+    // ─── Server Status Check ─────────────────────────────────────────────────
+    async function checkServer() {
+      try {
+        const r = await fetch(`${FLASK}/pose_data`, { signal: AbortSignal.timeout(2000) });
+        if (r.ok) {
+          document.getElementById('statusDot').className = 'status-dot online';
+          document.getElementById('statusText').textContent = '✓ Flask server connected — http://127.0.0.1:5000';
+          return true;
+        }
+      } catch {}
+      document.getElementById('statusDot').className = 'status-dot error';
+      document.getElementById('statusText').textContent = '✗ Flask server offline — run: python app.py';
+      return false;
+    }
+    checkServer();
+    setInterval(checkServer, 8000);
+
+    // ─── Mode State ───────────────────────────────────────────────────────────
+    let currentMode = 'webcam';   // 'webcam' | 'upload' | 'sim'
+    let webcamActive = false;
+    let pollInterval = null;
+    let simInterval  = null;
+    let simRunning   = false;
+    let currentSimPose = 'warrior';
+
+    function setMode(mode) {
+      // Stop everything first
+      if (webcamActive) stopWebcam();
+      stopSimulation();
+
+      currentMode = mode;
+
+      // Tab styling
+      document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab-' + mode).classList.add('active');
+
+      // Reset visuals
+      document.getElementById('webcamImg').style.display     = 'none';
+      document.getElementById('uploadPreview').style.display = 'none';
+      document.getElementById('uploadZone').style.display    = 'none';
+      document.getElementById('placeholder').style.display   = 'flex';
+      document.getElementById('skeletonCanvas').style.display = 'none';
+
+      // Control buttons
+      document.getElementById('btnStart').style.display    = 'none';
+      document.getElementById('btnStop').style.display     = 'none';
+      document.getElementById('btnUpload').style.display   = 'none';
+      document.getElementById('btnSimStart').style.display = 'none';
+      document.getElementById('btnSimStop').style.display  = 'none';
+
+      // Sidebar
+      document.getElementById('simPoseGrid').style.display = 'none';
+      document.getElementById('liveNote').style.display    = 'none';
+
+      resetOverlays();
+
+      if (mode === 'webcam') {
+        document.getElementById('btnStart').style.display = 'flex';
+        document.getElementById('btnStop').style.display  = 'flex';
+        document.getElementById('btnStop').disabled = true;
+        document.getElementById('liveNote').style.display = 'block';
+      } else if (mode === 'upload') {
+        document.getElementById('uploadZone').style.display = 'flex';
+        document.getElementById('placeholder').style.display = 'none';
+        document.getElementById('btnUpload').style.display   = 'flex';
+        document.getElementById('liveNote').style.display    = 'block';
+      } else if (mode === 'sim') {
+        document.getElementById('skeletonCanvas').style.display = 'block';
+        document.getElementById('placeholder').style.display = 'none';
+        document.getElementById('btnSimStart').style.display = 'flex';
+        document.getElementById('btnSimStop').style.display  = 'flex';
+        document.getElementById('simPoseGrid').style.display = 'grid';
+        resizeCanvas();
+        selectSimPose(currentSimPose);
+        startSimulation();
+      }
+    }
+
+    function resetOverlays() {
+      document.getElementById('poseLabel').textContent = '— Waiting —';
+      document.getElementById('poseLabel').style.borderColor = '#a8e6cf';
+      document.getElementById('fpsLabel').textContent = '-- FPS';
+      document.getElementById('confText').textContent = 'Confidence: —';
+      document.getElementById('poseText').textContent = '—';
+      document.getElementById('confBar').style.width = '0%';
+      ['ang-le','ang-re','ang-ls','ang-rs','ang-lk','ang-rk'].forEach(id => {
+        const el = document.getElementById(id);
+        el.textContent = '—°';
+        el.className = 'angle-value';
+      });
+      document.getElementById('tips-panel').innerHTML =
+        '<div class="tip-chip"><i class="fas fa-circle-info"></i>Waiting for detection…</div>';
+    }
+
+    // ─── Update UI from data ──────────────────────────────────────────────────
+    function updateUI(data) {
+      const { pose, confidence, angles, fps } = data;
+      const color = pose !== 'Unknown Pose' ? '#a8e6cf' : '#ff6b9d';
+
+      document.getElementById('poseLabel').textContent = `${confidence > 50 ? '✓' : '✗'} ${pose} — ${confidence}%`;
+      document.getElementById('poseLabel').style.borderColor = color;
+      document.getElementById('confText').textContent = `Confidence: ${confidence}%`;
+      document.getElementById('poseText').textContent = pose;
+      document.getElementById('confBar').style.width = confidence + '%';
+      document.getElementById('confBar').style.background =
+        confidence > 75 ? 'var(--green)' : confidence > 45 ? 'var(--yellow)' : 'var(--pink)';
+      if (fps) document.getElementById('fpsLabel').textContent = fps + ' FPS';
+
+      // Angles
+      const map = { le:'ang-le', re:'ang-re', ls:'ang-ls', rs:'ang-rs', lk:'ang-lk', rk:'ang-rk' };
+      Object.entries(map).forEach(([k, id]) => {
+        const val = angles[k];
+        if (val === undefined) return;
+        const el = document.getElementById(id);
+        el.textContent = val + '°';
+        // Colour-code: green if near 180 or clearly in range, yellow if borderline
+        const v = parseInt(val);
+        el.className = 'angle-value ' + (v > 155 || (v > 80 && v < 115) || (v > 25 && v < 50) ? 'ok' : v > 120 ? 'warn' : 'bad');
+      });
+
+      // Tips by pose
+      const tips = {
+        'Warrior II Pose': ['Keep front knee over ankle','Arms fully parallel to ground','Shoulders at 90°','Gaze over front finger','Relax shoulders from ears'],
+        'Tree Pose':        ['Fix gaze on a single point','Foot above OR below the knee','Press standing foot into floor','Hips square to the front'],
+        'T Pose':           ['Stand straight, feet hip-width','Arms exactly at shoulder height','Palms facing downward','Chin parallel to floor'],
+        'Unknown Pose':     ['Pose not recognised — adjust position','Ensure full body is in frame','Check lighting and background','See the Poses page for guides'],
+      };
+      const poseTips = tips[pose] || tips['Unknown Pose'];
+      document.getElementById('tips-panel').innerHTML = poseTips.map(t =>
+        `<div class="tip-chip"><i class="fas fa-check"></i>${t}</div>`
+      ).join('');
+    }
+
+    // ─── WEBCAM MODE ─────────────────────────────────────────────────────────
+    async function startWebcam() {
+      const ok = await checkServer();
+      if (!ok) { alert('Flask server is not running.\nRun: python app.py'); return; }
+
+      await fetch(`${FLASK}/start_camera`, { method: 'POST' });
+      webcamActive = true;
+
+      document.getElementById('placeholder').style.display = 'none';
+      document.getElementById('webcamImg').style.display   = 'block';
+      document.getElementById('webcamImg').src = `${FLASK}/video_feed`;
+
+      document.getElementById('btnStart').disabled = true;
+      document.getElementById('btnStop').disabled  = false;
+
+      // Poll pose data every 500ms
+      pollInterval = setInterval(async () => {
+        try {
+          const r = await fetch(`${FLASK}/pose_data`);
+          const data = await r.json();
+          updateUI(data);
+        } catch {}
+      }, 500);
+    }
+
+    async function stopWebcam() {
+      webcamActive = false;
+      clearInterval(pollInterval);
+      await fetch(`${FLASK}/stop_camera`, { method: 'POST' }).catch(()=>{});
+
+      document.getElementById('webcamImg').src = '';
+      document.getElementById('webcamImg').style.display = 'none';
+      document.getElementById('placeholder').style.display = 'flex';
+      document.getElementById('btnStart').disabled = false;
+      document.getElementById('btnStop').disabled  = true;
+    }
+
+    // ─── UPLOAD MODE ──────────────────────────────────────────────────────────
+    function handleUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      document.getElementById('uploadZone').style.display    = 'none';
+      document.getElementById('spinner').style.display       = 'block';
+      document.getElementById('uploadPreview').style.display = 'none';
+
+      const formData = new FormData();
+      formData.append('image', file);
+
+      fetch(`${FLASK}/upload`, { method: 'POST', body: formData })
+        .then(r => r.json())
+        .then(data => {
+          document.getElementById('spinner').style.display = 'none';
+          if (data.error) { alert(data.error); return; }
+
+          // Show annotated image from Flask
+          document.getElementById('uploadPreview').src = 'data:image/jpeg;base64,' + data.image;
+          document.getElementById('uploadPreview').style.display = 'block';
+          document.getElementById('placeholder').style.display   = 'none';
+
+          updateUI({ ...data, fps: null });
+          document.getElementById('fpsLabel').textContent = 'Static';
+        })
+        .catch(() => {
+          document.getElementById('spinner').style.display = 'none';
+          alert('Upload failed — is the Flask server running?');
+        });
+    }
+
+    // ─── SIMULATION MODE ──────────────────────────────────────────────────────
+    const SIM_POSES = {
+      warrior: {
+        name:'Warrior II Pose', conf:94, color:'#66d9ef',
+        angles:{ le:[180,'ok'], re:[178,'ok'], ls:[92,'ok'], rs:[89,'ok'], lk:[175,'ok'], rk:[104,'ok'] },
+        tips:['Keep front knee over ankle','Arms fully parallel to ground','Shoulders at 90°','Gaze over front finger','Relax shoulders from ears'],
+      },
+      tree: {
+        name:'Tree Pose', conf:91, color:'#ffd93d',
+        angles:{ le:[175,'ok'], re:[172,'ok'], ls:[45,'warn'], rs:[42,'warn'], lk:[180,'ok'], rk:[33,'ok'] },
+        tips:['Fix gaze on a single point','Foot above OR below the knee','Press standing foot into floor','Hips square to front'],
+      },
+      tpose: {
+        name:'T Pose', conf:96, color:'#a8e6cf',
+        angles:{ le:[183,'ok'], re:[180,'ok'], ls:[90,'ok'], rs:[91,'ok'], lk:[180,'ok'], rk:[178,'ok'] },
+        tips:['Stand straight, feet hip-width','Arms at shoulder height','Palms facing downward','Chin parallel to floor'],
+      },
+      unknown: {
+        name:'Unknown Pose', conf:12, color:'#ff6b9d',
+        angles:{ le:[145,'warn'], re:[160,'warn'], ls:[55,'bad'], rs:[130,'bad'], lk:[140,'bad'], rk:[145,'bad'] },
+        tips:['Pose not recognised','Adjust your position','Full body must be in frame','Check Poses page for guides'],
+      },
+    };
+
+    const canvas = document.getElementById('skeletonCanvas');
+    const ctx    = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      const feed = document.getElementById('cameraFeed');
+      canvas.width  = feed.offsetWidth;
+      canvas.height = feed.offsetHeight;
+    }
+    window.addEventListener('resize', () => { resizeCanvas(); if (currentMode === 'sim') drawSkeleton(currentSimPose); });
+
+    function drawSkeleton(poseKey) {
+      const w = canvas.width, h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = '#111'; ctx.fillRect(0, 0, w, h);
+
+      // Grid
+      ctx.strokeStyle = 'rgba(255,255,255,0.05)'; ctx.lineWidth = 1;
+      for (let x=0;x<w;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}
+      for (let y=0;y<h;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
+
+      const cx = w*0.5, cy = h*0.5, s = Math.min(w,h)*0.0032;
+      const pc = SIM_POSES[poseKey].color;
+      let pts = {};
+
+      if (poseKey==='warrior') {
+        pts = { head:[cx,cy-110*s],neck:[cx,cy-85*s],ls:[cx-55*s,cy-60*s],rs:[cx+55*s,cy-60*s],le:[cx-100*s,cy-60*s],re:[cx+100*s,cy-60*s],lw:[cx-145*s,cy-60*s],rw:[cx+145*s,cy-60*s],lh:[cx-20*s,cy+10*s],rh:[cx+20*s,cy+10*s],lk:[cx-20*s,cy+90*s],rk:[cx+60*s,cy+75*s],la:[cx-20*s,cy+170*s],ra:[cx+110*s,cy+160*s] };
+      } else if (poseKey==='tree') {
+        pts = { head:[cx,cy-115*s],neck:[cx,cy-90*s],ls:[cx-30*s,cy-65*s],rs:[cx+30*s,cy-65*s],le:[cx-50*s,cy-30*s],re:[cx+50*s,cy-30*s],lw:[cx-30*s,cy-110*s],rw:[cx+30*s,cy-110*s],lh:[cx-15*s,cy+10*s],rh:[cx+15*s,cy+10*s],lk:[cx-15*s,cy+90*s],rk:[cx+65*s,cy+55*s],la:[cx-15*s,cy+170*s],ra:[cx+80*s,cy+115*s] };
+      } else if (poseKey==='tpose') {
+        pts = { head:[cx,cy-115*s],neck:[cx,cy-90*s],ls:[cx-50*s,cy-65*s],rs:[cx+50*s,cy-65*s],le:[cx-100*s,cy-65*s],re:[cx+100*s,cy-65*s],lw:[cx-150*s,cy-65*s],rw:[cx+150*s,cy-65*s],lh:[cx-20*s,cy+10*s],rh:[cx+20*s,cy+10*s],lk:[cx-20*s,cy+90*s],rk:[cx+20*s,cy+90*s],la:[cx-20*s,cy+170*s],ra:[cx+20*s,cy+170*s] };
+      } else {
+        pts = { head:[cx,cy-100*s],neck:[cx,cy-80*s],ls:[cx-40*s,cy-55*s],rs:[cx+40*s,cy-55*s],le:[cx-70*s,cy-30*s],re:[cx+70*s,cy-30*s],lw:[cx-55*s,cy+10*s],rw:[cx+55*s,cy+10*s],lh:[cx-20*s,cy+10*s],rh:[cx+20*s,cy+10*s],lk:[cx-25*s,cy+80*s],rk:[cx+25*s,cy+80*s],la:[cx-30*s,cy+160*s],ra:[cx+30*s,cy+160*s] };
+      }
+
+      const conns = [['head','neck'],['neck','ls'],['neck','rs'],['ls','le'],['le','lw'],['rs','re'],['re','rw'],['neck','lh'],['neck','rh'],['lh','rh'],['lh','lk'],['lk','la'],['rh','rk'],['rk','ra']];
+      ctx.strokeStyle = pc; ctx.lineWidth = 3*s; ctx.lineCap = 'round';
+      conns.forEach(([a,b])=>{ if(!pts[a]||!pts[b])return; ctx.beginPath();ctx.moveTo(pts[a][0],pts[a][1]);ctx.lineTo(pts[b][0],pts[b][1]);ctx.stroke(); });
+
+      Object.entries(pts).forEach(([name,[x,y]])=>{
+        const key = ['ls','rs','le','re','lh','rh','lk','rk'].includes(name);
+        ctx.beginPath(); ctx.arc(x,y,key?7*s:5*s,0,Math.PI*2);
+        ctx.fillStyle = key ? pc : '#fff'; ctx.fill();
+        ctx.strokeStyle='#000'; ctx.lineWidth=2*s; ctx.stroke();
+      });
+      ctx.beginPath(); ctx.arc(pts.head[0],pts.head[1],16*s,0,Math.PI*2);
+      ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=pc; ctx.lineWidth=3*s; ctx.stroke();
+    }
+
+    function selectSimPose(poseKey) {
+      currentSimPose = poseKey;
+      document.querySelectorAll('.pose-select-btn').forEach(b=>b.classList.remove('active'));
+      document.getElementById('btn-'+poseKey).classList.add('active');
+      const p = SIM_POSES[poseKey];
+
+      document.getElementById('poseLabel').textContent = `${p.conf>50?'✓':'✗'} ${p.name} — ${p.conf}%`;
+      document.getElementById('poseLabel').style.borderColor = p.color;
+      document.getElementById('confText').textContent = `Confidence: ${p.conf}%`;
+      document.getElementById('poseText').textContent  = p.name;
+      document.getElementById('confBar').style.width   = p.conf+'%';
+      document.getElementById('confBar').style.background = p.conf>80?'var(--green)':p.conf>50?'var(--yellow)':'var(--pink)';
+
+      const map={le:'ang-le',re:'ang-re',ls:'ang-ls',rs:'ang-rs',lk:'ang-lk',rk:'ang-rk'};
+      Object.entries(p.angles).forEach(([k,[val,status]])=>{
+        const el=document.getElementById(map[k]); el.textContent=val+'°'; el.className='angle-value '+status;
+      });
+      document.getElementById('tips-panel').innerHTML=p.tips.map(t=>`<div class="tip-chip"><i class="fas fa-check"></i>${t}</div>`).join('');
+      if (currentMode==='sim') drawSkeleton(poseKey);
+    }
+
+    function startSimulation() {
+      if (simRunning) return;
+      simRunning = true;
+      document.getElementById('btnSimStart').disabled = true;
+      document.getElementById('btnSimStop').disabled  = false;
+      resizeCanvas();
+      selectSimPose(currentSimPose);
+      simInterval = setInterval(() => {
+        drawSkeleton(currentSimPose);
+        // Jitter angles slightly
+        const p = SIM_POSES[currentSimPose];
+        const map={le:'ang-le',re:'ang-re',ls:'ang-ls',rs:'ang-rs',lk:'ang-lk',rk:'ang-rk'};
+        Object.entries(p.angles).forEach(([k,[val]])=>{
+          const el=document.getElementById(map[k]);
+          el.textContent=Math.round(val+(Math.random()-0.5)*4)+'°';
+        });
+        document.getElementById('fpsLabel').textContent=Math.round(55+Math.random()*8)+' FPS';
+      }, 80);
+    }
+
+    function stopSimulation() {
+      simRunning = false;
+      clearInterval(simInterval);
+      document.getElementById('btnSimStart').disabled = false;
+      document.getElementById('btnSimStop').disabled  = true;
+      document.getElementById('fpsLabel').textContent = '-- FPS';
+      if (currentMode==='sim') drawSkeleton(currentSimPose);
+    }
+
+    // ─── Init ─────────────────────────────────────────────────────────────────
+    setMode('webcam');
+  </script>
+</body>
+</html>
