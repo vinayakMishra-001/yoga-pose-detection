@@ -1085,6 +1085,28 @@ def generate_frames():
 
 # ─── Routes ─────────────────────────────────────────────────────────────────
 
+@app.route('/index.html')
+def home():
+    return send_from_directory('.', 'index.html')
+
+@app.route('/about.html')
+def about():
+    return send_from_directory('.', 'about.html')
+
+@app.route('/poses.html')
+def poses():
+    return send_from_directory('.', 'poses.html')
+
+@app.route('/developer.html')
+def developer():
+    return send_from_directory('.', 'developer.html')
+
+@app.route('/works.html')
+@app.route('/how-it-works.html')
+def how_it_works():
+    return send_from_directory('.', 'works.html')  # once you create it
+
+
 @app.route('/')
 def index():
     return send_from_directory('.', 'demo.html')
@@ -1148,7 +1170,7 @@ def upload_image():
     })
 
 
+import os
+
 if __name__ == '__main__':
-    print("🧘 YogaVision Flask Server starting...")
-    port = int(os.environ.get("PORT", 10000))  # Render uses dynamic port
-    app.run(debug=False, host='0.0.0.0', port=port, threaded=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
