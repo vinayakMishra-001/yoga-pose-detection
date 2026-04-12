@@ -1041,20 +1041,40 @@ def classifyPose(landmarks):
 # ─── Webcam Stream Generator ────────────────────────────────────────────────
 def generate_frames():
     global camera_running
-    cap = cv2.VideoCapture(0)#http://10.174.32.128:8080/video
-    # ADD these 3 lines right after:
-    # cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
-    # cap.set(cv2.CAP_PROP_FPS, 30)
-    # cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+
+    def open_camera():
+        cap = cv2.VideoCapture(0)
+        cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)          # Never buffer old frames
+        cap.set(cv2.CAP_PROP_FPS, 30)
+        cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        return cap
+
+    cap = open_camera()
+
+    if not cap.isOpened():
+        camera_running = False
+        return
+
     t_prev = time.time()
+    fail_count = 0
 
     while camera_running:
-        ok, frame = cap.read()
-        if not ok:
-            break
+        # Drain stale buffered frames — always grab latest frame only
+        cap.grab()
+        ok, frame = cap.retrieve()
 
+        if not ok:
+            fail_count += 1
+            if fail_count > 10:
+                cap.release()
+                cap = open_camera()
+                fail_count = 0
+            time.sleep(0.05)
+            continue
+
+        fail_count = 0
         frame = cv2.flip(frame, 1)
         output_frame, landmarks = detectPose(frame, pose_video)
         label, conf, angles = classifyPose(landmarks)
@@ -1063,31 +1083,43 @@ def generate_frames():
         fps = int(1.0 / max(t_now - t_prev, 0.001))
         t_prev = t_now
 
-        # Overlay label
         color = (0, 255, 100) if label != "Unknown Pose" else (0, 0, 255)
         cv2.putText(output_frame, f"{label} {conf}%", (10, 35),
                     cv2.FONT_HERSHEY_DUPLEX, 0.9, color, 2)
         cv2.putText(output_frame, f"FPS: {fps}", (10, 65),
                     cv2.FONT_HERSHEY_PLAIN, 1.2, (180, 255, 180), 2)
 
-        # Update shared state
         with data_lock:
             latest_data["pose"] = label
             latest_data["confidence"] = conf
             latest_data["angles"] = angles
             latest_data["fps"] = fps
 
-        _, buffer = cv2.imencode('.jpg', output_frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
+        _, buffer = cv2.imencode('.jpg', output_frame, [cv2.IMWRITE_JPEG_QUALITY, 75])
         frame_bytes = buffer.tobytes()
         yield (b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
 
     cap.release()
+    # Reset shared state when camera stops
+    with data_lock:
+        latest_data["pose"] = "Unknown Pose"
+        latest_data["confidence"] = 0
+        latest_data["angles"] = {}
+        latest_data["fps"] = 0
 
 # ─── Routes ─────────────────────────────────────────────────────────────────
+
+@app.route('/')
+def index():
+    return send_from_directory('.', 'index.html')
 
 @app.route('/index.html')
 def home():
     return send_from_directory('.', 'index.html')
+
+@app.route('/demo.html')
+def demo():
+    return send_from_directory('.', 'demo.html')
 
 @app.route('/about.html')
 def about():
@@ -1104,16 +1136,16 @@ def developer():
 @app.route('/works.html')
 @app.route('/how-it-works.html')
 def how_it_works():
-    return send_from_directory('.', 'works.html')  # once you create it
-
-
-@app.route('/')
-def index():
-    return send_from_directory('.', 'demo.html')
+    return send_from_directory('.', 'works.html')
 
 @app.route('/style.css')
 def styles():
     return send_from_directory('.', 'style.css')
+
+@app.route('/media/<path:filename>')
+def media(filename):
+    return send_from_directory('media', filename)
+
 
 @app.route('/video_feed')
 def video_feed():
@@ -1121,9 +1153,8 @@ def video_feed():
 
 @app.route('/start_camera', methods=['POST'])
 def start_camera():
-    global camera_running, camera_thread
-    if not camera_running:
-        camera_running = True
+    global camera_running
+    camera_running = True
     return jsonify({"status": "started"})
 
 @app.route('/stop_camera', methods=['POST'])
@@ -1149,7 +1180,6 @@ def upload_image():
     if image is None:
         return jsonify({"error": "Invalid image"}), 400
 
-    # Resize for processing
     h, w = image.shape[:2]
     if w > 960:
         scale = 960 / w
@@ -1158,19 +1188,52 @@ def upload_image():
     output_image, landmarks = detectPose(image, pose_image)
     label, conf, angles = classifyPose(landmarks)
 
-    # Encode output image to base64
     _, buffer = cv2.imencode('.jpg', output_image, [cv2.IMWRITE_JPEG_QUALITY, 85])
     img_b64 = base64.b64encode(buffer).decode('utf-8')
 
-    return jsonify({
-        "pose": label,
-        "confidence": conf,
-        "angles": angles,
-        "image": img_b64
-    })
+    return jsonify({"pose": label, "confidence": conf, "angles": angles, "image": img_b64})
 
 
-import os
+@app.route('/mobile_frame', methods=['POST'])
+def mobile_frame():
+    """Receives a base64 frame from mobile browser camera, runs pose detection, returns annotated frame."""
+    data = request.get_json()
+    if not data or 'frame' not in data:
+        return jsonify({"error": "No frame"}), 400
+
+    try:
+        img_data = data['frame'].split(',')[1] if ',' in data['frame'] else data['frame']
+        img_bytes = base64.b64decode(img_data)
+        img_array = np.frombuffer(img_bytes, np.uint8)
+        image = cv2.imdecode(img_array, cv2.IMREAD_COLOR)
+
+        if image is None:
+            return jsonify({"error": "Invalid frame"}), 400
+
+        # Resize if too large for speed
+        h, w = image.shape[:2]
+        if w > 640:
+            scale = 640 / w
+            image = cv2.resize(image, (640, int(h * scale)))
+
+        output_image, landmarks = detectPose(image, pose_image)
+        label, conf, angles = classifyPose(landmarks)
+
+        _, buffer = cv2.imencode('.jpg', output_image, [cv2.IMWRITE_JPEG_QUALITY, 75])
+        img_b64 = base64.b64encode(buffer).decode('utf-8')
+
+        # Also update shared state so pose_data endpoint reflects mobile feed
+        with data_lock:
+            latest_data["pose"] = label
+            latest_data["confidence"] = conf
+            latest_data["angles"] = angles
+            latest_data["fps"] = 0
+
+        return jsonify({"pose": label, "confidence": conf, "angles": angles, "image": img_b64})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False, threaded=True)

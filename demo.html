@@ -385,6 +385,9 @@
         <button class="mode-tab active" id="tab-webcam"  onclick="setMode('webcam')">
           <i class="fas fa-video"></i> Live Webcam
         </button>
+        <button class="mode-tab" id="tab-mobile" onclick="setMode('mobile')">
+          <i class="fas fa-mobile-alt"></i> Mobile Camera
+        </button>
         <button class="mode-tab" id="tab-upload" onclick="setMode('upload')">
           <i class="fas fa-upload"></i> Upload Image
         </button>
@@ -401,6 +404,11 @@
 
             <!-- Webcam stream from Flask /video_feed -->
             <img id="webcamImg" src="" alt="Webcam feed">
+
+            <!-- Mobile camera live view -->
+            <video id="mobileVideo" autoplay playsinline muted style="display:none; width:100%; height:100%; object-fit:cover;"></video>
+            <!-- Mobile processed result overlay -->
+            <img id="mobileResult" src="" alt="Mobile result" style="display:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
 
             <!-- Upload result image -->
             <img id="uploadPreview" src="" alt="Upload preview">
@@ -449,6 +457,16 @@
             </button>
             <button class="cam-btn cam-btn-stop"  id="btnStop"   onclick="stopWebcam()" disabled>
               <i class="fas fa-stop"></i> Stop
+            </button>
+            <!-- Mobile camera controls -->
+            <button class="cam-btn cam-btn-start" id="btnMobileStart" onclick="startMobileCamera()" style="display:none;">
+              <i class="fas fa-mobile-alt"></i> Start Camera
+            </button>
+            <button class="cam-btn cam-btn-stop"  id="btnMobileStop"  onclick="stopMobileCamera()"  style="display:none;" disabled>
+              <i class="fas fa-stop"></i> Stop
+            </button>
+            <button class="cam-btn cam-btn-upload" id="btnMobileFlip" onclick="flipMobileCamera()" style="display:none;">
+              <i class="fas fa-sync"></i> Flip
             </button>
             <!-- Upload control -->
             <button class="cam-btn cam-btn-upload" id="btnUpload" onclick="document.getElementById('fileInput').click()" style="display:none;">
@@ -548,7 +566,10 @@
   </div><!-- /page-wrapper -->
 
   <script>
-    const FLASK = 'http://127.0.0.1:5000';
+    // Auto-detect: if opened via ngrok/remote, use same origin; if local file, use localhost
+    const FLASK = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost')
+      ? 'http://127.0.0.1:5000'
+      : window.location.origin;
 
     // ─── Theme ───────────────────────────────────────────────────────────────
     const themeBtn = document.getElementById('theme-toggle');
@@ -576,7 +597,7 @@
         const r = await fetch(`${FLASK}/pose_data`, { signal: AbortSignal.timeout(2000) });
         if (r.ok) {
           document.getElementById('statusDot').className = 'status-dot online';
-          document.getElementById('statusText').textContent = '✓ Flask server connected — http://127.0.0.1:5000';
+          document.getElementById('statusText').textContent = '✓ Flask server connected — ' + FLASK;
           return true;
         }
       } catch {}
@@ -588,41 +609,49 @@
     setInterval(checkServer, 8000);
 
     // ─── Mode State ───────────────────────────────────────────────────────────
-    let currentMode = 'webcam';   // 'webcam' | 'upload' | 'sim'
+    let currentMode = 'webcam';
     let webcamActive = false;
+    let mobileActive = false;
+    let mobileFacingMode = 'user';
+    let mobileStream = null;
+    let mobileInterval = null;
+    let mobileCanvas = document.createElement('canvas');
     let pollInterval = null;
     let simInterval  = null;
     let simRunning   = false;
     let currentSimPose = 'warrior';
 
     function setMode(mode) {
-      // Stop everything first
       if (webcamActive) stopWebcam();
+      if (mobileActive) stopMobileCamera();
       stopSimulation();
 
       currentMode = mode;
 
-      // Tab styling
       document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
       document.getElementById('tab-' + mode).classList.add('active');
 
-      // Reset visuals
-      document.getElementById('webcamImg').style.display     = 'none';
-      document.getElementById('uploadPreview').style.display = 'none';
-      document.getElementById('uploadZone').style.display    = 'none';
-      document.getElementById('placeholder').style.display   = 'flex';
-      document.getElementById('skeletonCanvas').style.display = 'none';
+      // Hide all panels
+      document.getElementById('webcamImg').style.display       = 'none';
+      document.getElementById('mobileVideo').style.display     = 'none';
+      document.getElementById('mobileResult').style.display    = 'none';
+      document.getElementById('uploadPreview').style.display   = 'none';
+      document.getElementById('uploadZone').style.display      = 'none';
+      document.getElementById('placeholder').style.display     = 'flex';
+      document.getElementById('skeletonCanvas').style.display  = 'none';
 
-      // Control buttons
-      document.getElementById('btnStart').style.display    = 'none';
-      document.getElementById('btnStop').style.display     = 'none';
-      document.getElementById('btnUpload').style.display   = 'none';
-      document.getElementById('btnSimStart').style.display = 'none';
-      document.getElementById('btnSimStop').style.display  = 'none';
+      // Hide all buttons
+      document.getElementById('btnStart').style.display        = 'none';
+      document.getElementById('btnStop').style.display         = 'none';
+      document.getElementById('btnMobileStart').style.display  = 'none';
+      document.getElementById('btnMobileStop').style.display   = 'none';
+      document.getElementById('btnMobileFlip').style.display   = 'none';
+      document.getElementById('btnUpload').style.display       = 'none';
+      document.getElementById('btnSimStart').style.display     = 'none';
+      document.getElementById('btnSimStop').style.display      = 'none';
 
-      // Sidebar
-      document.getElementById('simPoseGrid').style.display = 'none';
-      document.getElementById('liveNote').style.display    = 'none';
+      document.getElementById('simPoseGrid').style.display     = 'none';
+      document.getElementById('liveNote').style.display        = 'none';
 
       resetOverlays();
 
@@ -631,6 +660,14 @@
         document.getElementById('btnStop').style.display  = 'flex';
         document.getElementById('btnStop').disabled = true;
         document.getElementById('liveNote').style.display = 'block';
+      } else if (mode === 'mobile') {
+        document.getElementById('btnMobileStart').style.display = 'flex';
+        document.getElementById('btnMobileStop').style.display  = 'flex';
+        document.getElementById('btnMobileFlip').style.display  = 'flex';
+        document.getElementById('btnMobileStop').disabled = true;
+        document.getElementById('liveNote').style.display = 'block';
+        document.getElementById('placeholder').innerHTML =
+          '<i class="fas fa-mobile-alt" style="font-size:4rem;color:rgba(255,255,255,0.3)"></i><p style="color:rgba(255,255,255,0.4);margin-top:1rem">Press Start Camera to use your device camera</p>';
       } else if (mode === 'upload') {
         document.getElementById('uploadZone').style.display = 'flex';
         document.getElementById('placeholder').style.display = 'none';
@@ -703,17 +740,108 @@
       ).join('');
     }
 
+    // ─── MOBILE CAMERA MODE ───────────────────────────────────────────────────
+    async function startMobileCamera() {
+      try {
+        mobileStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: mobileFacingMode, width: { ideal: 640 }, height: { ideal: 480 } },
+          audio: false
+        });
+
+        const video = document.getElementById('mobileVideo');
+        video.srcObject = mobileStream;
+        video.style.display = 'block';
+        document.getElementById('mobileResult').style.display = 'block';
+        document.getElementById('placeholder').style.display  = 'none';
+
+        document.getElementById('btnMobileStart').disabled = true;
+        document.getElementById('btnMobileStop').disabled  = false;
+        mobileActive = true;
+
+        // Send frames to Flask every 200ms for pose detection
+        mobileInterval = setInterval(sendMobileFrame, 200);
+
+      } catch (err) {
+        alert('Camera access denied or not available.\nPlease allow camera permission in your browser.\n\n' + err.message);
+      }
+    }
+
+    function stopMobileCamera() {
+      mobileActive = false;
+      clearInterval(mobileInterval);
+      if (mobileStream) {
+        mobileStream.getTracks().forEach(t => t.stop());
+        mobileStream = null;
+      }
+      document.getElementById('mobileVideo').style.display    = 'none';
+      document.getElementById('mobileResult').style.display   = 'none';
+      document.getElementById('placeholder').style.display    = 'flex';
+      document.getElementById('btnMobileStart').disabled = false;
+      document.getElementById('btnMobileStop').disabled  = true;
+      resetOverlays();
+    }
+
+    async function flipMobileCamera() {
+      mobileFacingMode = mobileFacingMode === 'user' ? 'environment' : 'user';
+      if (mobileActive) {
+        stopMobileCamera();
+        await startMobileCamera();
+      }
+    }
+
+    async function sendMobileFrame() {
+      const video = document.getElementById('mobileVideo');
+      if (!video || video.readyState < 2) return;
+
+      mobileCanvas.width  = video.videoWidth  || 640;
+      mobileCanvas.height = video.videoHeight || 480;
+      const ctx2 = mobileCanvas.getContext('2d');
+      ctx2.drawImage(video, 0, 0);
+      const base64 = mobileCanvas.toDataURL('image/jpeg', 0.7);
+
+      try {
+        const r = await fetch(`${FLASK}/mobile_frame`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ frame: base64 })
+        });
+        const data = await r.json();
+        if (data.image) {
+          document.getElementById('mobileResult').src = 'data:image/jpeg;base64,' + data.image;
+        }
+        updateUI({ ...data, fps: null });
+        document.getElementById('fpsLabel').textContent = 'Live';
+      } catch {}
+    }
+
     // ─── WEBCAM MODE ─────────────────────────────────────────────────────────
     async function startWebcam() {
       const ok = await checkServer();
       if (!ok) { alert('Flask server is not running.\nRun: python app.py'); return; }
 
+      // Start camera on backend first, wait for it to be ready
       await fetch(`${FLASK}/start_camera`, { method: 'POST' });
+      await new Promise(r => setTimeout(r, 500)); // give camera time to open
+
       webcamActive = true;
 
       document.getElementById('placeholder').style.display = 'none';
-      document.getElementById('webcamImg').style.display   = 'block';
-      document.getElementById('webcamImg').src = `${FLASK}/video_feed`;
+      document.getElementById('spinner').style.display     = 'block';
+
+      const img = document.getElementById('webcamImg');
+
+      // Add timestamp to prevent browser caching old stream
+      img.src = `${FLASK}/video_feed?t=${Date.now()}`;
+      img.style.display = 'block';
+
+      // Hide spinner once first frame loads
+      img.onload = () => { document.getElementById('spinner').style.display = 'none'; };
+      img.onerror = () => {
+        document.getElementById('spinner').style.display = 'none';
+        document.getElementById('placeholder').style.display = 'flex';
+        document.getElementById('placeholder').innerHTML =
+          '<i class="fas fa-exclamation-triangle" style="font-size:3rem;color:#ff6b9d"></i><p style="color:#ff6b9d;margin-top:1rem">Camera not found or already in use</p>';
+      };
 
       document.getElementById('btnStart').disabled = true;
       document.getElementById('btnStop').disabled  = false;
@@ -731,11 +859,18 @@
     async function stopWebcam() {
       webcamActive = false;
       clearInterval(pollInterval);
+
+      const img = document.getElementById('webcamImg');
+      img.src = '';
+      img.style.display = 'none';
+      img.onload  = null;
+      img.onerror = null;
+
       await fetch(`${FLASK}/stop_camera`, { method: 'POST' }).catch(()=>{});
 
-      document.getElementById('webcamImg').src = '';
-      document.getElementById('webcamImg').style.display = 'none';
       document.getElementById('placeholder').style.display = 'flex';
+      document.getElementById('placeholder').innerHTML =
+        '<i class="fas fa-person-walking"></i><p>Select a mode above to begin</p>';
       document.getElementById('btnStart').disabled = false;
       document.getElementById('btnStop').disabled  = true;
     }
