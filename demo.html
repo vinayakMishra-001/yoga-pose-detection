@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -9,346 +9,117 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
   <style>
-    .page-hero {
-      background: var(--green);
-      border-bottom: 4px solid var(--border);
-      padding: 3rem 3rem 2rem;
-    }
-    .page-hero-tag {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      padding: 0.3rem 0.8rem; background: var(--white);
-      border: 3px solid var(--border); box-shadow: 3px 3px 0 var(--border);
-      font-weight: 700; font-size: 0.85rem; margin-bottom: 1rem;
-    }
-    .page-hero-title { font-size: 3.5rem; font-weight: 700; line-height: 1.1; margin-bottom: 0.75rem; }
-    .page-hero-desc { font-size: 1.1rem; opacity: 0.85; max-width: 600px; }
+    .page-hero { background:var(--green); border-bottom:4px solid var(--border); padding:3rem 3rem 2rem; }
+    .page-hero-tag { display:inline-flex;align-items:center;gap:.5rem;padding:.3rem .8rem;background:var(--white);border:3px solid var(--border);box-shadow:3px 3px 0 var(--border);font-weight:700;font-size:.85rem;margin-bottom:1rem; }
+    .page-hero-title { font-size:3.5rem;font-weight:700;line-height:1.1;margin-bottom:.75rem; }
+    .page-hero-desc  { font-size:1.1rem;opacity:.85;max-width:600px; }
 
     /* MODE TABS */
-    .mode-tabs {
-      display: flex;
-      gap: 0;
-      margin-bottom: 2rem;
-      border: 4px solid var(--border);
-      box-shadow: 6px 6px 0 var(--border);
-      overflow: hidden;
-      width: fit-content;
-    }
-    .mode-tab {
-      padding: 0.75rem 1.5rem;
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700;
-      font-size: 0.95rem;
-      border: none;
-      border-right: 3px solid var(--border);
-      background: var(--white);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: all 0.2s;
-    }
-    .mode-tab:last-child { border-right: none; }
-    .mode-tab.active { background: var(--cyan); }
-    .mode-tab:hover:not(.active) { background: var(--yellow); }
+    .mode-tabs { display:flex;gap:0;margin-bottom:2rem;border:4px solid var(--border);box-shadow:6px 6px 0 var(--border);overflow:hidden;width:fit-content;flex-wrap:wrap; }
+    .mode-tab  { padding:.75rem 1.2rem;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.88rem;border:none;border-right:3px solid var(--border);background:var(--white);cursor:pointer;display:flex;align-items:center;gap:.5rem;transition:all .2s; }
+    .mode-tab:last-child { border-right:none; }
+    .mode-tab.active              { background:var(--cyan); }
+    .mode-tab:hover:not(.active)  { background:var(--yellow); }
+    .mode-tab.esp32-tab.active    { background:#ff8c42; }
+    .mode-tab.esp32-tab:hover:not(.active) { background:#ffe0cc; }
 
     /* STATUS BAR */
-    .status-bar {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.6rem 1.2rem;
-      background: #1a1a1a;
-      border: 3px solid var(--border);
-      box-shadow: 4px 4px 0 var(--border);
-      margin-bottom: 1.5rem;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.8rem;
-      color: #a8e6cf;
-    }
-    .status-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: #666;
-      transition: background 0.3s;
-    }
-    .status-dot.online { background: #a8e6cf; box-shadow: 0 0 6px #a8e6cf; }
-    .status-dot.error  { background: #ff6b9d; box-shadow: 0 0 6px #ff6b9d; }
+    .status-bar { display:flex;align-items:center;gap:.75rem;padding:.6rem 1.2rem;background:#1a1a1a;border:3px solid var(--border);box-shadow:4px 4px 0 var(--border);margin-bottom:1.5rem;font-family:'Space Mono',monospace;font-size:.8rem;color:#a8e6cf;flex-wrap:wrap; }
+    .status-dot { width:10px;height:10px;border-radius:50%;background:#666;transition:background .3s;flex-shrink:0; }
+    .status-dot.online { background:#a8e6cf;box-shadow:0 0 6px #a8e6cf; }
+    .status-dot.error  { background:#ff6b9d;box-shadow:0 0 6px #ff6b9d; }
+    .esp32-badge { margin-left:auto;display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:#ff8c42; }
+    .esp32-dot   { width:8px;height:8px;border-radius:50%;background:#444;transition:background .3s; }
+    .esp32-dot.live { background:#ff8c42;box-shadow:0 0 6px #ff8c42;animation:blink 1.5s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1}50%{opacity:.4} }
 
     /* DEMO LAYOUT */
-    .demo-layout {
-      display: grid;
-      grid-template-columns: 1fr 380px;
-      gap: 2rem;
-      margin-bottom: 3rem;
-    }
+    .demo-layout { display:grid;grid-template-columns:1fr 380px;gap:2rem;margin-bottom:3rem; }
 
     /* CAMERA PANEL */
-    .camera-panel {
-      background: #111;
-      border: 4px solid var(--border);
-      box-shadow: 10px 10px 0 var(--border);
-      overflow: hidden;
-      position: relative;
-    }
+    .camera-panel { background:#111;border:4px solid var(--border);box-shadow:10px 10px 0 var(--border);overflow:hidden;position:relative; }
+    .camera-feed  { width:100%;aspect-ratio:4/3;background:#111;display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative;overflow:hidden; }
 
-    .camera-feed {
-      width: 100%;
-      aspect-ratio: 4/3;
-      background: #111;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      position: relative;
-      overflow: hidden;
-    }
+    #webcamImg,#esp32Img { width:100%;height:100%;object-fit:contain;display:none; }
+    #mobileVideo  { display:none;width:100%;height:100%;object-fit:cover; }
+    #mobileResult { display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover; }
+    #uploadPreview { width:100%;height:100%;object-fit:contain;display:none; }
+    .skeleton-canvas { position:absolute;inset:0;width:100%;height:100%; }
 
-    /* Live webcam img tag */
-    #webcamImg {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: none;
-    }
+    .upload-zone { border:4px dashed var(--border);background:rgba(255,255,255,.04);padding:3rem 2rem;text-align:center;cursor:pointer;transition:all .2s;color:rgba(255,255,255,.5);display:none; }
+    .upload-zone:hover { background:rgba(168,230,207,.08);border-color:#a8e6cf; }
+    .upload-zone i { font-size:3rem;display:block;margin-bottom:1rem; }
+    #fileInput { display:none; }
 
-    /* Upload preview */
-    #uploadPreview {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: none;
-    }
+    /* ESP32 panels */
+    .esp32-connect-panel { display:none;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;padding:2rem;text-align:center;color:rgba(255,255,255,.7);width:100%; }
+    .esp32-connect-panel .esp-icon { font-size:4rem; }
+    .esp32-ip-form { display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;justify-content:center; }
+    .esp32-ip-input { padding:.6rem 1rem;border:3px solid #a8e6cf;background:#222;color:#a8e6cf;font-family:'Space Mono',monospace;font-size:.88rem;min-width:200px; }
+    .esp32-ip-input::placeholder { opacity:.4; }
+    .esp32-no-stream { display:none;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:2rem;text-align:center;color:rgba(255,165,100,.7);width:100%; }
+    .esp32-no-stream i { font-size:3.5rem; }
 
-    /* Simulation canvas */
-    .skeleton-canvas {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-    }
+    .camera-placeholder { color:rgba(255,255,255,.3);text-align:center;z-index:2; }
+    .camera-placeholder i { font-size:5rem;display:block;margin-bottom:1rem; }
 
-    .camera-placeholder {
-      color: rgba(255,255,255,0.3);
-      text-align: center;
-      z-index: 2;
-    }
-    .camera-placeholder i { font-size: 5rem; display: block; margin-bottom: 1rem; }
-    .camera-placeholder p { font-size: 1rem; }
+    .camera-overlay-pose   { position:absolute;top:1rem;left:1rem;background:rgba(0,0,0,.85);border:3px solid;padding:.5rem 1rem;font-weight:700;font-size:1.1rem;color:#fff;font-family:'Space Mono',monospace;transition:all .3s;z-index:10; }
+    .camera-overlay-fps    { position:absolute;top:1rem;right:1rem;background:rgba(0,0,0,.7);border:2px solid #444;padding:.25rem .6rem;color:#a8e6cf;font-family:'Space Mono',monospace;font-size:.8rem;z-index:10; }
+    .camera-overlay-source { position:absolute;top:1rem;right:1rem;background:rgba(255,140,66,.92);border:2px solid var(--border);padding:.25rem .7rem;color:#000;font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;z-index:10;display:none; }
+    .camera-overlay-conf   { position:absolute;bottom:1rem;left:1rem;right:1rem;z-index:10; }
+    .conf-bar-bg  { width:100%;height:8px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);overflow:hidden; }
+    .conf-bar-fill { height:100%;transition:width .5s ease; }
+    .conf-label   { display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem;color:rgba(255,255,255,.8);font-family:'Space Mono',monospace;font-size:.75rem; }
 
-    .camera-overlay-pose {
-      position: absolute;
-      top: 1rem; left: 1rem;
-      background: rgba(0,0,0,0.85);
-      border: 3px solid;
-      padding: 0.5rem 1rem;
-      font-weight: 700;
-      font-size: 1.1rem;
-      color: #fff;
-      font-family: 'Space Mono', monospace;
-      transition: all 0.3s ease;
-      z-index: 10;
-    }
-
-    .camera-overlay-fps {
-      position: absolute;
-      top: 1rem; right: 1rem;
-      background: rgba(0,0,0,0.7);
-      border: 2px solid #444;
-      padding: 0.25rem 0.6rem;
-      color: #a8e6cf;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.8rem;
-      z-index: 10;
-    }
-
-    .camera-overlay-conf {
-      position: absolute;
-      bottom: 1rem; left: 1rem; right: 1rem;
-      z-index: 10;
-    }
-    .conf-bar-bg {
-      width: 100%; height: 8px;
-      background: rgba(255,255,255,0.15);
-      border: 2px solid rgba(255,255,255,0.3);
-      overflow: hidden;
-    }
-    .conf-bar-fill { height: 100%; transition: width 0.5s ease; }
-    .conf-label {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 0.3rem;
-      color: rgba(255,255,255,0.8);
-      font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
-    }
-
-    /* UPLOAD ZONE */
-    .upload-zone {
-      border: 4px dashed var(--border);
-      background: rgba(255,255,255,0.04);
-      padding: 3rem 2rem;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      color: rgba(255,255,255,0.5);
-      display: none;
-    }
-    .upload-zone:hover { background: rgba(168,230,207,0.08); border-color: #a8e6cf; }
-    .upload-zone i { font-size: 3rem; display: block; margin-bottom: 1rem; }
-    #fileInput { display: none; }
-
-    .camera-controls {
-      display: flex;
-      gap: 0.75rem;
-      padding: 1rem;
-      background: #1a1a1a;
-      border-top: 3px solid var(--border);
-      flex-wrap: wrap;
-    }
-
-    .cam-btn {
-      flex: 1;
-      min-width: 100px;
-      padding: 0.7rem;
-      border: 2px solid var(--border);
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-    }
-    .cam-btn-start  { background: var(--green);  color: #000; }
-    .cam-btn-start:hover  { background: #7dd3a8; }
-    .cam-btn-stop   { background: var(--pink);   color: #000; }
-    .cam-btn-stop:hover   { background: #e0547e; }
-    .cam-btn-upload { background: var(--cyan);   color: #000; }
-    .cam-btn-upload:hover { background: #44c9e0; }
-    .cam-btn-sim    { background: var(--yellow); color: #000; }
-    .cam-btn-sim:hover    { background: #e8c430; }
-    .cam-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .camera-controls { display:flex;gap:.75rem;padding:1rem;background:#1a1a1a;border-top:3px solid var(--border);flex-wrap:wrap; }
+    .cam-btn { flex:1;min-width:90px;padding:.7rem;border:2px solid var(--border);font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.4rem; }
+    .cam-btn-start  { background:var(--green);color:#000; } .cam-btn-start:hover  { background:#7dd3a8; }
+    .cam-btn-stop   { background:var(--pink); color:#000; } .cam-btn-stop:hover   { background:#e0547e; }
+    .cam-btn-upload { background:var(--cyan); color:#000; } .cam-btn-upload:hover { background:#44c9e0; }
+    .cam-btn-sim    { background:var(--yellow);color:#000; }.cam-btn-sim:hover    { background:#e8c430; }
+    .cam-btn-esp32  { background:#ff8c42;color:#000; }     .cam-btn-esp32:hover  { background:#e07030; }
+    .cam-btn:disabled { opacity:.4;cursor:not-allowed; }
 
     /* SIDEBAR */
-    .sidebar-panel { display: flex; flex-direction: column; gap: 1.5rem; }
+    .sidebar-panel { display:flex;flex-direction:column;gap:1.5rem; }
+    .info-card { background:var(--white);border:4px solid var(--border);box-shadow:6px 6px 0 var(--border);overflow:hidden; }
+    .info-card-header { padding:1rem 1.5rem;border-bottom:3px solid var(--border);font-weight:700;font-size:1rem;display:flex;align-items:center;gap:.5rem; }
+    .info-card:nth-child(1) .info-card-header { background:var(--yellow); }
+    .info-card:nth-child(2) .info-card-header { background:var(--pink);   }
+    .info-card:nth-child(3) .info-card-header { background:var(--cyan);   }
+    .info-card-body { padding:1.5rem; }
 
-    .info-card {
-      background: var(--white);
-      border: 4px solid var(--border);
-      box-shadow: 6px 6px 0 var(--border);
-      overflow: hidden;
-    }
-    .info-card-header {
-      padding: 1rem 1.5rem;
-      border-bottom: 3px solid var(--border);
-      font-weight: 700;
-      font-size: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .info-card:nth-child(1) .info-card-header { background: var(--yellow); }
-    .info-card:nth-child(2) .info-card-header { background: var(--pink);   }
-    .info-card:nth-child(3) .info-card-header { background: var(--cyan);   }
-    .info-card-body { padding: 1.5rem; }
+    .pose-selector-grid { display:grid;grid-template-columns:1fr 1fr;gap:.75rem; }
+    .pose-select-btn { border:3px solid var(--border);padding:1rem .75rem;text-align:center;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.9rem;background:var(--white);box-shadow:3px 3px 0 var(--border);transition:all .2s; }
+    .pose-select-btn:hover  { transform:translate(3px,3px);box-shadow:0 0 0 var(--border); }
+    .pose-select-btn.active { background:var(--cyan);box-shadow:0 0 0;transform:translate(3px,3px); }
+    .pose-select-btn span   { font-size:2rem;display:block;margin-bottom:.4rem; }
 
-    /* POSE SELECTOR (simulation mode only) */
-    .pose-selector-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-    }
-    .pose-select-btn {
-      border: 3px solid var(--border);
-      padding: 1rem 0.75rem;
-      text-align: center;
-      cursor: pointer;
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700;
-      font-size: 0.9rem;
-      background: var(--white);
-      box-shadow: 3px 3px 0 var(--border);
-      transition: all 0.2s;
-    }
-    .pose-select-btn:hover { transform: translate(3px,3px); box-shadow: 0 0 0 var(--border); }
-    .pose-select-btn.active { background: var(--cyan); box-shadow: 0 0 0; transform: translate(3px,3px); }
-    .pose-select-btn span { font-size: 2rem; display: block; margin-bottom: 0.4rem; }
+    .angle-readout { display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:2px solid rgba(0,0,0,.08);font-size:.9rem; }
+    .angle-readout:last-child { border-bottom:none; }
+    .angle-joint { font-weight:600; }
+    .angle-value { font-family:'Space Mono',monospace;font-weight:700;font-size:1rem;padding:.2rem .5rem;border:2px solid var(--border);min-width:55px;text-align:center;background:var(--white);transition:background .4s; }
+    .angle-value.ok   { background:var(--green);  }
+    .angle-value.warn { background:var(--yellow); }
+    .angle-value.bad  { background:var(--pink);   }
 
-    /* ANGLE READOUTS */
-    .angle-readout {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.5rem 0;
-      border-bottom: 2px solid rgba(0,0,0,0.08);
-      font-size: 0.9rem;
-    }
-    .angle-readout:last-child { border-bottom: none; }
-    .angle-joint { font-weight: 600; }
-    .angle-value {
-      font-family: 'Space Mono', monospace;
-      font-weight: 700;
-      font-size: 1rem;
-      padding: 0.2rem 0.5rem;
-      border: 2px solid var(--border);
-      min-width: 55px;
-      text-align: center;
-      background: var(--white);
-      transition: background 0.4s;
-    }
-    .angle-value.ok   { background: var(--green);  }
-    .angle-value.warn { background: var(--yellow); }
-    .angle-value.bad  { background: var(--pink);   }
+    .tip-chip { display:flex;align-items:flex-start;gap:.6rem;padding:.6rem 0;font-size:.88rem;border-bottom:2px solid rgba(0,0,0,.07); }
+    .tip-chip:last-child { border-bottom:none; }
+    .tip-chip i { color:var(--border);flex-shrink:0;margin-top:.1rem; }
 
-    /* TIPS */
-    .tip-chip {
-      display: flex; align-items: flex-start; gap: 0.6rem;
-      padding: 0.6rem 0; font-size: 0.88rem;
-      border-bottom: 2px solid rgba(0,0,0,0.07);
-    }
-    .tip-chip:last-child { border-bottom: none; }
-    .tip-chip i { color: var(--border); flex-shrink: 0; margin-top: 0.1rem; }
+    .esp32-info-box { background:#fff5ee;border:3px solid var(--border);padding:1rem;font-size:.87rem;line-height:1.7; }
+    .esp32-info-box code { background:#1a1a1a;color:#ff8c42;font-family:'Space Mono',monospace;font-size:.78rem;padding:.1rem .4rem; }
 
-    /* DEMO NOTE */
-    .demo-note {
-      background: var(--yellow);
-      border: 3px solid var(--border);
-      box-shadow: 4px 4px 0 var(--border);
-      padding: 1rem 1.5rem;
-      font-size: 0.9rem;
-      margin-bottom: 2rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-    }
+    .spinner { display:none;width:40px;height:40px;border:4px solid rgba(168,230,207,.2);border-top-color:#a8e6cf;border-radius:50%;animation:spin .8s linear infinite;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:20; }
+    @keyframes spin { to { transform:translate(-50%,-50%) rotate(360deg); } }
 
-    /* LOADING SPINNER */
-    .spinner {
-      display: none;
-      width: 40px; height: 40px;
-      border: 4px solid rgba(168,230,207,0.2);
-      border-top-color: #a8e6cf;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%,-50%);
-      z-index: 20;
-    }
-    @keyframes spin { to { transform: translate(-50%,-50%) rotate(360deg); } }
-
-    @media (max-width: 1024px) { .demo-layout { grid-template-columns: 1fr; } }
-    @media (max-width: 600px) {
-      .page-hero-title { font-size: 2.5rem; }
-      .pose-selector-grid { grid-template-columns: 1fr 1fr; }
-    }
+    @media (max-width:1024px) { .demo-layout { grid-template-columns:1fr; } }
+    @media (max-width:700px)  { .page-hero-title{font-size:2.2rem;} .mode-tabs{width:100%;} .mode-tab{flex:1;font-size:.72rem;padding:.6rem .3rem;} }
   </style>
 </head>
 <body>
   <div class="page-wrapper">
 
-    <!-- NAVBAR -->
     <nav class="navbar" id="navbar">
       <div class="nav-content">
         <a href="index.html" class="nav-brand">🧘 YogaVision</a>
@@ -365,213 +136,798 @@
       </div>
     </nav>
 
-    <!-- HERO -->
     <div class="page-hero">
       <div class="page-hero-tag"><i class="fas fa-play-circle"></i> Interactive Demo</div>
       <h1 class="page-hero-title">Live Pose Detection</h1>
-      <p class="page-hero-desc">Use your webcam for real-time detection, upload an image, or explore the simulation — powered by your local Python + Flask backend.</p>
+      <p class="page-hero-desc">Webcam, mobile camera, ESP32-CAM, image upload, or simulation — all powered by your local Flask backend.</p>
     </div>
 
     <div class="container">
 
-      <!-- STATUS BAR -->
       <div class="status-bar">
         <div class="status-dot" id="statusDot"></div>
         <span id="statusText">Checking Flask server…</span>
+        <div class="esp32-badge" id="esp32Badge" style="display:none;">
+          <div class="esp32-dot" id="esp32Dot"></div>
+          <span id="esp32StatusText">ESP32 — no frames yet</span>
+        </div>
       </div>
 
-      <!-- MODE TABS -->
       <div class="mode-tabs">
-        <button class="mode-tab active" id="tab-webcam"  onclick="setMode('webcam')">
-          <i class="fas fa-video"></i> Live Webcam
-        </button>
-        <button class="mode-tab" id="tab-mobile" onclick="setMode('mobile')">
-          <i class="fas fa-mobile-alt"></i> Mobile Camera
-        </button>
-        <button class="mode-tab" id="tab-upload" onclick="setMode('upload')">
-          <i class="fas fa-upload"></i> Upload Image
-        </button>
-        <button class="mode-tab" id="tab-sim"    onclick="setMode('sim')">
-          <i class="fas fa-cube"></i> Simulation
-        </button>
+        <button class="mode-tab active"    id="tab-webcam" onclick="setMode('webcam')"><i class="fas fa-video"></i> Webcam</button>
+        <button class="mode-tab"           id="tab-mobile" onclick="setMode('mobile')"><i class="fas fa-mobile-alt"></i> Mobile</button>
+        <button class="mode-tab"           id="tab-upload" onclick="setMode('upload')"><i class="fas fa-upload"></i> Upload</button>
+        <button class="mode-tab esp32-tab" id="tab-esp32"  onclick="setMode('esp32')"><i class="fas fa-microchip"></i> ESP32-CAM</button>
+        <button class="mode-tab"           id="tab-sim"    onclick="setMode('sim')"  ><i class="fas fa-cube"></i> Simulation</button>
       </div>
 
       <div class="demo-layout">
 
-        <!-- CAMERA / FEED PANEL -->
         <div class="camera-panel">
           <div class="camera-feed" id="cameraFeed">
 
-            <!-- Webcam stream from Flask /video_feed -->
-            <img id="webcamImg" src="" alt="Webcam feed">
-
-            <!-- Mobile camera live view -->
-            <video id="mobileVideo" autoplay playsinline muted style="display:none; width:100%; height:100%; object-fit:cover;"></video>
-            <!-- Mobile processed result overlay -->
-            <img id="mobileResult" src="" alt="Mobile result" style="display:none; position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
-
-            <!-- Upload result image -->
+            <img id="webcamImg"    src="" alt="Webcam feed">
+            <img id="esp32Img"     src="" alt="ESP32 feed">
+            <video id="mobileVideo" autoplay playsinline muted></video>
+            <img id="mobileResult" src="" alt="Mobile result">
             <img id="uploadPreview" src="" alt="Upload preview">
-
-            <!-- Simulation canvas -->
             <canvas class="skeleton-canvas" id="skeletonCanvas"></canvas>
 
-            <!-- Upload drop zone (shown in upload mode when no image yet) -->
             <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
               <i class="fas fa-cloud-upload-alt"></i>
               <p><strong>Click or drag an image here</strong></p>
-              <p style="font-size:0.85rem; margin-top:0.5rem; opacity:0.6;">JPG, PNG — Full body visible for best results</p>
+              <p style="font-size:.85rem;margin-top:.5rem;opacity:.6;">JPG / PNG — full body visible</p>
             </div>
             <input type="file" id="fileInput" accept="image/*" onchange="handleUpload(event)">
 
-            <!-- Placeholder (default) -->
+            <div class="esp32-connect-panel" id="esp32ConnectPanel">
+              <span class="esp-icon">📡</span>
+              <div>
+                <div style="font-size:1.1rem;font-weight:700;color:#ff8c42;margin-bottom:.5rem;">ESP32-CAM Mode</div>
+                <div style="font-size:.85rem;opacity:.7;max-width:340px;">Flash your ESP32 to POST raw JPEG frames to <code style="color:#ff8c42;background:#222;padding:2px 5px;font-size:.78rem;">/esp32_frame</code>. Annotated frames appear here automatically.</div>
+              </div>
+              <div class="esp32-ip-form">
+                <input class="esp32-ip-input" id="esp32IpInput" placeholder="Flask IP  e.g. 192.168.1.x:5000">
+                <button class="cam-btn cam-btn-esp32" style="flex:none;padding:.65rem 1.2rem;" onclick="connectESP32()"><i class="fas fa-plug"></i> Connect</button>
+              </div>
+            </div>
+
+            <div class="esp32-no-stream" id="esp32NoStream">
+              <i class="fas fa-satellite-dish"></i>
+              <div style="font-size:.9rem;">Waiting for ESP32 frames…<br><span style="font-size:.8rem;opacity:.6;">ESP32 must POST to <code style="color:#ff8c42;">/esp32_frame</code></span></div>
+            </div>
+
             <div class="camera-placeholder" id="placeholder">
               <i class="fas fa-person-walking"></i>
               <p>Select a mode above to begin</p>
             </div>
 
-            <!-- Loading spinner -->
             <div class="spinner" id="spinner"></div>
 
-            <!-- Overlays -->
-            <div class="camera-overlay-pose" id="poseLabel" style="border-color:#a8e6cf;">
-              — Waiting —
-            </div>
-            <div class="camera-overlay-fps" id="fpsLabel">-- FPS</div>
+            <div class="camera-overlay-pose"   id="poseLabel"   style="border-color:#a8e6cf;">— Waiting —</div>
+            <div class="camera-overlay-fps"    id="fpsLabel">-- FPS</div>
+            <div class="camera-overlay-source" id="sourceLabel">📡 ESP32-CAM</div>
             <div class="camera-overlay-conf">
-              <div class="conf-label">
-                <span id="confText">Confidence: —</span>
-                <span id="poseText">—</span>
-              </div>
-              <div class="conf-bar-bg">
-                <div class="conf-bar-fill" id="confBar" style="width:0%; background:var(--green);"></div>
-              </div>
+              <div class="conf-label"><span id="confText">Confidence: —</span><span id="poseText">—</span></div>
+              <div class="conf-bar-bg"><div class="conf-bar-fill" id="confBar" style="width:0%;background:var(--green);"></div></div>
             </div>
           </div>
 
-          <!-- CONTROLS -->
           <div class="camera-controls">
-            <!-- Webcam controls -->
-            <button class="cam-btn cam-btn-start" id="btnStart"  onclick="startWebcam()">
-              <i class="fas fa-play"></i> Start Webcam
-            </button>
-            <button class="cam-btn cam-btn-stop"  id="btnStop"   onclick="stopWebcam()" disabled>
-              <i class="fas fa-stop"></i> Stop
-            </button>
-            <!-- Mobile camera controls -->
-            <button class="cam-btn cam-btn-start" id="btnMobileStart" onclick="startMobileCamera()" style="display:none;">
-              <i class="fas fa-mobile-alt"></i> Start Camera
-            </button>
-            <button class="cam-btn cam-btn-stop"  id="btnMobileStop"  onclick="stopMobileCamera()"  style="display:none;" disabled>
-              <i class="fas fa-stop"></i> Stop
-            </button>
-            <button class="cam-btn cam-btn-upload" id="btnMobileFlip" onclick="flipMobileCamera()" style="display:none;">
-              <i class="fas fa-sync"></i> Flip
-            </button>
-            <!-- Upload control -->
-            <button class="cam-btn cam-btn-upload" id="btnUpload" onclick="document.getElementById('fileInput').click()" style="display:none;">
-              <i class="fas fa-folder-open"></i> Choose Image
-            </button>
-            <!-- Sim controls -->
-            <button class="cam-btn cam-btn-sim"   id="btnSimStart"  onclick="startSimulation()" style="display:none;">
-              <i class="fas fa-play"></i> Start Sim
-            </button>
-            <button class="cam-btn cam-btn-stop"  id="btnSimStop"   onclick="stopSimulation()"  style="display:none;" disabled>
-              <i class="fas fa-stop"></i> Stop Sim
-            </button>
+            <button class="cam-btn cam-btn-start"  id="btnStart"       onclick="startWebcam()">         <i class="fas fa-play"></i>         Webcam        </button>
+            <button class="cam-btn cam-btn-stop"   id="btnStop"        onclick="stopWebcam()"  disabled><i class="fas fa-stop"></i>         Stop          </button>
+            <button class="cam-btn cam-btn-start"  id="btnMobileStart" onclick="startMobileCamera()" style="display:none;"><i class="fas fa-mobile-alt"></i> Camera       </button>
+            <button class="cam-btn cam-btn-stop"   id="btnMobileStop"  onclick="stopMobileCamera()"  style="display:none;" disabled><i class="fas fa-stop"></i>       Stop          </button>
+            <button class="cam-btn cam-btn-upload" id="btnMobileFlip"  onclick="flipMobileCamera()"   style="display:none;"><i class="fas fa-sync"></i>         Flip          </button>
+            <button class="cam-btn cam-btn-upload" id="btnUpload"      onclick="document.getElementById('fileInput').click()" style="display:none;"><i class="fas fa-folder-open"></i> Choose Image  </button>
+            <button class="cam-btn cam-btn-esp32"  id="btnEsp32Start"  onclick="startESP32Poll()"     style="display:none;"><i class="fas fa-satellite-dish"></i> Start Polling </button>
+            <button class="cam-btn cam-btn-stop"   id="btnEsp32Stop"   onclick="stopESP32Poll()"      style="display:none;" disabled><i class="fas fa-stop"></i>         Stop          </button>
+            <button class="cam-btn cam-btn-sim"    id="btnSimStart"    onclick="startSimulation()"    style="display:none;"><i class="fas fa-play"></i>         Start Sim     </button>
+            <button class="cam-btn cam-btn-stop"   id="btnSimStop"     onclick="stopSimulation()"     style="display:none;" disabled><i class="fas fa-stop"></i>         Stop Sim      </button>
           </div>
         </div>
 
-        <!-- SIDEBAR -->
         <div class="sidebar-panel">
 
-          <!-- POSE SELECTOR (sim mode) -->
           <div class="info-card" id="poseSelector">
-            <div class="info-card-header"><i class="fas fa-person-praying"></i> Pose Controls</div>
+            <div class="info-card-header"><i class="fas fa-person-praying"></i> <span id="sidebarPoseTitle">Pose Controls</span></div>
             <div class="info-card-body">
-              <div class="pose-selector-grid" id="simPoseGrid">
+              <div class="pose-selector-grid" id="simPoseGrid" style="display:none;">
                 <button class="pose-select-btn active" onclick="selectSimPose('warrior')" id="btn-warrior"><span>🥋</span>Warrior II</button>
                 <button class="pose-select-btn"        onclick="selectSimPose('tree')"    id="btn-tree">   <span>🌳</span>Tree Pose</button>
                 <button class="pose-select-btn"        onclick="selectSimPose('tpose')"   id="btn-tpose">  <span>✈️</span>T Pose</button>
                 <button class="pose-select-btn"        onclick="selectSimPose('unknown')" id="btn-unknown"><span>❓</span>Unknown</button>
               </div>
-              <p id="liveNote" style="display:none; font-size:0.85rem; opacity:0.65; margin-top:0.75rem;">
-                <i class="fas fa-circle-info"></i> Live data from your Flask backend
-              </p>
+              <div class="esp32-info-box" id="esp32InfoBox" style="display:none;">
+                <strong>📡 ESP32-CAM Setup</strong><br><br>
+                <strong>1. Arduino sketch:</strong> POST raw JPEG body to<br><code>/esp32_frame</code> on the Flask server.<br><br>
+                <strong>2. Flask</strong> annotates the frame and serves it at <code>/latest_frame</code>.<br><br>
+                <strong>3. Browser</strong> polls <code>/latest_frame</code> every 150 ms.<br><br>
+                <strong>Endpoints:</strong><br>
+                <code>POST /esp32_frame</code> ← raw JPEG<br>
+                <code>GET  /latest_frame</code> → annotated JPEG<br>
+                <code>GET  /pose_data</code>    → JSON angles
+              </div>
+              <p id="liveNote" style="font-size:.85rem;opacity:.65;margin-top:.75rem;"><i class="fas fa-circle-info"></i> Live data from Flask backend</p>
             </div>
           </div>
 
-          <!-- ANGLE READOUTS -->
           <div class="info-card">
             <div class="info-card-header"><i class="fas fa-ruler-combined"></i> Joint Angle Readouts</div>
             <div class="info-card-body">
-              <div class="angle-readout"><span class="angle-joint">Left Elbow</span>   <span class="angle-value" id="ang-le">—°</span></div>
-              <div class="angle-readout"><span class="angle-joint">Right Elbow</span>  <span class="angle-value" id="ang-re">—°</span></div>
-              <div class="angle-readout"><span class="angle-joint">Left Shoulder</span><span class="angle-value" id="ang-ls">—°</span></div>
+              <div class="angle-readout"><span class="angle-joint">Left Elbow</span>    <span class="angle-value" id="ang-le">—°</span></div>
+              <div class="angle-readout"><span class="angle-joint">Right Elbow</span>   <span class="angle-value" id="ang-re">—°</span></div>
+              <div class="angle-readout"><span class="angle-joint">Left Shoulder</span> <span class="angle-value" id="ang-ls">—°</span></div>
               <div class="angle-readout"><span class="angle-joint">Right Shoulder</span><span class="angle-value" id="ang-rs">—°</span></div>
-              <div class="angle-readout"><span class="angle-joint">Left Knee</span>    <span class="angle-value" id="ang-lk">—°</span></div>
-              <div class="angle-readout"><span class="angle-joint">Right Knee</span>   <span class="angle-value" id="ang-rk">—°</span></div>
+              <div class="angle-readout"><span class="angle-joint">Left Knee</span>     <span class="angle-value" id="ang-lk">—°</span></div>
+              <div class="angle-readout"><span class="angle-joint">Right Knee</span>    <span class="angle-value" id="ang-rk">—°</span></div>
             </div>
           </div>
 
-          <!-- TIPS -->
           <div class="info-card">
             <div class="info-card-header"><i class="fas fa-lightbulb"></i> Form Tips</div>
             <div class="info-card-body" id="tips-panel">
-              <div class="tip-chip"><i class="fas fa-circle-info"></i>Start webcam or upload an image to get pose tips</div>
+              <div class="tip-chip"><i class="fas fa-circle-info"></i>Start a mode to get pose tips</div>
             </div>
           </div>
 
         </div>
       </div>
 
-      <!-- RUN LOCALLY SECTION -->
       <section class="section">
         <h2 class="section-title">Run Locally</h2>
-        <div style="background:var(--white); border:4px solid var(--border); box-shadow:8px 8px 0 var(--border); overflow:hidden;">
-          <div style="padding:2rem; border-bottom:3px solid var(--border);">
-            <p style="font-size:1rem; opacity:0.8; max-width:600px;">Install dependencies then run the Flask server. Open this page in your browser and all features connect automatically.</p>
+        <div style="background:var(--white);border:4px solid var(--border);box-shadow:8px 8px 0 var(--border);overflow:hidden;">
+          <div style="padding:2rem;border-bottom:3px solid var(--border);">
+            <p style="font-size:1rem;opacity:.8;max-width:640px;">Install deps, start Flask, open this page — all five modes auto-connect. For ESP32-CAM, flash the board to POST JPEG to <code style="background:#eee;padding:2px 6px;font-family:'Space Mono',monospace;font-size:.85rem;">/esp32_frame</code>.</p>
           </div>
-          <div style="background:#1a1a1a; color:#a8e6cf; font-family:'Space Mono',monospace; font-size:0.85rem; padding:2rem; line-height:2;">
-            <span style="color:#888;"># Install dependencies</span><br>
+          <div style="background:#1a1a1a;color:#a8e6cf;font-family:'Space Mono',monospace;font-size:.82rem;padding:2rem;line-height:2.1;">
+            <span style="color:#888;"># Install</span><br>
             <span style="color:#ffd93d;">pip</span> install flask flask-cors mediapipe opencv-python numpy<br><br>
-            <span style="color:#888;"># Start the Flask server</span><br>
+            <span style="color:#888;"># Start Flask</span><br>
             <span style="color:#ffd93d;">python</span> app.py<br><br>
-            <span style="color:#888;"># Open in browser</span><br>
+            <span style="color:#888;"># Browser</span><br>
             <span style="color:#ff6b9d;">http://127.0.0.1:5000</span><br><br>
-            <span style="color:#888;"># Press ESC or click Stop to end webcam session</span>
+            <span style="color:#888;"># ESP32-CAM endpoints</span><br>
+            <span style="color:#ff8c42;">POST /esp32_frame</span>  <span style="color:#555;">← raw JPEG body from ESP32</span><br>
+            <span style="color:#ff8c42;">GET  /latest_frame</span> <span style="color:#555;">← annotated JPEG for browser</span>
           </div>
         </div>
       </section>
 
-    </div><!-- /container -->
+    </div>
 
     <footer class="footer">
       <div class="footer-inner">
-        <div class="footer-brand">DEMO <span>AI Pose Detection System</span></div>
+        <div class="footer-brand">🧘 YogaVision <span>AI Pose Detection System</span></div>
         <nav class="footer-nav">
-          <a href="index.html">Home</a>
-          <a href="poses.html">Poses</a>
-          <a href="works.html">How It Works</a>
-          <a href="demo.html">Demo</a>
-          <a href="about.html">About</a>
-          <a href="developer.html">Developer</a>
+          <a href="index.html">Home</a><a href="poses.html">Poses</a>
+          <a href="works.html">How It Works</a><a href="demo.html">Demo</a>
+          <a href="about.html">About</a><a href="developer.html">Developer</a>
         </nav>
       </div>
       <div class="footer-bottom">
-        <span>© 2025 YogaVision — Built with MediaPipe & OpenCV</span>
-        <span style="font-family:'Space Mono',monospace; font-size:0.85rem;">Python · Flask · Computer Vision</span>
+        <span>© 2025 YogaVision — MediaPipe · OpenCV · Flask · ESP32</span>
+        <span style="font-family:'Space Mono',monospace;font-size:.85rem;">Python · Flask · ESP32 · CV</span>
       </div>
     </footer>
-  </div><!-- /page-wrapper -->
+  </div>
 
   <script>
-    // Auto-detect: if opened via ngrok/remote, use same origin; if local file, use localhost
-    const FLASK = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost')
-      ? 'http://127.0.0.1:5000'
-      : window.location.origin;
+    const FLASK = (location.hostname==='127.0.0.1'||location.hostname==='localhost')
+      ? 'http://127.0.0.1:5000' : location.origin;
 
-    // ─── Theme ───────────────────────────────────────────────────────────────
+    // Theme
+    const themeBtn = document.getElementById('theme-toggle');
+    const saved = localStorage.getItem('yv-theme')||'light';
+    document.body.setAttribute('data-theme', saved);
+    themeBtn.textContent = saved==='dark'?'☀️':'🌙';
+    themeBtn.addEventListener('click',()=>{
+      const next=document.body.getAttribute('data-theme')==='light'?'dark':'light';
+      document.body.setAttribute('data-theme',next);
+      localStorage.setItem('yv-theme',next);
+      themeBtn.textContent=next==='dark'?'☀️':'🌙';
+    });
+
+    // Navbar
+    let lastScroll=0;
+    window.addEventListener('scroll',()=>{
+      const cur=window.scrollY;
+      document.getElementById('navbar').classList.toggle('hidden',cur>lastScroll&&cur>100);
+      lastScroll=cur;
+    });
+
+    // Server check
+    async function checkServer(){
+      try{
+        const r=await fetch(`${FLASK}/pose_data`,{signal:AbortSignal.timeout(2000)});
+        if(r.ok){ document.getElementById('statusDot').className='status-dot online'; document.getElementById('statusText').textContent='✓ Flask connected — '+FLASK; return true; }
+      }catch{}
+      document.getElementById('statusDot').className='status-dot error';
+      document.getElementById('statusText').textContent='✗ Flask offline — run: python app.py';
+      return false;
+    }
+    checkServer(); setInterval(checkServer,8000);
+
+    // State
+    let currentMode='webcam', webcamActive=false, mobileActive=false;
+    let mobileFacingMode='user', mobileStream=null, mobileInterval=null;
+    let mobileCanvas=document.createElement('canvas');
+    let pollInterval=null, simInterval=null, simRunning=false, currentSimPose='warrior';
+    let esp32PollInterval=null, esp32Active=false, esp32FrameCount=0;
+    let _esp32Base=null;
+
+    function resetOverlays(){
+      document.getElementById('poseLabel').textContent='— Waiting —';
+      document.getElementById('poseLabel').style.borderColor='#a8e6cf';
+      document.getElementById('fpsLabel').textContent='-- FPS';
+      document.getElementById('confText').textContent='Confidence: —';
+      document.getElementById('poseText').textContent='—';
+      document.getElementById('confBar').style.width='0%';
+      ['ang-le','ang-re','ang-ls','ang-rs','ang-lk','ang-rk'].forEach(id=>{
+        const el=document.getElementById(id); el.textContent='—°'; el.className='angle-value';
+      });
+      document.getElementById('tips-panel').innerHTML='<div class="tip-chip"><i class="fas fa-circle-info"></i>Waiting for detection…</div>';
+    }
+
+    function updateUI(data){
+      const{pose,confidence,angles,fps}=data;
+      const color=pose!=='Unknown Pose'?'#a8e6cf':'#ff6b9d';
+      document.getElementById('poseLabel').textContent=`${confidence>50?'✓':'✗'} ${pose} — ${confidence}%`;
+      document.getElementById('poseLabel').style.borderColor=color;
+      document.getElementById('confText').textContent=`Confidence: ${confidence}%`;
+      document.getElementById('poseText').textContent=pose;
+      document.getElementById('confBar').style.width=confidence+'%';
+      document.getElementById('confBar').style.background=confidence>75?'var(--green)':confidence>45?'var(--yellow)':'var(--pink)';
+      if(fps) document.getElementById('fpsLabel').textContent=fps+' FPS';
+      const map={le:'ang-le',re:'ang-re',ls:'ang-ls',rs:'ang-rs',lk:'ang-lk',rk:'ang-rk'};
+      Object.entries(map).forEach(([k,id])=>{
+        const val=angles[k]; if(val===undefined) return;
+        const el=document.getElementById(id); el.textContent=val+'°';
+        const v=parseInt(val);
+        el.className='angle-value '+(v>155||(v>80&&v<115)||(v>25&&v<50)?'ok':v>120?'warn':'bad');
+      });
+      const tips={'Warrior II Pose':['Keep front knee over ankle','Arms fully parallel to ground','Shoulders at 90°','Gaze over front finger','Relax shoulders from ears'],'Tree Pose':['Fix gaze on a single point','Foot above OR below the knee','Press standing foot into floor','Hips square to front'],'T Pose':['Stand straight, feet hip-width','Arms exactly at shoulder height','Palms facing downward','Chin parallel to floor'],'Unknown Pose':['Pose not recognised — adjust position','Full body must be in frame','Check lighting and background','See Poses page for guides']};
+      document.getElementById('tips-panel').innerHTML=(tips[pose]||tips['Unknown Pose']).map(t=>`<div class="tip-chip"><i class="fas fa-check"></i>${t}</div>`).join('');
+    }
+
+    function showEl(ids){ ids.forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='flex';}); }
+    function hideEl(ids){ ids.forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';}); }
+
+    function setMode(mode){
+      if(webcamActive) stopWebcam();
+      if(mobileActive) stopMobileCamera();
+      if(esp32Active)  stopESP32Poll();
+      stopSimulation();
+      currentMode=mode;
+
+      document.querySelectorAll('.mode-tab').forEach(t=>t.classList.remove('active'));
+      document.getElementById('tab-'+mode).classList.add('active');
+
+      hideEl(['webcamImg','mobileVideo','mobileResult','uploadPreview','uploadZone','skeletonCanvas','esp32Img','esp32ConnectPanel','esp32NoStream']);
+      document.getElementById('placeholder').style.display='flex';
+      document.getElementById('sourceLabel').style.display='none';
+      hideEl(['btnStart','btnStop','btnMobileStart','btnMobileStop','btnMobileFlip','btnUpload','btnEsp32Start','btnEsp32Stop','btnSimStart','btnSimStop']);
+      document.getElementById('simPoseGrid').style.display='none';
+      document.getElementById('esp32InfoBox').style.display='none';
+      document.getElementById('liveNote').style.display='block';
+      document.getElementById('sidebarPoseTitle').textContent='Pose Controls';
+      document.getElementById('esp32Badge').style.display='none';
+      resetOverlays();
+
+      if(mode==='webcam'){
+        showEl(['btnStart','btnStop']); document.getElementById('btnStop').disabled=true;
+      } else if(mode==='mobile'){
+        showEl(['btnMobileStart','btnMobileStop','btnMobileFlip']); document.getElementById('btnMobileStop').disabled=true;
+        document.getElementById('placeholder').innerHTML='<i class="fas fa-mobile-alt" style="font-size:4rem;color:rgba(255,255,255,.3)"></i><p style="color:rgba(255,255,255,.4);margin-top:1rem">Press Start Camera</p>';
+      } else if(mode==='upload'){
+        document.getElementById('uploadZone').style.display='flex';
+        document.getElementById('placeholder').style.display='none';
+        showEl(['btnUpload']);
+      } else if(mode==='esp32'){
+        document.getElementById('esp32ConnectPanel').style.display='flex';
+        document.getElementById('placeholder').style.display='none';
+        showEl(['btnEsp32Start','btnEsp32Stop']); document.getElementById('btnEsp32Stop').disabled=true;
+        document.getElementById('esp32InfoBox').style.display='block';
+        document.getElementById('liveNote').style.display='none';
+        document.getElementById('sidebarPoseTitle').textContent='ESP32 Info';
+        document.getElementById('esp32Badge').style.display='flex';
+        document.getElementById('sourceLabel').style.display='block';
+      } else if(mode==='sim'){
+        document.getElementById('skeletonCanvas').style.display='block';
+        document.getElementById('placeholder').style.display='none';
+        showEl(['btnSimStart','btnSimStop']);
+        document.getElementById('simPoseGrid').style.display='grid';
+        document.getElementById('liveNote').style.display='none';
+        resizeCanvas(); selectSimPose(currentSimPose); startSimulation();
+      }
+    }
+
+    // WEBCAM
+    async function startWebcam(){
+      const ok=await checkServer(); if(!ok){alert('Flask not running.\nRun: python app.py');return;}
+      await fetch(`${FLASK}/start_camera`,{method:'POST'});
+      await new Promise(r=>setTimeout(r,500));
+      webcamActive=true;
+      document.getElementById('placeholder').style.display='none';
+      document.getElementById('spinner').style.display='block';
+      const img=document.getElementById('webcamImg');
+      img.src=`${FLASK}/video_feed?t=${Date.now()}`; img.style.display='block';
+      img.onload=()=>{document.getElementById('spinner').style.display='none';};
+      img.onerror=()=>{document.getElementById('spinner').style.display='none';document.getElementById('placeholder').style.display='flex';document.getElementById('placeholder').innerHTML='<i class="fas fa-exclamation-triangle" style="font-size:3rem;color:#ff6b9d"></i><p style="color:#ff6b9d;margin-top:1rem">Camera not found or in use</p>';};
+      document.getElementById('btnStart').disabled=true; document.getElementById('btnStop').disabled=false;
+      pollInterval=setInterval(async()=>{try{const r=await fetch(`${FLASK}/pose_data`);updateUI(await r.json());}catch{}},500);
+    }
+    async function stopWebcam(){
+      webcamActive=false; clearInterval(pollInterval);
+      const img=document.getElementById('webcamImg'); img.src=''; img.style.display='none'; img.onload=null; img.onerror=null;
+      await fetch(`${FLASK}/stop_camera`,{method:'POST'}).catch(()=>{});
+      document.getElementById('placeholder').style.display='flex';
+      document.getElementById('placeholder').innerHTML='<i class="fas fa-person-walking"></i><p>Select a mode above to begin</p>';
+      document.getElementById('btnStart').disabled=false; document.getElementById('btnStop').disabled=true;
+    }
+
+    // MOBILE
+    async function startMobileCamera(){
+      try{
+        mobileStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:mobileFacingMode,width:{ideal:640},height:{ideal:480}},audio:false});
+        const v=document.getElementById('mobileVideo'); v.srcObject=mobileStream; v.style.display='block';
+        document.getElementById('mobileResult').style.display='block';
+        document.getElementById('placeholder').style.display='none';
+        document.getElementById('btnMobileStart').disabled=true; document.getElementById('btnMobileStop').disabled=false;
+        mobileActive=true; mobileInterval=setInterval(sendMobileFrame,200);
+      }catch(e){alert('Camera access denied.\n'+e.message);}
+    }
+    function stopMobileCamera(){
+      mobileActive=false; clearInterval(mobileInterval);
+      if(mobileStream){mobileStream.getTracks().forEach(t=>t.stop());mobileStream=null;}
+      document.getElementById('mobileVideo').style.display='none'; document.getElementById('mobileResult').style.display='none';
+      document.getElementById('placeholder').style.display='flex';
+      document.getElementById('btnMobileStart').disabled=false; document.getElementById('btnMobileStop').disabled=true;
+      resetOverlays();
+    }
+    async function flipMobileCamera(){ mobileFacingMode=mobileFacingMode==='user'?'environment':'user'; if(mobileActive){stopMobileCamera();await startMobileCamera();} }
+    async function sendMobileFrame(){
+      const v=document.getElementById('mobileVideo'); if(!v||v.readyState<2) return;
+      mobileCanvas.width=v.videoWidth||640; mobileCanvas.height=v.videoHeight||480;
+      mobileCanvas.getContext('2d').drawImage(v,0,0);
+      const b64=mobileCanvas.toDataURL('image/jpeg',.7);
+      try{
+        const r=await fetch(`${FLASK}/mobile_frame`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({frame:b64})});
+        const data=await r.json();
+        if(data.image) document.getElementById('mobileResult').src='data:image/jpeg;base64,'+data.image;
+        updateUI({...data,fps:null}); document.getElementById('fpsLabel').textContent='Live';
+      }catch{}
+    }
+
+    // UPLOAD
+    function handleUpload(event){
+      const file=event.target.files[0]; if(!file) return;
+      document.getElementById('uploadZone').style.display='none';
+      document.getElementById('spinner').style.display='block';
+      document.getElementById('uploadPreview').style.display='none';
+      const fd=new FormData(); fd.append('image',file);
+      fetch(`${FLASK}/upload`,{method:'POST',body:fd})
+        .then(r=>r.json())
+        .then(data=>{
+          document.getElementById('spinner').style.display='none';
+          if(data.error){alert(data.error);return;}
+          document.getElementById('uploadPreview').src='data:image/jpeg;base64,'+data.image;
+          document.getElementById('uploadPreview').style.display='block';
+          document.getElementById('placeholder').style.display='none';
+          updateUI({...data,fps:null}); document.getElementById('fpsLabel').textContent='Static';
+        })
+        .catch(()=>{document.getElementById('spinner').style.display='none';alert('Upload failed — Flask running?');});
+    }
+
+    // ESP32-CAM
+    function connectESP32(){
+      const val=document.getElementById('esp32IpInput').value.trim();
+      if(val) _esp32Base=val.startsWith('http')?val:'http://'+val;
+      startESP32Poll();
+    }
+    function startESP32Poll(){
+      if(esp32Active) return;
+      esp32Active=true; esp32FrameCount=0;
+      document.getElementById('btnEsp32Start').disabled=true;
+      document.getElementById('btnEsp32Stop').disabled=false;
+      document.getElementById('esp32ConnectPanel').style.display='none';
+      document.getElementById('esp32NoStream').style.display='flex';
+      document.getElementById('placeholder').style.display='none';
+      const base=_esp32Base||FLASK;
+
+      esp32PollInterval=setInterval(async()=>{
+        try{
+          const r=await fetch(`${base}/latest_frame?t=${Date.now()}`,{signal:AbortSignal.timeout(2000)});
+          if(r.status===204) return; // no frame yet
+          if(!r.ok) return;
+          const blob=await r.blob();
+          const url=URL.createObjectURL(blob);
+          const img=document.getElementById('esp32Img');
+          const old=img.src; img.src=url; img.style.display='block';
+          if(old.startsWith('blob:')) URL.revokeObjectURL(old);
+          document.getElementById('esp32NoStream').style.display='none';
+          document.getElementById('fpsLabel').textContent='~7 FPS';
+          esp32FrameCount++;
+          document.getElementById('esp32Dot').className='esp32-dot live';
+          document.getElementById('esp32StatusText').textContent=`ESP32 — ${esp32FrameCount} frames`;
+          // Fetch pose data
+          const pd=await fetch(`${base}/pose_data`);
+          updateUI(await pd.json());
+        }catch{}
+      },150);
+    }
+    function stopESP32Poll(){
+      esp32Active=false; clearInterval(esp32PollInterval);
+      const img=document.getElementById('esp32Img');
+      if(img.src.startsWith('blob:')) URL.revokeObjectURL(img.src);
+      img.src=''; img.style.display='none';
+      document.getElementById('esp32ConnectPanel').style.display='flex';
+      document.getElementById('esp32NoStream').style.display='none';
+      document.getElementById('btnEsp32Start').disabled=false;
+      document.getElementById('btnEsp32Stop').disabled=true;
+      document.getElementById('esp32Dot').className='esp32-dot';
+      document.getElementById('esp32StatusText').textContent='ESP32 — stopped';
+      resetOverlays();
+    }
+
+    // SIMULATION
+    const SIM_POSES={
+      warrior:{name:'Warrior II Pose',conf:94,color:'#66d9ef',angles:{le:[180,'ok'],re:[178,'ok'],ls:[92,'ok'],rs:[89,'ok'],lk:[175,'ok'],rk:[104,'ok']},tips:['Keep front knee over ankle','Arms fully parallel to ground','Shoulders at 90°','Gaze over front finger','Relax shoulders from ears']},
+      tree:   {name:'Tree Pose',conf:91,color:'#ffd93d',angles:{le:[175,'ok'],re:[172,'ok'],ls:[45,'warn'],rs:[42,'warn'],lk:[180,'ok'],rk:[33,'ok']},tips:['Fix gaze on a single point','Foot above OR below the knee','Press standing foot into floor','Hips square to front']},
+      tpose:  {name:'T Pose',conf:96,color:'#a8e6cf',angles:{le:[183,'ok'],re:[180,'ok'],ls:[90,'ok'],rs:[91,'ok'],lk:[180,'ok'],rk:[178,'ok']},tips:['Stand straight, feet hip-width','Arms at shoulder height','Palms facing downward','Chin parallel to floor']},
+      unknown:{name:'Unknown Pose',conf:12,color:'#ff6b9d',angles:{le:[145,'warn'],re:[160,'warn'],ls:[55,'bad'],rs:[130,'bad'],lk:[140,'bad'],rk:[145,'bad']},tips:['Pose not recognised','Adjust your position','Full body must be in frame','Check Poses page']},
+    };
+    const canvas=document.getElementById('skeletonCanvas'),ctx=canvas.getContext('2d');
+    function resizeCanvas(){const f=document.getElementById('cameraFeed');canvas.width=f.offsetWidth;canvas.height=f.offsetHeight;}
+    window.addEventListener('resize',()=>{resizeCanvas();if(currentMode==='sim')drawSkeleton(currentSimPose);});
+    function drawSkeleton(pk){
+      const w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);ctx.fillStyle='#111';ctx.fillRect(0,0,w,h);
+      ctx.strokeStyle='rgba(255,255,255,.05)';ctx.lineWidth=1;
+      for(let x=0;x<w;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}
+      for(let y=0;y<h;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
+      const cx=w*.5,cy=h*.5,s=Math.min(w,h)*.0032,pc=SIM_POSES[pk].color;
+      let p={};
+      if(pk==='warrior')p={head:[cx,cy-110*s],neck:[cx,cy-85*s],ls:[cx-55*s,cy-60*s],rs:[cx+55*s,cy-60*s],le:[cx-100*s,cy-60*s],re:[cx+100*s,cy-60*s],lw:[cx-145*s,cy-60*s],rw:[cx+145*s,cy-60*s],lh:[cx-20*s,cy+10*s],rh:[cx+20*s,cy+10*s],lk:[cx-20*s,cy+90*s],rk:[cx+60*s,cy+75*s],la:[cx-20*s,cy+170*s],ra:[cx+110*s,cy+160*s]};
+      else if(pk==='tree')p={head:[cx,cy-115*s],neck:[cx,cy-90*s],ls:[cx-30*s,cy-65*s],rs:[cx+30*s,cy-65*s],le:[cx-50*s,cy-30*s],re:[cx+50*s,cy-30*s],lw:[cx-30*s,cy-110*s],rw:[cx+30*s,cy-110*s],lh:[cx-15*s,cy+10*s],rh:[cx+15*s,cy+10*s],lk:[cx-15*s,cy+90*s],rk:[cx+65*s,cy+55*s],la:[cx-15*s,cy+170*s],ra:[cx+80*s,cy+115*s]};
+      else if(pk==='tpose')p={head:[cx,cy-115*s],neck:[cx,cy-90*s],ls:[cx-50*s,cy-65*s],rs:[cx+50*s,cy-65*s],le:[cx-100*s,cy-65*s],re:[cx+100*s,cy-65*s],lw:[cx-150*s,cy-65*s],rw:[cx+150*s,cy-65*s],lh:[cx-20*s,cy+10*s],rh:[cx+20*s,cy+10*s],lk:[cx-20*s,cy+90*s],rk:[cx+20*s,cy+90*s],la:[cx-20*s,cy+170*s],ra:[cx+20*s,cy+170*s]};
+      else p={head:[cx,cy-100*s],neck:[cx,cy-80*s],ls:[cx-40*s,cy-55*s],rs:[cx+40*s,cy-55*s],le:[cx-70*s,cy-30*s],re:[cx+70*s,cy-30*s],lw:[cx-55*s,cy+10*s],rw:[cx+55*s,cy+10*s],lh:[cx-20*s,cy+10*s],rh:[cx+20*s,cy+10*s],lk:[cx-25*s,cy+80*s],rk:[cx+25*s,cy+80*s],la:[cx-30*s,cy+160*s],ra:[cx+30*s,cy+160*s]};
+      const conns=[['head','neck'],['neck','ls'],['neck','rs'],['ls','le'],['le','lw'],['rs','re'],['re','rw'],['neck','lh'],['neck','rh'],['lh','rh'],['lh','lk'],['lk','la'],['rh','rk'],['rk','ra']];
+      ctx.strokeStyle=pc;ctx.lineWidth=3*s;ctx.lineCap='round';
+      conns.forEach(([a,b])=>{if(!p[a]||!p[b])return;ctx.beginPath();ctx.moveTo(p[a][0],p[a][1]);ctx.lineTo(p[b][0],p[b][1]);ctx.stroke();});
+      Object.entries(p).forEach(([n,[x,y]])=>{const k=['ls','rs','le','re','lh','rh','lk','rk'].includes(n);ctx.beginPath();ctx.arc(x,y,k?7*s:5*s,0,Math.PI*2);ctx.fillStyle=k?pc:'#fff';ctx.fill();ctx.strokeStyle='#000';ctx.lineWidth=2*s;ctx.stroke();});
+      ctx.beginPath();ctx.arc(p.head[0],p.head[1],16*s,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle=pc;ctx.lineWidth=3*s;ctx.stroke();
+    }
+    function selectSimPose(pk){
+      currentSimPose=pk;
+      document.querySelectorAll('.pose-select-btn').forEach(b=>b.classList.remove('active'));
+      document.getElementById('btn-'+pk).classList.add('active');
+      const sp=SIM_POSES[pk];
+      document.getElementById('poseLabel').textContent=`${sp.conf>50?'✓':'✗'} ${sp.name} — ${sp.conf}%`;
+      document.getElementById('poseLabel').style.borderColor=sp.color;
+      document.getElementById('confText').textContent=`Confidence: ${sp.conf}%`;
+      document.getElementById('poseText').textContent=sp.name;
+      document.getElementById('confBar').style.width=sp.conf+'%';
+      document.getElementById('confBar').style.background=sp.conf>80?'var(--green)':sp.conf>50?'var(--yellow)':'var(--pink)';
+      const map={le:'ang-le',re:'ang-re',ls:'ang-ls',rs:'ang-rs',lk:'ang-lk',rk:'ang-rk'};
+      Object.entries(sp.angles).forEach(([k,[val,st]])=>{const el=document.getElementById(map[k]);el.textContent=val+'°';el.className='angle-value '+st;});
+      document.getElementById('tips-panel').innerHTML=sp.tips.map(t=>`<div class="tip-chip"><i class="fas fa-check"></i>${t}</div>`).join('');
+      if(currentMode==='sim') drawSkeleton(pk);
+    }
+    function startSimulation(){
+      if(simRunning) return; simRunning=true;
+      document.getElementById('btnSimStart').disabled=true; document.getElementById('btnSimStop').disabled=false;
+      resizeCanvas(); selectSimPose(currentSimPose);
+      simInterval=setInterval(()=>{
+        drawSkeleton(currentSimPose);
+        const sp=SIM_POSES[currentSimPose];
+        const map={le:'ang-le',re:'ang-re',ls:'ang-ls',rs:'ang-rs',lk:'ang-lk',rk:'ang-rk'};
+        Object.entries(sp.angles).forEach(([k,[v]])=>{document.getElementById(map[k]).textContent=Math.round(v+(Math.random()-.5)*4)+'°';});
+        document.getElementById('fpsLabel').textContent=Math.round(55+Math.random()*8)+' FPS';
+      },80);
+    }
+    function stopSimulation(){
+      simRunning=false; clearInterval(simInterval);
+      document.getElementById('btnSimStart').disabled=false; document.getElementById('btnSimStop').disabled=true;
+      document.getElementById('fpsLabel').textContent='-- FPS';
+      if(currentMode==='sim') drawSkeleton(currentSimPose);
+    }
+
+    setMode('webcam');
+  </script>
+</body>
+</html> -->
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YogaVision | Live Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Space+Mono:wght@400;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page-hero { background:var(--green); border-bottom:4px solid var(--border); padding:3rem 3rem 2rem; }
+    .page-hero-tag { display:inline-flex;align-items:center;gap:.5rem;padding:.3rem .8rem;background:var(--white);border:3px solid var(--border);box-shadow:3px 3px 0 var(--border);font-weight:700;font-size:.85rem;margin-bottom:1rem; }
+    .page-hero-title { font-size:3.5rem;font-weight:700;line-height:1.1;margin-bottom:.75rem; }
+    .page-hero-desc  { font-size:1.1rem;opacity:.85;max-width:600px; }
+
+    .mode-tabs { display:flex;gap:0;margin-bottom:2rem;border:4px solid var(--border);box-shadow:6px 6px 0 var(--border);overflow:hidden;width:fit-content;flex-wrap:wrap; }
+    .mode-tab  { padding:.75rem 1.4rem;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.88rem;border:none;border-right:3px solid var(--border);background:var(--white);cursor:pointer;display:flex;align-items:center;gap:.5rem;transition:all .2s; }
+    .mode-tab:last-child { border-right:none; }
+    .mode-tab.active             { background:var(--cyan); }
+    .mode-tab:hover:not(.active) { background:var(--yellow); }
+    .mode-tab.esp32-tab.active              { background:#ff8c42; }
+    .mode-tab.esp32-tab:hover:not(.active)  { background:#ffe0cc; }
+
+    .status-bar { display:flex;align-items:center;gap:.75rem;padding:.6rem 1.2rem;background:#1a1a1a;border:3px solid var(--border);box-shadow:4px 4px 0 var(--border);margin-bottom:1.5rem;font-family:'Space Mono',monospace;font-size:.8rem;color:#a8e6cf;flex-wrap:wrap; }
+    .status-dot { width:10px;height:10px;border-radius:50%;background:#666;transition:background .3s;flex-shrink:0; }
+    .status-dot.online { background:#a8e6cf;box-shadow:0 0 6px #a8e6cf; }
+    .status-dot.error  { background:#ff6b9d;box-shadow:0 0 6px #ff6b9d; }
+    .esp32-badge { margin-left:auto;display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:#ff8c42; }
+    .esp32-dot   { width:8px;height:8px;border-radius:50%;background:#444;transition:background .3s; }
+    .esp32-dot.live { background:#ff8c42;box-shadow:0 0 6px #ff8c42;animation:blink 1.5s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1}50%{opacity:.4} }
+
+    .demo-layout { display:grid;grid-template-columns:1fr 380px;gap:2rem;margin-bottom:3rem; }
+
+    .camera-panel { background:#111;border:4px solid var(--border);box-shadow:10px 10px 0 var(--border);overflow:hidden;position:relative; }
+    .camera-feed  { width:100%;aspect-ratio:4/3;background:#111;display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative;overflow:hidden; }
+
+    #webcamImg, #esp32Img  { width:100%;height:100%;object-fit:contain;display:none; }
+    #uploadPreview          { width:100%;height:100%;object-fit:contain;display:none; }
+
+    .upload-zone { border:4px dashed var(--border);background:rgba(255,255,255,.04);padding:3rem 2rem;text-align:center;cursor:pointer;transition:all .2s;color:rgba(255,255,255,.5);display:none; }
+    .upload-zone:hover { background:rgba(168,230,207,.08);border-color:#a8e6cf; }
+    .upload-zone i { font-size:3rem;display:block;margin-bottom:1rem; }
+    #fileInput { display:none; }
+
+    .esp32-connect-panel { display:none;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;padding:2rem;text-align:center;color:rgba(255,255,255,.7);width:100%; }
+    .esp32-connect-panel .esp-icon { font-size:4rem; }
+    .esp32-ip-form { display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;justify-content:center; }
+    .esp32-ip-input { padding:.6rem 1rem;border:3px solid #a8e6cf;background:#222;color:#a8e6cf;font-family:'Space Mono',monospace;font-size:.88rem;min-width:200px; }
+    .esp32-ip-input::placeholder { opacity:.4; }
+    .esp32-no-stream { display:none;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:2rem;text-align:center;color:rgba(255,165,100,.7);width:100%; }
+    .esp32-no-stream i { font-size:3.5rem; }
+
+    .camera-placeholder { color:rgba(255,255,255,.3);text-align:center;z-index:2; }
+    .camera-placeholder i { font-size:5rem;display:block;margin-bottom:1rem; }
+
+    .camera-overlay-pose   { position:absolute;top:1rem;left:1rem;background:rgba(0,0,0,.85);border:3px solid;padding:.5rem 1rem;font-weight:700;font-size:1.1rem;color:#fff;font-family:'Space Mono',monospace;transition:all .3s;z-index:10; }
+    .camera-overlay-fps    { position:absolute;top:1rem;right:1rem;background:rgba(0,0,0,.7);border:2px solid #444;padding:.25rem .6rem;color:#a8e6cf;font-family:'Space Mono',monospace;font-size:.8rem;z-index:10; }
+    .camera-overlay-source { position:absolute;top:1rem;right:1rem;background:rgba(255,140,66,.92);border:2px solid var(--border);padding:.25rem .7rem;color:#000;font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;z-index:10;display:none; }
+    .camera-overlay-conf   { position:absolute;bottom:1rem;left:1rem;right:1rem;z-index:10; }
+    .conf-bar-bg   { width:100%;height:8px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);overflow:hidden; }
+    .conf-bar-fill { height:100%;transition:width .5s ease; }
+    .conf-label    { display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem;color:rgba(255,255,255,.8);font-family:'Space Mono',monospace;font-size:.75rem; }
+
+    .camera-controls { display:flex;gap:.75rem;padding:1rem;background:#1a1a1a;border-top:3px solid var(--border);flex-wrap:wrap; }
+    .cam-btn { flex:1;min-width:90px;padding:.7rem;border:2px solid var(--border);font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.4rem; }
+    .cam-btn-start  { background:var(--green);color:#000; } .cam-btn-start:hover  { background:#7dd3a8; }
+    .cam-btn-stop   { background:var(--pink); color:#000; } .cam-btn-stop:hover   { background:#e0547e; }
+    .cam-btn-upload { background:var(--cyan); color:#000; } .cam-btn-upload:hover { background:#44c9e0; }
+    .cam-btn-esp32  { background:#ff8c42;color:#000; }     .cam-btn-esp32:hover  { background:#e07030; }
+    .cam-btn:disabled { opacity:.4;cursor:not-allowed; }
+
+    .sidebar-panel { display:flex;flex-direction:column;gap:1.5rem; }
+    .info-card { background:var(--white);border:4px solid var(--border);box-shadow:6px 6px 0 var(--border);overflow:hidden; }
+    .info-card-header { padding:1rem 1.5rem;border-bottom:3px solid var(--border);font-weight:700;font-size:1rem;display:flex;align-items:center;gap:.5rem; }
+    .info-card:nth-child(1) .info-card-header { background:var(--yellow); }
+    .info-card:nth-child(2) .info-card-header { background:var(--pink);   }
+    .info-card:nth-child(3) .info-card-header { background:var(--cyan);   }
+    .info-card-body { padding:1.5rem; }
+
+    .angle-readout { display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:2px solid rgba(0,0,0,.08);font-size:.9rem; }
+    .angle-readout:last-child { border-bottom:none; }
+    .angle-joint { font-weight:600; }
+    .angle-value { font-family:'Space Mono',monospace;font-weight:700;font-size:1rem;padding:.2rem .5rem;border:2px solid var(--border);min-width:55px;text-align:center;background:var(--white);transition:background .4s; }
+    .angle-value.ok   { background:var(--green);  }
+    .angle-value.warn { background:var(--yellow); }
+    .angle-value.bad  { background:var(--pink);   }
+
+    .tip-chip { display:flex;align-items:flex-start;gap:.6rem;padding:.6rem 0;font-size:.88rem;border-bottom:2px solid rgba(0,0,0,.07); }
+    .tip-chip:last-child { border-bottom:none; }
+    .tip-chip i { color:var(--border);flex-shrink:0;margin-top:.1rem; }
+
+    .esp32-info-box { background:#fff5ee;border:3px solid var(--border);padding:1rem;font-size:.87rem;line-height:1.7; }
+    .esp32-info-box code { background:#1a1a1a;color:#ff8c42;font-family:'Space Mono',monospace;font-size:.78rem;padding:.1rem .4rem; }
+
+    .spinner { display:none;width:40px;height:40px;border:4px solid rgba(168,230,207,.2);border-top-color:#a8e6cf;border-radius:50%;animation:spin .8s linear infinite;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:20; }
+    @keyframes spin { to { transform:translate(-50%,-50%) rotate(360deg); } }
+
+    @media (max-width:1024px) { .demo-layout { grid-template-columns:1fr; } }
+    @media (max-width:700px)  { .page-hero-title{font-size:2.2rem;} .mode-tabs{width:100%;} .mode-tab{flex:1;font-size:.72rem;padding:.6rem .4rem;} }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <nav class="navbar" id="navbar">
+      <div class="nav-content">
+        <a href="index.html" class="nav-brand">🧘 YogaVision</a>
+        <div class="nav-right">
+          <a href="index.html"     class="nav-link">Home</a>
+          <a href="poses.html"     class="nav-link">Poses</a>
+          <a href="works.html"     class="nav-link">How It Works</a>
+          <a href="demo.html"      class="nav-link active">Demo</a>
+          <a href="about.html"     class="nav-link">About</a>
+          <a href="developer.html" class="nav-link">Developer</a>
+          <a href="demo.html"      class="nav-cta">Try Now →</a>
+          <button class="theme-btn" id="theme-toggle">🌙</button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="page-hero">
+      <div class="page-hero-tag"><i class="fas fa-play-circle"></i> Interactive Demo</div>
+      <h1 class="page-hero-title">Live Pose Detection</h1>
+      <p class="page-hero-desc">Webcam, ESP32-CAM, or image upload — all powered by your local Flask backend.</p>
+    </div>
+
+    <div class="container">
+
+      <div class="status-bar">
+        <div class="status-dot" id="statusDot"></div>
+        <span id="statusText">Checking Flask server…</span>
+        <div class="esp32-badge" id="esp32Badge" style="display:none;">
+          <div class="esp32-dot" id="esp32Dot"></div>
+          <span id="esp32StatusText">ESP32 — no frames yet</span>
+        </div>
+      </div>
+
+      3 tabs: Webcam · Upload · ESP32-CAM -->
+     <!-- <div class="mode-tabs">
+        <button class="mode-tab active"    id="tab-webcam" onclick="setMode('webcam')"><i class="fas fa-video"></i> Webcam</button>
+        <button class="mode-tab"           id="tab-upload" onclick="setMode('upload')"><i class="fas fa-upload"></i> Upload</button>
+        <button class="mode-tab esp32-tab" id="tab-esp32"  onclick="setMode('esp32')"><i class="fas fa-microchip"></i> ESP32-CAM</button>
+      </div>
+
+      <div class="demo-layout">
+
+         CAMERA PANEL
+        <div class="camera-panel">
+          <div class="camera-feed" id="cameraFeed">
+
+            <img id="webcamImg"    src="" alt="Webcam feed">
+            <img id="esp32Img"     src="" alt="ESP32 feed">
+            <img id="uploadPreview" src="" alt="Upload preview">
+
+            <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <p><strong>Click or drag an image here</strong></p>
+              <p style="font-size:.85rem;margin-top:.5rem;opacity:.6;">JPG / PNG — full body visible</p>
+            </div>
+            <input type="file" id="fileInput" accept="image/*" onchange="handleUpload(event)">
+
+            <div class="esp32-connect-panel" id="esp32ConnectPanel">
+              <span class="esp-icon">📡</span>
+              <div>
+                <div style="font-size:1.1rem;font-weight:700;color:#ff8c42;margin-bottom:.5rem;">ESP32-CAM Mode</div>
+                <div style="font-size:.85rem;opacity:.7;max-width:340px;">Flask polls your ESP32's <code style="color:#ff8c42;background:#222;padding:2px 5px;font-size:.78rem;">/capture</code> endpoint automatically. Set <code style="color:#ff8c42;background:#222;padding:2px 5px;font-size:.78rem;">ESP32_IP</code> in app.py, then click Start Polling.</div>
+              </div>
+              <div class="esp32-ip-form">
+                <input class="esp32-ip-input" id="esp32IpInput" placeholder="Override Flask IP  e.g. 192.168.1.x:5000">
+                <button class="cam-btn cam-btn-esp32" style="flex:none;padding:.65rem 1.2rem;" onclick="connectESP32()"><i class="fas fa-plug"></i> Connect</button>
+              </div>
+            </div>
+
+            <div class="esp32-no-stream" id="esp32NoStream">
+              <i class="fas fa-satellite-dish"></i>
+              <div style="font-size:.9rem;">Waiting for ESP32 frames…<br><span style="font-size:.8rem;opacity:.6;">Make sure ESP32_IP is set correctly in app.py</span></div>
+            </div>
+
+            <div class="camera-placeholder" id="placeholder">
+              <i class="fas fa-person-walking"></i>
+              <p>Select a mode above to begin</p>
+            </div>
+
+            <div class="spinner" id="spinner"></div>
+
+            <div class="camera-overlay-pose"   id="poseLabel"   style="border-color:#a8e6cf;">— Waiting —</div>
+            <div class="camera-overlay-fps"    id="fpsLabel">-- FPS</div>
+            <div class="camera-overlay-source" id="sourceLabel">📡 ESP32-CAM</div>
+            <div class="camera-overlay-conf">
+              <div class="conf-label"><span id="confText">Confidence: —</span><span id="poseText">—</span></div>
+              <div class="conf-bar-bg"><div class="conf-bar-fill" id="confBar" style="width:0%;background:var(--green);"></div></div>
+            </div>
+          </div>
+
+          <div class="camera-controls">
+             Webcam 
+            <button class="cam-btn cam-btn-start" id="btnStart"      onclick="startWebcam()">          <i class="fas fa-play"></i>            Webcam        </button>
+            <button class="cam-btn cam-btn-stop"  id="btnStop"        onclick="stopWebcam()"   disabled><i class="fas fa-stop"></i>            Stop          </button>
+            <!-- Upload
+            <button class="cam-btn cam-btn-upload" id="btnUpload"     onclick="document.getElementById('fileInput').click()" style="display:none;"><i class="fas fa-folder-open"></i> Choose Image  </button>
+            <!-- ESP32 
+            <button class="cam-btn cam-btn-esp32" id="btnEsp32Start"  onclick="startESP32Poll()" style="display:none;"><i class="fas fa-satellite-dish"></i> Start Polling </button>
+            <button class="cam-btn cam-btn-stop"  id="btnEsp32Stop"   onclick="stopESP32Poll()"  style="display:none;" disabled><i class="fas fa-stop"></i>            Stop          </button>
+          </div>
+        </div>
+
+        <!-- SIDEBAR 
+        <div class="sidebar-panel">
+
+          <div class="info-card">
+            <div class="info-card-header"><i class="fas fa-person-praying"></i> <span id="sidebarPoseTitle">Detected Pose</span></div>
+            <div class="info-card-body">
+              <div class="esp32-info-box" id="esp32InfoBox" style="display:none;">
+                <strong>📡 ESP32-CAM Setup</strong><br><br>
+                <strong>1.</strong> Set <code>ESP32_IP</code> in <code>app.py</code> to your board's IP.<br><br>
+                <strong>2.</strong> Flask polls <code>/capture</code>, annotates the frame, and exposes it at <code>/latest_frame</code>.<br><br>
+                <strong>3.</strong> Browser polls <code>/latest_frame</code> every 150 ms.<br><br>
+                <strong>Endpoints used:</strong><br>
+                <code>GET /latest_frame</code> → annotated JPEG<br>
+                <code>GET /pose_data</code>    → JSON angles &amp; pose
+              </div>
+              <p id="liveNote" style="font-size:.85rem;opacity:.65;margin-top:.5rem;"><i class="fas fa-circle-info"></i> Live data streamed from Flask backend</p>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-card-header"><i class="fas fa-ruler-combined"></i> Joint Angle Readouts</div>
+            <div class="info-card-body">
+              <div class="angle-readout"><span class="angle-joint">Left Elbow</span>    <span class="angle-value" id="ang-le">—°</span></div>
+              <div class="angle-readout"><span class="angle-joint">Right Elbow</span>   <span class="angle-value" id="ang-re">—°</span></div>
+              <div class="angle-readout"><span class="angle-joint">Left Shoulder</span> <span class="angle-value" id="ang-ls">—°</span></div>
+              <div class="angle-readout"><span class="angle-joint">Right Shoulder</span><span class="angle-value" id="ang-rs">—°</span></div>
+              <div class="angle-readout"><span class="angle-joint">Left Knee</span>     <span class="angle-value" id="ang-lk">—°</span></div>
+              <div class="angle-readout"><span class="angle-joint">Right Knee</span>    <span class="angle-value" id="ang-rk">—°</span></div>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-card-header"><i class="fas fa-lightbulb"></i> Form Tips</div>
+            <div class="info-card-body" id="tips-panel">
+              <div class="tip-chip"><i class="fas fa-circle-info"></i>Start a mode to get real-time pose tips</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <section class="section">
+        <h2 class="section-title">Run Locally</h2>
+        <div style="background:var(--white);border:4px solid var(--border);box-shadow:8px 8px 0 var(--border);overflow:hidden;">
+          <div style="padding:2rem;border-bottom:3px solid var(--border);">
+            <p style="font-size:1rem;opacity:.8;max-width:640px;">Install deps, start Flask, then open this page. For ESP32-CAM, set <code style="background:#eee;padding:2px 6px;font-family:'Space Mono',monospace;font-size:.85rem;">ESP32_IP</code> in app.py before running.</p>
+          </div>
+          <div style="background:#1a1a1a;color:#a8e6cf;font-family:'Space Mono',monospace;font-size:.82rem;padding:2rem;line-height:2.1;">
+            <span style="color:#888;"># Install dependencies</span><br>
+            <span style="color:#ffd93d;">pip</span> install flask flask-cors mediapipe opencv-python numpy<br><br>
+            <span style="color:#888;"># Set ESP32 IP in app.py (ESP32-CAM mode only)</span><br>
+            <span style="color:#ff8c42;">ESP32_IP = "http://&lt;your-esp32-ip&gt;"</span><br><br>
+            <span style="color:#888;"># Start Flask server</span><br>
+            <span style="color:#ffd93d;">python</span> app.py<br><br>
+            <span style="color:#888;"># Open in browser</span><br>
+            <span style="color:#ff6b9d;">http://127.0.0.1:5000</span>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">🧘 YogaVision <span>AI Pose Detection System</span></div>
+        <nav class="footer-nav">
+          <a href="index.html">Home</a><a href="poses.html">Poses</a>
+          <a href="works.html">How It Works</a><a href="demo.html">Demo</a>
+          <a href="about.html">About</a><a href="developer.html">Developer</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 YogaVision — MediaPipe · OpenCV · Flask · ESP32</span>
+        <span style="font-family:'Space Mono',monospace;font-size:.85rem;">Python · Flask · ESP32 · CV</span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const FLASK = (location.hostname === '127.0.0.1' || location.hostname === 'localhost')
+      ? 'http://127.0.0.1:5000' : location.origin;
+
+    // ── Theme ──────────────────────────────────────────────────────────────
     const themeBtn = document.getElementById('theme-toggle');
     const saved = localStorage.getItem('yv-theme') || 'light';
     document.body.setAttribute('data-theme', saved);
@@ -583,7 +939,7 @@
       themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
     });
 
-    // ─── Navbar hide on scroll ────────────────────────────────────────────────
+    // ── Navbar hide on scroll ──────────────────────────────────────────────
     let lastScroll = 0;
     window.addEventListener('scroll', () => {
       const cur = window.scrollY;
@@ -591,100 +947,74 @@
       lastScroll = cur;
     });
 
-    // ─── Server Status Check ─────────────────────────────────────────────────
+    // ── Flask server check ─────────────────────────────────────────────────
     async function checkServer() {
       try {
         const r = await fetch(`${FLASK}/pose_data`, { signal: AbortSignal.timeout(2000) });
         if (r.ok) {
           document.getElementById('statusDot').className = 'status-dot online';
-          document.getElementById('statusText').textContent = '✓ Flask server connected — ' + FLASK;
+          document.getElementById('statusText').textContent = '✓ Flask connected — ' + FLASK;
           return true;
         }
       } catch {}
       document.getElementById('statusDot').className = 'status-dot error';
-      document.getElementById('statusText').textContent = '✗ Flask server offline — run: python app.py';
+      document.getElementById('statusText').textContent = '✗ Flask offline — run: python app.py';
       return false;
     }
     checkServer();
     setInterval(checkServer, 8000);
 
-    // ─── Mode State ───────────────────────────────────────────────────────────
-    let currentMode = 'webcam';
-    let webcamActive = false;
-    let mobileActive = false;
-    let mobileFacingMode = 'user';
-    let mobileStream = null;
-    let mobileInterval = null;
-    let mobileCanvas = document.createElement('canvas');
-    let pollInterval = null;
-    let simInterval  = null;
-    let simRunning   = false;
-    let currentSimPose = 'warrior';
+    // ── State ──────────────────────────────────────────────────────────────
+    let currentMode    = 'webcam';
+    let webcamActive   = false;
+    let pollInterval   = null;
+    let esp32PollInterval = null;
+    let esp32Active    = false;
+    let esp32FrameCount = 0;
+    let _esp32Base     = null;
 
-    function setMode(mode) {
-      if (webcamActive) stopWebcam();
-      if (mobileActive) stopMobileCamera();
-      stopSimulation();
+    // ── Pose tips — kept in sync with all 6 poses in app.py ───────────────
+    const POSE_TIPS = {
+      'T Pose':          ['Stand straight, feet hip-width apart','Arms exactly at shoulder height','Palms facing downward','Chin parallel to floor','Hold steady and breathe evenly'],
+      'Warrior II Pose': ['Keep front knee directly over ankle','Arms fully parallel to the ground','Shoulders pressed down, not hunched','Gaze over your front fingertips','Hold for 5 steady breaths each side'],
+      'Tree Pose':       ['Fix your gaze on a single still point','Place foot above or below the knee','Press standing foot firmly into floor','Keep hips square to the front','Raise arms overhead for more challenge'],
+      'Mountain Pose':   ['Stand tall with feet hip-width apart','Arms relaxed and hanging at your sides','Distribute weight evenly on both feet','Chin parallel to the floor','Breathe deeply — this is your foundation'],
+      'Chair Pose':      ['Keep knees together, do not let them splay','Raise both arms straight overhead','Lift your chest — do not collapse forward','Sit back as if into an invisible chair','Hold for 5–10 deep, steady breaths'],
+      'Hand Up Pose':    ['Extend both arms fully overhead','Keep elbows straight, not bent','Reach up through your fingertips','Engage your core for stability','Keep legs straight and strong'],
+      'Unknown Pose':    ['Pose not recognised — adjust your position','Make sure your full body is in frame','Check lighting and background contrast','Try a slower, more deliberate movement','See the Poses page for reference guides'],
+    };
 
-      currentMode = mode;
+    // ── Update UI with Flask pose_data ─────────────────────────────────────
+    function updateUI(data) {
+      const { pose, confidence, angles, fps } = data;
+      const color = pose !== 'Unknown Pose' ? '#a8e6cf' : '#ff6b9d';
 
-      document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
-      document.getElementById('tab-' + mode).classList.add('active');
+      document.getElementById('poseLabel').textContent = `${confidence > 50 ? '✓' : '✗'} ${pose} — ${confidence}%`;
+      document.getElementById('poseLabel').style.borderColor = color;
+      document.getElementById('confText').textContent = `Confidence: ${confidence}%`;
+      document.getElementById('poseText').textContent = pose;
+      document.getElementById('confBar').style.width = confidence + '%';
+      document.getElementById('confBar').style.background =
+        confidence > 75 ? 'var(--green)' : confidence > 45 ? 'var(--yellow)' : 'var(--pink)';
+      if (fps) document.getElementById('fpsLabel').textContent = fps + ' FPS';
 
-      // Hide all panels
-      document.getElementById('webcamImg').style.display       = 'none';
-      document.getElementById('mobileVideo').style.display     = 'none';
-      document.getElementById('mobileResult').style.display    = 'none';
-      document.getElementById('uploadPreview').style.display   = 'none';
-      document.getElementById('uploadZone').style.display      = 'none';
-      document.getElementById('placeholder').style.display     = 'flex';
-      document.getElementById('skeletonCanvas').style.display  = 'none';
+      const map = { le:'ang-le', re:'ang-re', ls:'ang-ls', rs:'ang-rs', lk:'ang-lk', rk:'ang-rk' };
+      Object.entries(map).forEach(([k, id]) => {
+        const val = angles[k];
+        if (val === undefined) return;
+        const el = document.getElementById(id);
+        el.textContent = val + '°';
+        const v = parseInt(val);
+        el.className = 'angle-value ' +
+          (v > 155 || (v > 80 && v < 115) || (v > 25 && v < 50) ? 'ok' : v > 120 ? 'warn' : 'bad');
+      });
 
-      // Hide all buttons
-      document.getElementById('btnStart').style.display        = 'none';
-      document.getElementById('btnStop').style.display         = 'none';
-      document.getElementById('btnMobileStart').style.display  = 'none';
-      document.getElementById('btnMobileStop').style.display   = 'none';
-      document.getElementById('btnMobileFlip').style.display   = 'none';
-      document.getElementById('btnUpload').style.display       = 'none';
-      document.getElementById('btnSimStart').style.display     = 'none';
-      document.getElementById('btnSimStop').style.display      = 'none';
-
-      document.getElementById('simPoseGrid').style.display     = 'none';
-      document.getElementById('liveNote').style.display        = 'none';
-
-      resetOverlays();
-
-      if (mode === 'webcam') {
-        document.getElementById('btnStart').style.display = 'flex';
-        document.getElementById('btnStop').style.display  = 'flex';
-        document.getElementById('btnStop').disabled = true;
-        document.getElementById('liveNote').style.display = 'block';
-      } else if (mode === 'mobile') {
-        document.getElementById('btnMobileStart').style.display = 'flex';
-        document.getElementById('btnMobileStop').style.display  = 'flex';
-        document.getElementById('btnMobileFlip').style.display  = 'flex';
-        document.getElementById('btnMobileStop').disabled = true;
-        document.getElementById('liveNote').style.display = 'block';
-        document.getElementById('placeholder').innerHTML =
-          '<i class="fas fa-mobile-alt" style="font-size:4rem;color:rgba(255,255,255,0.3)"></i><p style="color:rgba(255,255,255,0.4);margin-top:1rem">Press Start Camera to use your device camera</p>';
-      } else if (mode === 'upload') {
-        document.getElementById('uploadZone').style.display = 'flex';
-        document.getElementById('placeholder').style.display = 'none';
-        document.getElementById('btnUpload').style.display   = 'flex';
-        document.getElementById('liveNote').style.display    = 'block';
-      } else if (mode === 'sim') {
-        document.getElementById('skeletonCanvas').style.display = 'block';
-        document.getElementById('placeholder').style.display = 'none';
-        document.getElementById('btnSimStart').style.display = 'flex';
-        document.getElementById('btnSimStop').style.display  = 'flex';
-        document.getElementById('simPoseGrid').style.display = 'grid';
-        resizeCanvas();
-        selectSimPose(currentSimPose);
-        startSimulation();
-      }
+      const tips = POSE_TIPS[pose] || POSE_TIPS['Unknown Pose'];
+      document.getElementById('tips-panel').innerHTML =
+        tips.map(t => `<div class="tip-chip"><i class="fas fa-check"></i>${t}</div>`).join('');
     }
 
+    // ── Reset overlays ─────────────────────────────────────────────────────
     function resetOverlays() {
       document.getElementById('poseLabel').textContent = '— Waiting —';
       document.getElementById('poseLabel').style.borderColor = '#a8e6cf';
@@ -701,7 +1031,651 @@
         '<div class="tip-chip"><i class="fas fa-circle-info"></i>Waiting for detection…</div>';
     }
 
-    // ─── Update UI from data ──────────────────────────────────────────────────
+    // ── Mode switcher ──────────────────────────────────────────────────────
+    function setMode(mode) {
+      if (webcamActive) stopWebcam();
+      if (esp32Active)  stopESP32Poll();
+      currentMode = mode;
+
+      document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab-' + mode).classList.add('active');
+
+      // Hide all feed elements
+      ['webcamImg','esp32Img','uploadPreview','uploadZone',
+       'esp32ConnectPanel','esp32NoStream'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
+      document.getElementById('placeholder').style.display = 'flex';
+      document.getElementById('sourceLabel').style.display  = 'none';
+      document.getElementById('esp32Badge').style.display   = 'none';
+      document.getElementById('esp32InfoBox').style.display = 'none';
+      document.getElementById('liveNote').style.display     = 'block';
+      document.getElementById('sidebarPoseTitle').textContent = 'Detected Pose';
+
+      // Hide all control buttons
+      ['btnStart','btnStop','btnUpload','btnEsp32Start','btnEsp32Stop'].forEach(id => {
+        document.getElementById(id).style.display = 'none';
+      });
+      resetOverlays();
+
+      if (mode === 'webcam') {
+        document.getElementById('btnStart').style.display = 'flex';
+        document.getElementById('btnStop').style.display  = 'flex';
+        document.getElementById('btnStop').disabled = true;
+
+      } else if (mode === 'upload') {
+        document.getElementById('uploadZone').style.display  = 'flex';
+        document.getElementById('placeholder').style.display = 'none';
+        document.getElementById('btnUpload').style.display   = 'flex';
+
+      } else if (mode === 'esp32') {
+        document.getElementById('esp32ConnectPanel').style.display = 'flex';
+        document.getElementById('placeholder').style.display       = 'none';
+        document.getElementById('btnEsp32Start').style.display     = 'flex';
+        document.getElementById('btnEsp32Stop').style.display      = 'flex';
+        document.getElementById('btnEsp32Stop').disabled           = true;
+        document.getElementById('esp32InfoBox').style.display      = 'block';
+        document.getElementById('liveNote').style.display          = 'none';
+        document.getElementById('sidebarPoseTitle').textContent    = 'ESP32 Info';
+        document.getElementById('esp32Badge').style.display        = 'flex';
+        document.getElementById('sourceLabel').style.display       = 'block';
+      }
+    }
+
+    // ── Webcam mode ────────────────────────────────────────────────────────
+    async function startWebcam() {
+      const ok = await checkServer();
+      if (!ok) { alert('Flask not running.\nRun: python app.py'); return; }
+
+      await fetch(`${FLASK}/start_camera`, { method: 'POST' });
+      await new Promise(r => setTimeout(r, 500));
+      webcamActive = true;
+
+      document.getElementById('placeholder').style.display = 'none';
+      document.getElementById('spinner').style.display     = 'block';
+
+      const img = document.getElementById('webcamImg');
+      img.src   = `${FLASK}/video_feed?t=${Date.now()}`;
+      img.style.display = 'block';
+      img.onload  = () => { document.getElementById('spinner').style.display = 'none'; };
+      img.onerror = () => {
+        document.getElementById('spinner').style.display   = 'none';
+        document.getElementById('placeholder').style.display = 'flex';
+        document.getElementById('placeholder').innerHTML =
+          '<i class="fas fa-exclamation-triangle" style="font-size:3rem;color:#ff6b9d"></i>' +
+          '<p style="color:#ff6b9d;margin-top:1rem">Camera not found or already in use</p>';
+      };
+
+      document.getElementById('btnStart').disabled = true;
+      document.getElementById('btnStop').disabled  = false;
+
+      pollInterval = setInterval(async () => {
+        try {
+          const r = await fetch(`${FLASK}/pose_data`);
+          updateUI(await r.json());
+        } catch {}
+      }, 500);
+    }
+
+    async function stopWebcam() {
+      webcamActive = false;
+      clearInterval(pollInterval);
+      const img = document.getElementById('webcamImg');
+      img.src = ''; img.style.display = 'none';
+      img.onload = null; img.onerror = null;
+      await fetch(`${FLASK}/stop_camera`, { method: 'POST' }).catch(() => {});
+      document.getElementById('placeholder').style.display = 'flex';
+      document.getElementById('placeholder').innerHTML =
+        '<i class="fas fa-person-walking"></i><p>Select a mode above to begin</p>';
+      document.getElementById('btnStart').disabled = false;
+      document.getElementById('btnStop').disabled  = true;
+    }
+
+    // ── Upload mode ────────────────────────────────────────────────────────
+    function handleUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      document.getElementById('uploadZone').style.display    = 'none';
+      document.getElementById('spinner').style.display       = 'block';
+      document.getElementById('uploadPreview').style.display = 'none';
+
+      const fd = new FormData();
+      fd.append('image', file);
+
+      fetch(`${FLASK}/upload`, { method: 'POST', body: fd })
+        .then(r => r.json())
+        .then(data => {
+          document.getElementById('spinner').style.display = 'none';
+          if (data.error) { alert(data.error); return; }
+          document.getElementById('uploadPreview').src          = 'data:image/jpeg;base64,' + data.image;
+          document.getElementById('uploadPreview').style.display = 'block';
+          document.getElementById('placeholder').style.display  = 'none';
+          updateUI({ ...data, fps: null });
+          document.getElementById('fpsLabel').textContent = 'Static';
+        })
+        .catch(() => {
+          document.getElementById('spinner').style.display = 'none';
+          alert('Upload failed — is Flask running?');
+        });
+    }
+
+    // ── ESP32-CAM mode ─────────────────────────────────────────────────────
+    function connectESP32() {
+      const val = document.getElementById('esp32IpInput').value.trim();
+      if (val) _esp32Base = val.startsWith('http') ? val : 'http://' + val;
+      startESP32Poll();
+    }
+
+    function startESP32Poll() {
+      if (esp32Active) return;
+      esp32Active = true;
+      esp32FrameCount = 0;
+
+      document.getElementById('btnEsp32Start').disabled           = true;
+      document.getElementById('btnEsp32Stop').disabled            = false;
+      document.getElementById('esp32ConnectPanel').style.display  = 'none';
+      document.getElementById('esp32NoStream').style.display      = 'flex';
+      document.getElementById('placeholder').style.display        = 'none';
+
+      const base = _esp32Base || FLASK;
+
+      esp32PollInterval = setInterval(async () => {
+        try {
+          const r = await fetch(`${base}/latest_frame?t=${Date.now()}`,
+            { signal: AbortSignal.timeout(2000) });
+          if (r.status === 204) return;
+          if (!r.ok) return;
+
+          const blob = await r.blob();
+          const url  = URL.createObjectURL(blob);
+          const img  = document.getElementById('esp32Img');
+          const old  = img.src;
+          img.src = url;
+          img.style.display = 'block';
+          if (old.startsWith('blob:')) URL.revokeObjectURL(old);
+
+          document.getElementById('esp32NoStream').style.display = 'none';
+          esp32FrameCount++;
+          document.getElementById('esp32Dot').className = 'esp32-dot live';
+          document.getElementById('esp32StatusText').textContent = `ESP32 — ${esp32FrameCount} frames`;
+
+          const pd = await fetch(`${base}/pose_data`);
+          updateUI(await pd.json());
+        } catch {}
+      }, 150);
+    }
+
+    function stopESP32Poll() {
+      esp32Active = false;
+      clearInterval(esp32PollInterval);
+      const img = document.getElementById('esp32Img');
+      if (img.src.startsWith('blob:')) URL.revokeObjectURL(img.src);
+      img.src = '';
+      img.style.display = 'none';
+      document.getElementById('esp32ConnectPanel').style.display = 'flex';
+      document.getElementById('esp32NoStream').style.display     = 'none';
+      document.getElementById('btnEsp32Start').disabled          = false;
+      document.getElementById('btnEsp32Stop').disabled           = true;
+      document.getElementById('esp32Dot').className              = 'esp32-dot';
+      document.getElementById('esp32StatusText').textContent     = 'ESP32 — stopped';
+      resetOverlays();
+    }
+
+    // ── Init ───────────────────────────────────────────────────────────────
+    setMode('webcam');
+  </script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YogaVision | Live Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Space+Mono:wght@400;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page-hero { background:var(--green); border-bottom:4px solid var(--border); padding:3rem 3rem 2rem; }
+    .page-hero-tag { display:inline-flex;align-items:center;gap:.5rem;padding:.3rem .8rem;background:var(--white);border:3px solid var(--border);box-shadow:3px 3px 0 var(--border);font-weight:700;font-size:.85rem;margin-bottom:1rem; }
+    .page-hero-title { font-size:3.5rem;font-weight:700;line-height:1.1;margin-bottom:.75rem; }
+    .page-hero-desc  { font-size:1.1rem;opacity:.85;max-width:600px; }
+
+    /* Demo Video Button */
+    .demo-video-btn-wrap { margin-bottom:1.5rem; }
+    .demo-video-btn {
+      display:inline-flex;align-items:center;gap:.6rem;
+      padding:.75rem 1.6rem;background:#1a1a1a;color:#ffd93d;
+      border:3px solid var(--border);box-shadow:5px 5px 0 var(--border);
+      font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.95rem;
+      cursor:pointer;transition:all .2s;text-decoration:none;
+    }
+    .demo-video-btn:hover { background:#2d2d2d;transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--border); }
+    .demo-video-btn i { font-size:1.1rem; }
+
+    /* Video Modal */
+    .video-modal-overlay {
+      display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;
+      align-items:center;justify-content:center;padding:1.5rem;
+    }
+    .video-modal-overlay.open { display:flex; }
+    .video-modal {
+      background:var(--white);border:4px solid var(--border);box-shadow:12px 12px 0 var(--border);
+      width:100%;max-width:860px;overflow:hidden;position:relative;
+    }
+    .video-modal-header {
+      display:flex;align-items:center;justify-content:space-between;
+      padding:1rem 1.5rem;border-bottom:3px solid var(--border);background:var(--yellow);
+      font-weight:700;font-size:1rem;
+    }
+    .video-modal-close {
+      width:36px;height:36px;border:3px solid var(--border);background:var(--white);
+      font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+      font-weight:700;transition:background .2s;
+    }
+    .video-modal-close:hover { background:var(--pink); }
+    .video-modal-body { background:#000;aspect-ratio:16/9;position:relative; }
+    .video-modal-body video,
+    .video-modal-body iframe { width:100%;height:100%;display:block; }
+    /* Placeholder when no video file yet */
+    .video-placeholder {
+      width:100%;height:100%;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;gap:1rem;color:rgba(255,255,255,.5);
+      font-family:'Space Mono',monospace;font-size:.9rem;
+    }
+    .video-placeholder i { font-size:4rem; }
+
+    .mode-tabs { display:flex;gap:0;margin-bottom:2rem;border:4px solid var(--border);box-shadow:6px 6px 0 var(--border);overflow:hidden;width:fit-content;flex-wrap:wrap; }
+    .mode-tab  { padding:.75rem 1.4rem;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.88rem;border:none;border-right:3px solid var(--border);background:var(--white);cursor:pointer;display:flex;align-items:center;gap:.5rem;transition:all .2s; }
+    .mode-tab:last-child { border-right:none; }
+    .mode-tab.active             { background:var(--cyan); }
+    .mode-tab:hover:not(.active) { background:var(--yellow); }
+    .mode-tab.esp32-tab.active              { background:#ff8c42; }
+    .mode-tab.esp32-tab:hover:not(.active)  { background:#ffe0cc; }
+
+    .status-bar { display:flex;align-items:center;gap:.75rem;padding:.6rem 1.2rem;background:#1a1a1a;border:3px solid var(--border);box-shadow:4px 4px 0 var(--border);margin-bottom:1.5rem;font-family:'Space Mono',monospace;font-size:.8rem;color:#a8e6cf;flex-wrap:wrap; }
+    .status-dot { width:10px;height:10px;border-radius:50%;background:#666;transition:background .3s;flex-shrink:0; }
+    .status-dot.online { background:#a8e6cf;box-shadow:0 0 6px #a8e6cf; }
+    .status-dot.error  { background:#ff6b9d;box-shadow:0 0 6px #ff6b9d; }
+    .esp32-badge { margin-left:auto;display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:#ff8c42; }
+    .esp32-dot   { width:8px;height:8px;border-radius:50%;background:#444;transition:background .3s; }
+    .esp32-dot.live { background:#ff8c42;box-shadow:0 0 6px #ff8c42;animation:blink 1.5s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1}50%{opacity:.4} }
+
+    .demo-layout { display:grid;grid-template-columns:1fr 380px;gap:2rem;margin-bottom:3rem; }
+
+    .camera-panel { background:#111;border:4px solid var(--border);box-shadow:10px 10px 0 var(--border);overflow:hidden;position:relative; }
+    .camera-feed  { width:100%;aspect-ratio:4/3;background:#111;display:flex;align-items:center;justify-content:center;flex-direction:column;position:relative;overflow:hidden; }
+
+    #webcamImg, #esp32Img  { width:100%;height:100%;object-fit:contain;display:none; }
+
+    .esp32-connect-panel { display:none;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;padding:2rem;text-align:center;color:rgba(255,255,255,.7);width:100%; }
+    .esp32-connect-panel .esp-icon { font-size:4rem; }
+    .esp32-ip-form { display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;justify-content:center; }
+    .esp32-ip-input { padding:.6rem 1rem;border:3px solid #a8e6cf;background:#222;color:#a8e6cf;font-family:'Space Mono',monospace;font-size:.88rem;min-width:200px; }
+    .esp32-ip-input::placeholder { opacity:.4; }
+    .esp32-no-stream { display:none;flex-direction:column;align-items:center;justify-content:center;gap:1rem;padding:2rem;text-align:center;color:rgba(255,165,100,.7);width:100%; }
+    .esp32-no-stream i { font-size:3.5rem; }
+
+    .camera-placeholder { color:rgba(255,255,255,.3);text-align:center;z-index:2; }
+    .camera-placeholder i { font-size:5rem;display:block;margin-bottom:1rem; }
+
+    .camera-overlay-pose   { position:absolute;top:1rem;left:1rem;background:rgba(0,0,0,.85);border:3px solid;padding:.5rem 1rem;font-weight:700;font-size:1.1rem;color:#fff;font-family:'Space Mono',monospace;transition:all .3s;z-index:10; }
+    .camera-overlay-fps    { position:absolute;top:1rem;right:1rem;background:rgba(0,0,0,.7);border:2px solid #444;padding:.25rem .6rem;color:#a8e6cf;font-family:'Space Mono',monospace;font-size:.8rem;z-index:10; }
+    .camera-overlay-source { position:absolute;top:1rem;right:1rem;background:rgba(255,140,66,.92);border:2px solid var(--border);padding:.25rem .7rem;color:#000;font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;z-index:10;display:none; }
+    .camera-overlay-conf   { position:absolute;bottom:1rem;left:1rem;right:1rem;z-index:10; }
+    .conf-bar-bg   { width:100%;height:8px;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);overflow:hidden; }
+    .conf-bar-fill { height:100%;transition:width .5s ease; }
+    .conf-label    { display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem;color:rgba(255,255,255,.8);font-family:'Space Mono',monospace;font-size:.75rem; }
+
+    .camera-controls { display:flex;gap:.75rem;padding:1rem;background:#1a1a1a;border-top:3px solid var(--border);flex-wrap:wrap; }
+    .cam-btn { flex:1;min-width:90px;padding:.7rem;border:2px solid var(--border);font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.85rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.4rem; }
+    .cam-btn-start  { background:var(--green);color:#000; } .cam-btn-start:hover  { background:#7dd3a8; }
+    .cam-btn-stop   { background:var(--pink); color:#000; } .cam-btn-stop:hover   { background:#e0547e; }
+    .cam-btn-esp32  { background:#ff8c42;color:#000; }     .cam-btn-esp32:hover  { background:#e07030; }
+    .cam-btn:disabled { opacity:.4;cursor:not-allowed; }
+
+    .sidebar-panel { display:flex;flex-direction:column;gap:1.5rem; }
+    .info-card { background:var(--white);border:4px solid var(--border);box-shadow:6px 6px 0 var(--border);overflow:hidden; }
+    .info-card-header { padding:1rem 1.5rem;border-bottom:3px solid var(--border);font-weight:700;font-size:1rem;display:flex;align-items:center;gap:.5rem; }
+    .info-card:nth-child(1) .info-card-header { background:var(--yellow); }
+    .info-card:nth-child(2) .info-card-header { background:var(--pink);   }
+    .info-card:nth-child(3) .info-card-header { background:var(--cyan);   }
+    .info-card-body { padding:1.5rem; }
+
+    .angle-readout { display:flex;justify-content:space-between;align-items:center;padding:.5rem 0;border-bottom:2px solid rgba(0,0,0,.08);font-size:.9rem; }
+    .angle-readout:last-child { border-bottom:none; }
+    .angle-joint { font-weight:600; }
+    .angle-value { font-family:'Space Mono',monospace;font-weight:700;font-size:1rem;padding:.2rem .5rem;border:2px solid var(--border);min-width:55px;text-align:center;background:var(--white);transition:background .4s; }
+    .angle-value.ok   { background:var(--green);  }
+    .angle-value.warn { background:var(--yellow); }
+    .angle-value.bad  { background:var(--pink);   }
+
+    .tip-chip { display:flex;align-items:flex-start;gap:.6rem;padding:.6rem 0;font-size:.88rem;border-bottom:2px solid rgba(0,0,0,.07); }
+    .tip-chip:last-child { border-bottom:none; }
+    .tip-chip i { color:var(--border);flex-shrink:0;margin-top:.1rem; }
+
+    .esp32-info-box { background:#fff5ee;border:3px solid var(--border);padding:1rem;font-size:.87rem;line-height:1.7; }
+    .esp32-info-box code { background:#1a1a1a;color:#ff8c42;font-family:'Space Mono',monospace;font-size:.78rem;padding:.1rem .4rem; }
+
+    .spinner { display:none;width:40px;height:40px;border:4px solid rgba(168,230,207,.2);border-top-color:#a8e6cf;border-radius:50%;animation:spin .8s linear infinite;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:20; }
+    @keyframes spin { to { transform:translate(-50%,-50%) rotate(360deg); } }
+
+    @media (max-width:1024px) { .demo-layout { grid-template-columns:1fr; } }
+    @media (max-width:700px)  { .page-hero-title{font-size:2.2rem;} .mode-tabs{width:100%;} .mode-tab{flex:1;font-size:.72rem;padding:.6rem .4rem;} }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <nav class="navbar" id="navbar">
+      <div class="nav-content">
+        <a href="index.html" class="nav-brand">🧘 YogaVision</a>
+        <div class="nav-right">
+          <a href="index.html"     class="nav-link">Home</a>
+          <a href="poses.html"     class="nav-link">Poses</a>
+          <a href="works.html"     class="nav-link">How It Works</a>
+          <a href="demo.html"      class="nav-link active">Demo</a>
+          <a href="about.html"     class="nav-link">About</a>
+          <a href="developer.html" class="nav-link">Developer</a>
+          <a href="demo.html"      class="nav-cta">Try Now →</a>
+          <button class="theme-btn" id="theme-toggle">🌙</button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="page-hero">
+      <div class="page-hero-tag"><i class="fas fa-play-circle"></i> Interactive Demo</div>
+      <h1 class="page-hero-title">Live Pose Detection</h1>
+      <p class="page-hero-desc">Webcam or ESP32-CAM — all powered by your local Flask backend.</p>
+    </div>
+
+    <div class="container">
+
+      <!-- Demo Video Button -->
+      <div class="demo-video-btn-wrap" style="margin-top:2rem;">
+        <button class="demo-video-btn" onclick="openVideoModal()">
+          <i class="fas fa-film"></i> Watch Project Demo Video
+        </button>
+      </div>
+
+      <div class="status-bar">
+        <div class="status-dot" id="statusDot"></div>
+        <span id="statusText">Checking Flask server…</span>
+        <div class="esp32-badge" id="esp32Badge" style="display:none;">
+          <div class="esp32-dot" id="esp32Dot"></div>
+          <span id="esp32StatusText">ESP32 — no frames yet</span>
+        </div>
+      </div>
+
+      <!-- 2 tabs: Webcam · ESP32-CAM -->
+      <div class="mode-tabs">
+        <button class="mode-tab active"    id="tab-webcam" onclick="setMode('webcam')"><i class="fas fa-video"></i> Webcam</button>
+        <button class="mode-tab esp32-tab" id="tab-esp32"  onclick="setMode('esp32')"><i class="fas fa-microchip"></i> ESP32-CAM</button>
+      </div>
+
+      <div class="demo-layout">
+
+        <!-- CAMERA PANEL -->
+        <div class="camera-panel">
+          <div class="camera-feed" id="cameraFeed">
+
+            <img id="webcamImg" src="" alt="Webcam feed">
+            <img id="esp32Img"  src="" alt="ESP32 feed">
+
+            <div class="esp32-connect-panel" id="esp32ConnectPanel">
+              <span class="esp-icon">📡</span>
+              <div>
+                <div style="font-size:1.1rem;font-weight:700;color:#ff8c42;margin-bottom:.5rem;">ESP32-CAM Mode</div>
+                <div style="font-size:.85rem;opacity:.7;max-width:340px;">Flask polls your ESP32's <code style="color:#ff8c42;background:#222;padding:2px 5px;font-size:.78rem;">/capture</code> endpoint automatically. Set <code style="color:#ff8c42;background:#222;padding:2px 5px;font-size:.78rem;">ESP32_IP</code> in app.py, then click Start Polling.</div>
+              </div>
+              <div class="esp32-ip-form">
+                <input class="esp32-ip-input" id="esp32IpInput" placeholder="Override Flask IP  e.g. 192.168.1.x:5000">
+                <button class="cam-btn cam-btn-esp32" style="flex:none;padding:.65rem 1.2rem;" onclick="connectESP32()"><i class="fas fa-plug"></i> Connect</button>
+              </div>
+            </div>
+
+            <div class="esp32-no-stream" id="esp32NoStream">
+              <i class="fas fa-satellite-dish"></i>
+              <div style="font-size:.9rem;">Waiting for ESP32 frames…<br><span style="font-size:.8rem;opacity:.6;">Make sure ESP32_IP is set correctly in app.py</span></div>
+            </div>
+
+            <div class="camera-placeholder" id="placeholder">
+              <i class="fas fa-person-walking"></i>
+              <p>Select a mode above to begin</p>
+            </div>
+
+            <div class="spinner" id="spinner"></div>
+
+            <div class="camera-overlay-pose"   id="poseLabel"   style="border-color:#a8e6cf;">— Waiting —</div>
+            <div class="camera-overlay-fps"    id="fpsLabel">-- FPS</div>
+            <div class="camera-overlay-source" id="sourceLabel">📡 ESP32-CAM</div>
+            <div class="camera-overlay-conf">
+              <div class="conf-label"><span id="confText">Confidence: —</span><span id="poseText">—</span></div>
+              <div class="conf-bar-bg"><div class="conf-bar-fill" id="confBar" style="width:0%;background:var(--green);"></div></div>
+            </div>
+          </div>
+
+          <div class="camera-controls">
+            <!-- Webcam -->
+            <button class="cam-btn cam-btn-start" id="btnStart"     onclick="startWebcam()">         <i class="fas fa-play"></i>            Webcam        </button>
+            <button class="cam-btn cam-btn-stop"  id="btnStop"       onclick="stopWebcam()"  disabled><i class="fas fa-stop"></i>            Stop          </button>
+            <!-- ESP32 -->
+            <button class="cam-btn cam-btn-esp32" id="btnEsp32Start" onclick="startESP32Poll()" style="display:none;"><i class="fas fa-satellite-dish"></i> Start Polling </button>
+            <button class="cam-btn cam-btn-stop"  id="btnEsp32Stop"  onclick="stopESP32Poll()"  style="display:none;" disabled><i class="fas fa-stop"></i>            Stop          </button>
+          </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div class="sidebar-panel">
+
+          <div class="info-card">
+            <div class="info-card-header"><i class="fas fa-person-praying"></i> <span id="sidebarPoseTitle">Detected Pose</span></div>
+            <div class="info-card-body">
+              <div class="esp32-info-box" id="esp32InfoBox" style="display:none;">
+                <strong>📡 ESP32-CAM Setup</strong><br><br>
+                <strong>1.</strong> Set <code>ESP32_IP</code> in <code>app.py</code> to your board's IP.<br><br>
+                <strong>2.</strong> Flask polls the MJPEG stream, annotates with MediaPipe skeleton overlays, exposes at <code>/latest_frame</code>.<br><br>
+                <strong>3.</strong> Browser polls <code>/latest_frame</code> every 150 ms.<br><br>
+                <strong>Endpoints used:</strong><br>
+                <code>GET /latest_frame</code> → annotated JPEG<br>
+                <code>GET /pose_data</code>    → JSON angles &amp; pose
+              </div>
+              <p id="liveNote" style="font-size:.85rem;opacity:.65;margin-top:.5rem;"><i class="fas fa-circle-info"></i> Live data streamed from Flask backend</p>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-card-header"><i class="fas fa-ruler-combined"></i> Joint Angle Readouts</div>
+            <div class="info-card-body">
+              <div class="angle-readout"><span class="angle-joint">Left Elbow</span>    <span class="angle-value" id="ang-le">—°</span></div>
+              <div class="angle-readout"><span class="angle-joint">Right Elbow</span>   <span class="angle-value" id="ang-re">—°</span></div>
+              <div class="angle-readout"><span class="angle-joint">Left Shoulder</span> <span class="angle-value" id="ang-ls">—°</span></div>
+              <div class="angle-readout"><span class="angle-joint">Right Shoulder</span><span class="angle-value" id="ang-rs">—°</span></div>
+              <div class="angle-readout"><span class="angle-joint">Left Knee</span>     <span class="angle-value" id="ang-lk">—°</span></div>
+              <div class="angle-readout"><span class="angle-joint">Right Knee</span>    <span class="angle-value" id="ang-rk">—°</span></div>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-card-header"><i class="fas fa-lightbulb"></i> Form Tips</div>
+            <div class="info-card-body" id="tips-panel">
+              <div class="tip-chip"><i class="fas fa-circle-info"></i>Start a mode to get real-time pose tips</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <section class="section">
+        <h2 class="section-title">Run Locally</h2>
+        <div style="background:var(--white);border:4px solid var(--border);box-shadow:8px 8px 0 var(--border);overflow:hidden;">
+          <div style="padding:2rem;border-bottom:3px solid var(--border);">
+            <p style="font-size:1rem;opacity:.8;max-width:640px;">Install deps, start Flask, then open this page. For ESP32-CAM, set <code style="background:#eee;padding:2px 6px;font-family:'Space Mono',monospace;font-size:.85rem;">ESP32_IP</code> in app.py before running.</p>
+          </div>
+          <div style="background:#1a1a1a;color:#a8e6cf;font-family:'Space Mono',monospace;font-size:.82rem;padding:2rem;line-height:2.1;">
+            <span style="color:#888;"># Install dependencies</span><br>
+            <span style="color:#ffd93d;">pip</span> install flask flask-cors mediapipe opencv-python numpy<br><br>
+            <span style="color:#888;"># Set ESP32 IP in app.py (ESP32-CAM mode only)</span><br>
+            <span style="color:#ff8c42;">ESP32_IP = "http://&lt;your-esp32-ip&gt;"</span><br><br>
+            <span style="color:#888;"># Start Flask server</span><br>
+            <span style="color:#ffd93d;">python</span> app.py<br><br>
+            <span style="color:#888;"># Open in browser</span><br>
+            <span style="color:#ff6b9d;">http://127.0.0.1:5000</span>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">🧘 YogaVision <span>AI Pose Detection System</span></div>
+        <nav class="footer-nav">
+          <a href="index.html">Home</a><a href="poses.html">Poses</a>
+          <a href="works.html">How It Works</a><a href="demo.html">Demo</a>
+          <a href="about.html">About</a><a href="developer.html">Developer</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 YogaVision — MediaPipe · OpenCV · Flask · ESP32</span>
+        <span style="font-family:'Space Mono',monospace;font-size:.85rem;">Python · Flask · ESP32 · CV</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- VIDEO MODAL -->
+  <div class="video-modal-overlay" id="videoModalOverlay" onclick="handleOverlayClick(event)">
+    <div class="video-modal">
+      <div class="video-modal-header">
+        <span><i class="fas fa-film" style="margin-right:.5rem;"></i> YogaVision — Project Demo</span>
+        <button class="video-modal-close" onclick="closeVideoModal()">✕</button>
+      </div>
+      <div class="video-modal-body" id="videoModalBody">
+        <!--
+          OPTION A — local video file:
+          Replace "demo_video.mp4" with your actual file name placed in the same folder.
+          <video id="demoVideo" controls autoplay>
+            <source src="demo_video.mp4" type="video/mp4">
+            Your browser does not support HTML5 video.
+          </video>
+
+          OPTION B — YouTube embed:
+          Replace VIDEO_ID with your YouTube video ID.
+          <iframe id="demoVideo"
+            src="https://www.youtube.com/embed/VIDEO_ID?autoplay=1"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+
+          Currently showing a placeholder until you add your video:
+        -->
+        <div class="video-placeholder">
+          <i class="fas fa-film"></i>
+          <span>Add your demo video here</span>
+          <span style="font-size:.75rem;opacity:.5;">Edit demo.html — see comments in #videoModalBody</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const FLASK = (location.hostname === '127.0.0.1' || location.hostname === 'localhost')
+      ? 'http://127.0.0.1:5000' : location.origin;
+
+    // ── Theme ──────────────────────────────────────────────────────────────
+    const themeBtn = document.getElementById('theme-toggle');
+    const saved = localStorage.getItem('yv-theme') || 'light';
+    document.body.setAttribute('data-theme', saved);
+    themeBtn.textContent = saved === 'dark' ? '☀️' : '🌙';
+    themeBtn.addEventListener('click', () => {
+      const next = document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      document.body.setAttribute('data-theme', next);
+      localStorage.setItem('yv-theme', next);
+      themeBtn.textContent = next === 'dark' ? '☀️' : '🌙';
+    });
+
+    // ── Navbar hide on scroll ──────────────────────────────────────────────
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const cur = window.scrollY;
+      document.getElementById('navbar').classList.toggle('hidden', cur > lastScroll && cur > 100);
+      lastScroll = cur;
+    });
+
+    // ── Video Modal ────────────────────────────────────────────────────────
+    function openVideoModal() {
+      document.getElementById('videoModalOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeVideoModal() {
+      document.getElementById('videoModalOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+      // Pause video/iframe on close
+      const video = document.getElementById('demoVideo');
+      if (video) {
+        if (video.tagName === 'VIDEO') {
+          video.pause();
+        } else if (video.tagName === 'IFRAME') {
+          // Reset iframe src to stop YouTube autoplay
+          const src = video.src;
+          video.src = '';
+          video.src = src.replace('?autoplay=1', '');
+        }
+      }
+    }
+
+    function handleOverlayClick(e) {
+      if (e.target === document.getElementById('videoModalOverlay')) closeVideoModal();
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeVideoModal();
+    });
+
+    // ── Flask server check ─────────────────────────────────────────────────
+    async function checkServer() {
+      try {
+        const r = await fetch(`${FLASK}/pose_data`, { signal: AbortSignal.timeout(2000) });
+        if (r.ok) {
+          document.getElementById('statusDot').className = 'status-dot online';
+          document.getElementById('statusText').textContent = '✓ Flask connected — ' + FLASK;
+          return true;
+        }
+      } catch {}
+      document.getElementById('statusDot').className = 'status-dot error';
+      document.getElementById('statusText').textContent = '✗ Flask offline — run: python app.py';
+      return false;
+    }
+    checkServer();
+    setInterval(checkServer, 8000);
+
+    // ── State ──────────────────────────────────────────────────────────────
+    let currentMode    = 'webcam';
+    let webcamActive   = false;
+    let pollInterval   = null;
+    let esp32PollInterval = null;
+    let esp32Active    = false;
+    let esp32FrameCount = 0;
+    let _esp32Base     = null;
+
+    // ── Pose tips — all 6 poses from app.py ───────────────────────────────
+    const POSE_TIPS = {
+      'T Pose':          ['Stand straight, feet hip-width apart','Arms exactly at shoulder height','Palms facing downward','Chin parallel to floor','Hold steady and breathe evenly'],
+      'Warrior II Pose': ['Keep front knee directly over ankle','Arms fully parallel to the ground','Shoulders pressed down, not hunched','Gaze over your front fingertips','Hold for 5 steady breaths each side'],
+      'Tree Pose':       ['Fix your gaze on a single still point','Place foot above or below the knee','Press standing foot firmly into floor','Keep hips square to the front','Raise arms overhead for more challenge'],
+      'Mountain Pose':   ['Stand tall with feet hip-width apart','Arms relaxed and hanging at your sides','Distribute weight evenly on both feet','Chin parallel to the floor','Breathe deeply — this is your foundation'],
+      'Chair Pose':      ['Keep knees together, do not let them splay','Raise both arms straight overhead','Lift your chest — do not collapse forward','Sit back as if into an invisible chair','Hold for 5–10 deep, steady breaths'],
+      'Hand Up Pose':    ['Extend both arms fully overhead','Keep elbows straight, not bent','Reach up through your fingertips','Engage your core for stability','Keep legs straight and strong'],
+      'Unknown Pose':    ['Pose not recognised — adjust your position','Make sure your full body is in frame','Check lighting and background contrast','Try a slower, more deliberate movement','See the Poses page for reference guides'],
+    };
+
+    // ── Update UI with Flask pose_data ─────────────────────────────────────
     function updateUI(data) {
       const { pose, confidence, angles, fps } = data;
       const color = pose !== 'Unknown Pose' ? '#a8e6cf' : '#ff6b9d';
@@ -715,143 +1689,113 @@
         confidence > 75 ? 'var(--green)' : confidence > 45 ? 'var(--yellow)' : 'var(--pink)';
       if (fps) document.getElementById('fpsLabel').textContent = fps + ' FPS';
 
-      // Angles
       const map = { le:'ang-le', re:'ang-re', ls:'ang-ls', rs:'ang-rs', lk:'ang-lk', rk:'ang-rk' };
       Object.entries(map).forEach(([k, id]) => {
         const val = angles[k];
         if (val === undefined) return;
         const el = document.getElementById(id);
         el.textContent = val + '°';
-        // Colour-code: green if near 180 or clearly in range, yellow if borderline
         const v = parseInt(val);
-        el.className = 'angle-value ' + (v > 155 || (v > 80 && v < 115) || (v > 25 && v < 50) ? 'ok' : v > 120 ? 'warn' : 'bad');
+        el.className = 'angle-value ' +
+          (v > 155 || (v > 80 && v < 115) || (v > 25 && v < 50) ? 'ok' : v > 120 ? 'warn' : 'bad');
       });
 
-      // Tips by pose
-      const tips = {
-        'Warrior II Pose': ['Keep front knee over ankle','Arms fully parallel to ground','Shoulders at 90°','Gaze over front finger','Relax shoulders from ears'],
-        'Tree Pose':        ['Fix gaze on a single point','Foot above OR below the knee','Press standing foot into floor','Hips square to the front'],
-        'T Pose':           ['Stand straight, feet hip-width','Arms exactly at shoulder height','Palms facing downward','Chin parallel to floor'],
-        'Unknown Pose':     ['Pose not recognised — adjust position','Ensure full body is in frame','Check lighting and background','See the Poses page for guides'],
-      };
-      const poseTips = tips[pose] || tips['Unknown Pose'];
-      document.getElementById('tips-panel').innerHTML = poseTips.map(t =>
-        `<div class="tip-chip"><i class="fas fa-check"></i>${t}</div>`
-      ).join('');
+      const tips = POSE_TIPS[pose] || POSE_TIPS['Unknown Pose'];
+      document.getElementById('tips-panel').innerHTML =
+        tips.map(t => `<div class="tip-chip"><i class="fas fa-check"></i>${t}</div>`).join('');
     }
 
-    // ─── MOBILE CAMERA MODE ───────────────────────────────────────────────────
-    async function startMobileCamera() {
-      try {
-        mobileStream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: mobileFacingMode, width: { ideal: 640 }, height: { ideal: 480 } },
-          audio: false
-        });
-
-        const video = document.getElementById('mobileVideo');
-        video.srcObject = mobileStream;
-        video.style.display = 'block';
-        document.getElementById('mobileResult').style.display = 'block';
-        document.getElementById('placeholder').style.display  = 'none';
-
-        document.getElementById('btnMobileStart').disabled = true;
-        document.getElementById('btnMobileStop').disabled  = false;
-        mobileActive = true;
-
-        // Send frames to Flask every 200ms for pose detection
-        mobileInterval = setInterval(sendMobileFrame, 200);
-
-      } catch (err) {
-        alert('Camera access denied or not available.\nPlease allow camera permission in your browser.\n\n' + err.message);
-      }
+    // ── Reset overlays ─────────────────────────────────────────────────────
+    function resetOverlays() {
+      document.getElementById('poseLabel').textContent = '— Waiting —';
+      document.getElementById('poseLabel').style.borderColor = '#a8e6cf';
+      document.getElementById('fpsLabel').textContent = '-- FPS';
+      document.getElementById('confText').textContent = 'Confidence: —';
+      document.getElementById('poseText').textContent = '—';
+      document.getElementById('confBar').style.width = '0%';
+      ['ang-le','ang-re','ang-ls','ang-rs','ang-lk','ang-rk'].forEach(id => {
+        const el = document.getElementById(id);
+        el.textContent = '—°';
+        el.className = 'angle-value';
+      });
+      document.getElementById('tips-panel').innerHTML =
+        '<div class="tip-chip"><i class="fas fa-circle-info"></i>Waiting for detection…</div>';
     }
 
-    function stopMobileCamera() {
-      mobileActive = false;
-      clearInterval(mobileInterval);
-      if (mobileStream) {
-        mobileStream.getTracks().forEach(t => t.stop());
-        mobileStream = null;
-      }
-      document.getElementById('mobileVideo').style.display    = 'none';
-      document.getElementById('mobileResult').style.display   = 'none';
-      document.getElementById('placeholder').style.display    = 'flex';
-      document.getElementById('btnMobileStart').disabled = false;
-      document.getElementById('btnMobileStop').disabled  = true;
+    // ── Mode switcher ──────────────────────────────────────────────────────
+    function setMode(mode) {
+      if (webcamActive) stopWebcam();
+      if (esp32Active)  stopESP32Poll();
+      currentMode = mode;
+
+      document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab-' + mode).classList.add('active');
+
+      ['webcamImg','esp32Img','esp32ConnectPanel','esp32NoStream'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
+      document.getElementById('placeholder').style.display = 'flex';
+      document.getElementById('sourceLabel').style.display  = 'none';
+      document.getElementById('esp32Badge').style.display   = 'none';
+      document.getElementById('esp32InfoBox').style.display = 'none';
+      document.getElementById('liveNote').style.display     = 'block';
+      document.getElementById('sidebarPoseTitle').textContent = 'Detected Pose';
+
+      ['btnStart','btnStop','btnEsp32Start','btnEsp32Stop'].forEach(id => {
+        document.getElementById(id).style.display = 'none';
+      });
       resetOverlays();
-    }
 
-    async function flipMobileCamera() {
-      mobileFacingMode = mobileFacingMode === 'user' ? 'environment' : 'user';
-      if (mobileActive) {
-        stopMobileCamera();
-        await startMobileCamera();
+      if (mode === 'webcam') {
+        document.getElementById('btnStart').style.display = 'flex';
+        document.getElementById('btnStop').style.display  = 'flex';
+        document.getElementById('btnStop').disabled = true;
+      } else if (mode === 'esp32') {
+        document.getElementById('esp32ConnectPanel').style.display = 'flex';
+        document.getElementById('placeholder').style.display       = 'none';
+        document.getElementById('btnEsp32Start').style.display     = 'flex';
+        document.getElementById('btnEsp32Stop').style.display      = 'flex';
+        document.getElementById('btnEsp32Stop').disabled           = true;
+        document.getElementById('esp32InfoBox').style.display      = 'block';
+        document.getElementById('liveNote').style.display          = 'none';
+        document.getElementById('sidebarPoseTitle').textContent    = 'ESP32 Info';
+        document.getElementById('esp32Badge').style.display        = 'flex';
+        document.getElementById('sourceLabel').style.display       = 'block';
       }
     }
 
-    async function sendMobileFrame() {
-      const video = document.getElementById('mobileVideo');
-      if (!video || video.readyState < 2) return;
-
-      mobileCanvas.width  = video.videoWidth  || 640;
-      mobileCanvas.height = video.videoHeight || 480;
-      const ctx2 = mobileCanvas.getContext('2d');
-      ctx2.drawImage(video, 0, 0);
-      const base64 = mobileCanvas.toDataURL('image/jpeg', 0.7);
-
-      try {
-        const r = await fetch(`${FLASK}/mobile_frame`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ frame: base64 })
-        });
-        const data = await r.json();
-        if (data.image) {
-          document.getElementById('mobileResult').src = 'data:image/jpeg;base64,' + data.image;
-        }
-        updateUI({ ...data, fps: null });
-        document.getElementById('fpsLabel').textContent = 'Live';
-      } catch {}
-    }
-
-    // ─── WEBCAM MODE ─────────────────────────────────────────────────────────
+    // ── Webcam mode ────────────────────────────────────────────────────────
     async function startWebcam() {
       const ok = await checkServer();
-      if (!ok) { alert('Flask server is not running.\nRun: python app.py'); return; }
+      if (!ok) { alert('Flask not running.\nRun: python app.py'); return; }
 
-      // Start camera on backend first, wait for it to be ready
       await fetch(`${FLASK}/start_camera`, { method: 'POST' });
-      await new Promise(r => setTimeout(r, 500)); // give camera time to open
-
+      await new Promise(r => setTimeout(r, 500));
       webcamActive = true;
 
       document.getElementById('placeholder').style.display = 'none';
       document.getElementById('spinner').style.display     = 'block';
 
       const img = document.getElementById('webcamImg');
-
-      // Add timestamp to prevent browser caching old stream
-      img.src = `${FLASK}/video_feed?t=${Date.now()}`;
+      img.src   = `${FLASK}/video_feed?t=${Date.now()}`;
       img.style.display = 'block';
-
-      // Hide spinner once first frame loads
-      img.onload = () => { document.getElementById('spinner').style.display = 'none'; };
+      img.onload  = () => { document.getElementById('spinner').style.display = 'none'; };
       img.onerror = () => {
-        document.getElementById('spinner').style.display = 'none';
+        document.getElementById('spinner').style.display   = 'none';
         document.getElementById('placeholder').style.display = 'flex';
         document.getElementById('placeholder').innerHTML =
-          '<i class="fas fa-exclamation-triangle" style="font-size:3rem;color:#ff6b9d"></i><p style="color:#ff6b9d;margin-top:1rem">Camera not found or already in use</p>';
+          '<i class="fas fa-exclamation-triangle" style="font-size:3rem;color:#ff6b9d"></i>' +
+          '<p style="color:#ff6b9d;margin-top:1rem">Camera not found or already in use</p>';
       };
 
       document.getElementById('btnStart').disabled = true;
       document.getElementById('btnStop').disabled  = false;
 
-      // Poll pose data every 500ms
       pollInterval = setInterval(async () => {
         try {
           const r = await fetch(`${FLASK}/pose_data`);
-          const data = await r.json();
-          updateUI(data);
+          updateUI(await r.json());
         } catch {}
       }, 500);
     }
@@ -859,15 +1803,10 @@
     async function stopWebcam() {
       webcamActive = false;
       clearInterval(pollInterval);
-
       const img = document.getElementById('webcamImg');
-      img.src = '';
-      img.style.display = 'none';
-      img.onload  = null;
-      img.onerror = null;
-
-      await fetch(`${FLASK}/stop_camera`, { method: 'POST' }).catch(()=>{});
-
+      img.src = ''; img.style.display = 'none';
+      img.onload = null; img.onerror = null;
+      await fetch(`${FLASK}/stop_camera`, { method: 'POST' }).catch(() => {});
       document.getElementById('placeholder').style.display = 'flex';
       document.getElementById('placeholder').innerHTML =
         '<i class="fas fa-person-walking"></i><p>Select a mode above to begin</p>';
@@ -875,161 +1814,69 @@
       document.getElementById('btnStop').disabled  = true;
     }
 
-    // ─── UPLOAD MODE ──────────────────────────────────────────────────────────
-    function handleUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      document.getElementById('uploadZone').style.display    = 'none';
-      document.getElementById('spinner').style.display       = 'block';
-      document.getElementById('uploadPreview').style.display = 'none';
-
-      const formData = new FormData();
-      formData.append('image', file);
-
-      fetch(`${FLASK}/upload`, { method: 'POST', body: formData })
-        .then(r => r.json())
-        .then(data => {
-          document.getElementById('spinner').style.display = 'none';
-          if (data.error) { alert(data.error); return; }
-
-          // Show annotated image from Flask
-          document.getElementById('uploadPreview').src = 'data:image/jpeg;base64,' + data.image;
-          document.getElementById('uploadPreview').style.display = 'block';
-          document.getElementById('placeholder').style.display   = 'none';
-
-          updateUI({ ...data, fps: null });
-          document.getElementById('fpsLabel').textContent = 'Static';
-        })
-        .catch(() => {
-          document.getElementById('spinner').style.display = 'none';
-          alert('Upload failed — is the Flask server running?');
-        });
+    // ── ESP32-CAM mode ─────────────────────────────────────────────────────
+    function connectESP32() {
+      const val = document.getElementById('esp32IpInput').value.trim();
+      if (val) _esp32Base = val.startsWith('http') ? val : 'http://' + val;
+      startESP32Poll();
     }
 
-    // ─── SIMULATION MODE ──────────────────────────────────────────────────────
-    const SIM_POSES = {
-      warrior: {
-        name:'Warrior II Pose', conf:94, color:'#66d9ef',
-        angles:{ le:[180,'ok'], re:[178,'ok'], ls:[92,'ok'], rs:[89,'ok'], lk:[175,'ok'], rk:[104,'ok'] },
-        tips:['Keep front knee over ankle','Arms fully parallel to ground','Shoulders at 90°','Gaze over front finger','Relax shoulders from ears'],
-      },
-      tree: {
-        name:'Tree Pose', conf:91, color:'#ffd93d',
-        angles:{ le:[175,'ok'], re:[172,'ok'], ls:[45,'warn'], rs:[42,'warn'], lk:[180,'ok'], rk:[33,'ok'] },
-        tips:['Fix gaze on a single point','Foot above OR below the knee','Press standing foot into floor','Hips square to front'],
-      },
-      tpose: {
-        name:'T Pose', conf:96, color:'#a8e6cf',
-        angles:{ le:[183,'ok'], re:[180,'ok'], ls:[90,'ok'], rs:[91,'ok'], lk:[180,'ok'], rk:[178,'ok'] },
-        tips:['Stand straight, feet hip-width','Arms at shoulder height','Palms facing downward','Chin parallel to floor'],
-      },
-      unknown: {
-        name:'Unknown Pose', conf:12, color:'#ff6b9d',
-        angles:{ le:[145,'warn'], re:[160,'warn'], ls:[55,'bad'], rs:[130,'bad'], lk:[140,'bad'], rk:[145,'bad'] },
-        tips:['Pose not recognised','Adjust your position','Full body must be in frame','Check Poses page for guides'],
-      },
-    };
+    function startESP32Poll() {
+      if (esp32Active) return;
+      esp32Active = true;
+      esp32FrameCount = 0;
 
-    const canvas = document.getElementById('skeletonCanvas');
-    const ctx    = canvas.getContext('2d');
+      document.getElementById('btnEsp32Start').disabled           = true;
+      document.getElementById('btnEsp32Stop').disabled            = false;
+      document.getElementById('esp32ConnectPanel').style.display  = 'none';
+      document.getElementById('esp32NoStream').style.display      = 'flex';
+      document.getElementById('placeholder').style.display        = 'none';
 
-    function resizeCanvas() {
-      const feed = document.getElementById('cameraFeed');
-      canvas.width  = feed.offsetWidth;
-      canvas.height = feed.offsetHeight;
-    }
-    window.addEventListener('resize', () => { resizeCanvas(); if (currentMode === 'sim') drawSkeleton(currentSimPose); });
+      const base = _esp32Base || FLASK;
 
-    function drawSkeleton(poseKey) {
-      const w = canvas.width, h = canvas.height;
-      ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = '#111'; ctx.fillRect(0, 0, w, h);
+      esp32PollInterval = setInterval(async () => {
+        try {
+          const r = await fetch(`${base}/latest_frame?t=${Date.now()}`,
+            { signal: AbortSignal.timeout(2000) });
+          if (r.status === 204) return;
+          if (!r.ok) return;
 
-      // Grid
-      ctx.strokeStyle = 'rgba(255,255,255,0.05)'; ctx.lineWidth = 1;
-      for (let x=0;x<w;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}
-      for (let y=0;y<h;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
+          const blob = await r.blob();
+          const url  = URL.createObjectURL(blob);
+          const img  = document.getElementById('esp32Img');
+          const old  = img.src;
+          img.src = url;
+          img.style.display = 'block';
+          if (old.startsWith('blob:')) URL.revokeObjectURL(old);
 
-      const cx = w*0.5, cy = h*0.5, s = Math.min(w,h)*0.0032;
-      const pc = SIM_POSES[poseKey].color;
-      let pts = {};
+          document.getElementById('esp32NoStream').style.display = 'none';
+          esp32FrameCount++;
+          document.getElementById('esp32Dot').className = 'esp32-dot live';
+          document.getElementById('esp32StatusText').textContent = `ESP32 — ${esp32FrameCount} frames`;
 
-      if (poseKey==='warrior') {
-        pts = { head:[cx,cy-110*s],neck:[cx,cy-85*s],ls:[cx-55*s,cy-60*s],rs:[cx+55*s,cy-60*s],le:[cx-100*s,cy-60*s],re:[cx+100*s,cy-60*s],lw:[cx-145*s,cy-60*s],rw:[cx+145*s,cy-60*s],lh:[cx-20*s,cy+10*s],rh:[cx+20*s,cy+10*s],lk:[cx-20*s,cy+90*s],rk:[cx+60*s,cy+75*s],la:[cx-20*s,cy+170*s],ra:[cx+110*s,cy+160*s] };
-      } else if (poseKey==='tree') {
-        pts = { head:[cx,cy-115*s],neck:[cx,cy-90*s],ls:[cx-30*s,cy-65*s],rs:[cx+30*s,cy-65*s],le:[cx-50*s,cy-30*s],re:[cx+50*s,cy-30*s],lw:[cx-30*s,cy-110*s],rw:[cx+30*s,cy-110*s],lh:[cx-15*s,cy+10*s],rh:[cx+15*s,cy+10*s],lk:[cx-15*s,cy+90*s],rk:[cx+65*s,cy+55*s],la:[cx-15*s,cy+170*s],ra:[cx+80*s,cy+115*s] };
-      } else if (poseKey==='tpose') {
-        pts = { head:[cx,cy-115*s],neck:[cx,cy-90*s],ls:[cx-50*s,cy-65*s],rs:[cx+50*s,cy-65*s],le:[cx-100*s,cy-65*s],re:[cx+100*s,cy-65*s],lw:[cx-150*s,cy-65*s],rw:[cx+150*s,cy-65*s],lh:[cx-20*s,cy+10*s],rh:[cx+20*s,cy+10*s],lk:[cx-20*s,cy+90*s],rk:[cx+20*s,cy+90*s],la:[cx-20*s,cy+170*s],ra:[cx+20*s,cy+170*s] };
-      } else {
-        pts = { head:[cx,cy-100*s],neck:[cx,cy-80*s],ls:[cx-40*s,cy-55*s],rs:[cx+40*s,cy-55*s],le:[cx-70*s,cy-30*s],re:[cx+70*s,cy-30*s],lw:[cx-55*s,cy+10*s],rw:[cx+55*s,cy+10*s],lh:[cx-20*s,cy+10*s],rh:[cx+20*s,cy+10*s],lk:[cx-25*s,cy+80*s],rk:[cx+25*s,cy+80*s],la:[cx-30*s,cy+160*s],ra:[cx+30*s,cy+160*s] };
-      }
-
-      const conns = [['head','neck'],['neck','ls'],['neck','rs'],['ls','le'],['le','lw'],['rs','re'],['re','rw'],['neck','lh'],['neck','rh'],['lh','rh'],['lh','lk'],['lk','la'],['rh','rk'],['rk','ra']];
-      ctx.strokeStyle = pc; ctx.lineWidth = 3*s; ctx.lineCap = 'round';
-      conns.forEach(([a,b])=>{ if(!pts[a]||!pts[b])return; ctx.beginPath();ctx.moveTo(pts[a][0],pts[a][1]);ctx.lineTo(pts[b][0],pts[b][1]);ctx.stroke(); });
-
-      Object.entries(pts).forEach(([name,[x,y]])=>{
-        const key = ['ls','rs','le','re','lh','rh','lk','rk'].includes(name);
-        ctx.beginPath(); ctx.arc(x,y,key?7*s:5*s,0,Math.PI*2);
-        ctx.fillStyle = key ? pc : '#fff'; ctx.fill();
-        ctx.strokeStyle='#000'; ctx.lineWidth=2*s; ctx.stroke();
-      });
-      ctx.beginPath(); ctx.arc(pts.head[0],pts.head[1],16*s,0,Math.PI*2);
-      ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=pc; ctx.lineWidth=3*s; ctx.stroke();
+          const pd = await fetch(`${base}/pose_data`);
+          updateUI(await pd.json());
+        } catch {}
+      }, 150);
     }
 
-    function selectSimPose(poseKey) {
-      currentSimPose = poseKey;
-      document.querySelectorAll('.pose-select-btn').forEach(b=>b.classList.remove('active'));
-      document.getElementById('btn-'+poseKey).classList.add('active');
-      const p = SIM_POSES[poseKey];
-
-      document.getElementById('poseLabel').textContent = `${p.conf>50?'✓':'✗'} ${p.name} — ${p.conf}%`;
-      document.getElementById('poseLabel').style.borderColor = p.color;
-      document.getElementById('confText').textContent = `Confidence: ${p.conf}%`;
-      document.getElementById('poseText').textContent  = p.name;
-      document.getElementById('confBar').style.width   = p.conf+'%';
-      document.getElementById('confBar').style.background = p.conf>80?'var(--green)':p.conf>50?'var(--yellow)':'var(--pink)';
-
-      const map={le:'ang-le',re:'ang-re',ls:'ang-ls',rs:'ang-rs',lk:'ang-lk',rk:'ang-rk'};
-      Object.entries(p.angles).forEach(([k,[val,status]])=>{
-        const el=document.getElementById(map[k]); el.textContent=val+'°'; el.className='angle-value '+status;
-      });
-      document.getElementById('tips-panel').innerHTML=p.tips.map(t=>`<div class="tip-chip"><i class="fas fa-check"></i>${t}</div>`).join('');
-      if (currentMode==='sim') drawSkeleton(poseKey);
+    function stopESP32Poll() {
+      esp32Active = false;
+      clearInterval(esp32PollInterval);
+      const img = document.getElementById('esp32Img');
+      if (img.src.startsWith('blob:')) URL.revokeObjectURL(img.src);
+      img.src = '';
+      img.style.display = 'none';
+      document.getElementById('esp32ConnectPanel').style.display = 'flex';
+      document.getElementById('esp32NoStream').style.display     = 'none';
+      document.getElementById('btnEsp32Start').disabled          = false;
+      document.getElementById('btnEsp32Stop').disabled           = true;
+      document.getElementById('esp32Dot').className              = 'esp32-dot';
+      document.getElementById('esp32StatusText').textContent     = 'ESP32 — stopped';
+      resetOverlays();
     }
 
-    function startSimulation() {
-      if (simRunning) return;
-      simRunning = true;
-      document.getElementById('btnSimStart').disabled = true;
-      document.getElementById('btnSimStop').disabled  = false;
-      resizeCanvas();
-      selectSimPose(currentSimPose);
-      simInterval = setInterval(() => {
-        drawSkeleton(currentSimPose);
-        // Jitter angles slightly
-        const p = SIM_POSES[currentSimPose];
-        const map={le:'ang-le',re:'ang-re',ls:'ang-ls',rs:'ang-rs',lk:'ang-lk',rk:'ang-rk'};
-        Object.entries(p.angles).forEach(([k,[val]])=>{
-          const el=document.getElementById(map[k]);
-          el.textContent=Math.round(val+(Math.random()-0.5)*4)+'°';
-        });
-        document.getElementById('fpsLabel').textContent=Math.round(55+Math.random()*8)+' FPS';
-      }, 80);
-    }
-
-    function stopSimulation() {
-      simRunning = false;
-      clearInterval(simInterval);
-      document.getElementById('btnSimStart').disabled = false;
-      document.getElementById('btnSimStop').disabled  = true;
-      document.getElementById('fpsLabel').textContent = '-- FPS';
-      if (currentMode==='sim') drawSkeleton(currentSimPose);
-    }
-
-    // ─── Init ─────────────────────────────────────────────────────────────────
+    // ── Init ───────────────────────────────────────────────────────────────
     setMode('webcam');
   </script>
 </body>

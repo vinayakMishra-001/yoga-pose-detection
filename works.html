@@ -9,218 +9,57 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
   <style>
-    .page-hero {
-      background: var(--cyan);
-      border-bottom: 4px solid var(--border);
-      padding: 3rem 3rem 2rem;
-    }
-    .page-hero-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.3rem 0.8rem;
-      background: var(--white);
-      border: 3px solid var(--border);
-      box-shadow: 3px 3px 0 var(--border);
-      font-weight: 700;
-      font-size: 0.85rem;
-      margin-bottom: 1rem;
-    }
-    .page-hero-title { font-size: 3.5rem; font-weight: 700; line-height: 1.1; margin-bottom: 0.75rem; }
-    .page-hero-desc { font-size: 1.1rem; opacity: 0.85; max-width: 600px; }
-
-    /* PIPELINE */
-    .pipeline {
-      display: flex;
-      align-items: stretch;
-      gap: 0;
-      margin-bottom: 3rem;
-      overflow-x: auto;
-    }
-
-    .pipeline-step {
-      flex: 1;
-      min-width: 180px;
-      background: var(--white);
-      border: 4px solid var(--border);
-      padding: 2rem 1.5rem;
-      position: relative;
-      text-align: center;
-    }
-
-    .pipeline-step:not(:first-child) { border-left: none; }
-
-    .pipeline-step:nth-child(1) { background: var(--pink); }
-    .pipeline-step:nth-child(2) { background: var(--yellow); }
-    .pipeline-step:nth-child(3) { background: var(--cyan); }
-    .pipeline-step:nth-child(4) { background: var(--green); }
-
-    .pipeline-arrow {
-      position: absolute;
-      right: -22px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1.5rem;
-      z-index: 10;
-      background: var(--border);
-      color: #fff;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 3px solid var(--border);
-    }
-
-    .pipeline-step:last-child .pipeline-arrow { display: none; }
-
-    .pipeline-icon { font-size: 3rem; display: block; margin-bottom: 1rem; }
-    .pipeline-num {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
-      font-weight: 700;
-      opacity: 0.6;
-      margin-bottom: 0.5rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-    .pipeline-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
-    .pipeline-desc { font-size: 0.85rem; opacity: 0.8; }
-
-    /* DEEP DIVE SECTIONS */
-    .deep-section {
-      background: var(--white);
-      border: 4px solid var(--border);
-      box-shadow: 8px 8px 0 var(--border);
-      margin-bottom: 2.5rem;
-      overflow: hidden;
-    }
-
-    .deep-section-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1.5rem 2rem;
-      border-bottom: 4px solid var(--border);
-      font-size: 1.4rem;
-      font-weight: 700;
-    }
-
-    .deep-section:nth-child(1) .deep-section-header { background: var(--pink); }
-    .deep-section:nth-child(2) .deep-section-header { background: var(--yellow); }
-    .deep-section:nth-child(3) .deep-section-header { background: var(--cyan); }
-    .deep-section:nth-child(4) .deep-section-header { background: var(--green); }
-
-    .deep-section-body {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-    }
-
-    .deep-col {
-      padding: 2rem;
-      border-right: 3px solid var(--border);
-    }
-    .deep-col:last-child { border-right: none; }
-
-    .deep-col h4 {
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      opacity: 0.6;
-      margin-bottom: 1rem;
-      font-weight: 700;
-    }
-
-    .code-block {
-      background: #1a1a1a;
-      color: #a8e6cf;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.8rem;
-      padding: 1.5rem;
-      border: 3px solid var(--border);
-      line-height: 1.8;
-      overflow-x: auto;
-    }
-
-    .code-block .kw { color: #ff6b9d; }
-    .code-block .fn { color: #66d9ef; }
-    .code-block .cm { color: #888; }
-    .code-block .st { color: #ffd93d; }
-    .code-block .nu { color: #ff8c42; }
-
-    .info-list { list-style: none; }
-    .info-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      padding: 0.75rem 0;
-      border-bottom: 2px solid rgba(0,0,0,0.08);
-      font-size: 0.95rem;
-    }
-    .info-list li:last-child { border-bottom: none; }
-    .info-list li i { flex-shrink: 0; margin-top: 0.2rem; }
-
-    /* ANGLE VIZ */
-    .angle-demo {
-      background: var(--white);
-      border: 4px solid var(--border);
-      box-shadow: 8px 8px 0 var(--border);
-      padding: 2rem;
-      margin-bottom: 3rem;
-    }
-
-    .angle-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin-top: 1.5rem;
-    }
-
-    .angle-box {
-      border: 3px solid var(--border);
-      padding: 1.5rem;
-      text-align: center;
-    }
-
-    .angle-box:nth-child(1) { background: var(--cyan); }
-    .angle-box:nth-child(2) { background: var(--yellow); }
-    .angle-box:nth-child(3) { background: var(--pink); }
-
-    .angle-box svg { width: 100px; height: 100px; margin: 0 auto 1rem; display: block; }
-    .angle-box-name { font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem; }
-    .angle-box-range { font-family: 'Space Mono', monospace; font-size: 0.8rem; opacity: 0.7; }
-
-    /* LANDMARK TABLE */
-    .landmark-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.75rem;
-    }
-
-    .lm-chip {
-      background: var(--white);
-      border: 2px solid var(--border);
-      padding: 0.5rem 0.75rem;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-align: center;
-      box-shadow: 2px 2px 0 var(--border);
-    }
-
-    .lm-chip.used { background: var(--cyan); }
-    .lm-chip.key { background: var(--yellow); }
-
-    @media (max-width: 900px) {
-      .deep-section-body { grid-template-columns: 1fr; }
-      .deep-col { border-right: none; border-bottom: 3px solid var(--border); }
-      .angle-grid { grid-template-columns: 1fr; }
-      .landmark-grid { grid-template-columns: repeat(2, 1fr); }
-      .pipeline { flex-direction: column; }
-      .pipeline-step { border-left: 4px solid var(--border) !important; }
-      .pipeline-arrow { right: 50%; bottom: -22px; top: auto; transform: translateX(50%) rotate(90deg); }
-    }
+    .page-hero { background: var(--cyan); border-bottom: 4px solid var(--border); padding: 3rem 3rem 2rem; }
+    .page-hero-tag { display:inline-flex;align-items:center;gap:.5rem;padding:.3rem .8rem;background:var(--white);border:3px solid var(--border);box-shadow:3px 3px 0 var(--border);font-weight:700;font-size:.85rem;margin-bottom:1rem; }
+    .page-hero-title { font-size:3.5rem;font-weight:700;line-height:1.1;margin-bottom:.75rem; }
+    .page-hero-desc { font-size:1.1rem;opacity:.85;max-width:600px; }
+    .pipeline { display:flex;align-items:stretch;gap:0;margin-bottom:3rem;overflow-x:auto; }
+    .pipeline-step { flex:1;min-width:180px;background:var(--white);border:4px solid var(--border);padding:2rem 1.5rem;position:relative;text-align:center; }
+    .pipeline-step:not(:first-child) { border-left:none; }
+    .pipeline-step:nth-child(1) { background:var(--pink); }
+    .pipeline-step:nth-child(2) { background:var(--yellow); }
+    .pipeline-step:nth-child(3) { background:var(--cyan); }
+    .pipeline-step:nth-child(4) { background:var(--green); }
+    .pipeline-arrow { position:absolute;right:-22px;top:50%;transform:translateY(-50%);font-size:1.5rem;z-index:10;background:var(--border);color:#fff;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:3px solid var(--border); }
+    .pipeline-step:last-child .pipeline-arrow { display:none; }
+    .pipeline-icon { font-size:3rem;display:block;margin-bottom:1rem; }
+    .pipeline-num { font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;opacity:.6;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:2px; }
+    .pipeline-name { font-size:1.1rem;font-weight:700;margin-bottom:.5rem; }
+    .pipeline-desc { font-size:.85rem;opacity:.8; }
+    .deep-section { background:var(--white);border:4px solid var(--border);box-shadow:8px 8px 0 var(--border);margin-bottom:2.5rem;overflow:hidden; }
+    .deep-section-header { display:flex;align-items:center;gap:1rem;padding:1.5rem 2rem;border-bottom:4px solid var(--border);font-size:1.4rem;font-weight:700; }
+    .deep-section:nth-child(1) .deep-section-header { background:var(--pink); }
+    .deep-section:nth-child(2) .deep-section-header { background:var(--yellow); }
+    .deep-section:nth-child(3) .deep-section-header { background:var(--cyan); }
+    .deep-section:nth-child(4) .deep-section-header { background:var(--green); }
+    .deep-section-body { display:grid;grid-template-columns:1fr 1fr;gap:0; }
+    .deep-col { padding:2rem;border-right:3px solid var(--border); }
+    .deep-col:last-child { border-right:none; }
+    .deep-col h4 { font-size:.85rem;text-transform:uppercase;letter-spacing:1px;opacity:.6;margin-bottom:1rem;font-weight:700; }
+    .code-block { background:#1a1a1a;color:#a8e6cf;font-family:'Space Mono',monospace;font-size:.8rem;padding:1.5rem;border:3px solid var(--border);line-height:1.8;overflow-x:auto; }
+    .code-block .kw { color:#ff6b9d; }
+    .code-block .fn { color:#66d9ef; }
+    .code-block .cm { color:#888; }
+    .code-block .st { color:#ffd93d; }
+    .code-block .nu { color:#ff8c42; }
+    .info-list { list-style:none; }
+    .info-list li { display:flex;align-items:flex-start;gap:.75rem;padding:.75rem 0;border-bottom:2px solid rgba(0,0,0,.08);font-size:.95rem; }
+    .info-list li:last-child { border-bottom:none; }
+    .info-list li i { flex-shrink:0;margin-top:.2rem; }
+    .angle-demo { background:var(--white);border:4px solid var(--border);box-shadow:8px 8px 0 var(--border);padding:2rem;margin-bottom:3rem; }
+    .angle-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:1.5rem; }
+    .angle-box { border:3px solid var(--border);padding:1.5rem;text-align:center; }
+    .angle-box:nth-child(1) { background:var(--cyan); }
+    .angle-box:nth-child(2) { background:var(--yellow); }
+    .angle-box:nth-child(3) { background:var(--pink); }
+    .angle-box svg { width:100px;height:100px;margin:0 auto 1rem;display:block; }
+    .angle-box-name { font-weight:700;font-size:1rem;margin-bottom:.25rem; }
+    .angle-box-range { font-family:'Space Mono',monospace;font-size:.8rem;opacity:.7; }
+    .landmark-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem; }
+    .lm-chip { background:var(--white);border:2px solid var(--border);padding:.5rem .75rem;font-family:'Space Mono',monospace;font-size:.75rem;font-weight:700;text-align:center;box-shadow:2px 2px 0 var(--border); }
+    .lm-chip.used { background:var(--cyan); }
+    .lm-chip.key  { background:var(--yellow); }
+    @media (max-width:900px) { .deep-section-body{grid-template-columns:1fr} .deep-col{border-right:none;border-bottom:3px solid var(--border)} .angle-grid{grid-template-columns:1fr} .landmark-grid{grid-template-columns:repeat(2,1fr)} .pipeline{flex-direction:column} .pipeline-step{border-left:4px solid var(--border)!important} .pipeline-arrow{right:50%;bottom:-22px;top:auto;transform:translateX(50%) rotate(90deg)} }
   </style>
 </head>
 <body>
@@ -232,10 +71,10 @@
           <a href="index.html" class="nav-link">Home</a>
           <a href="poses.html" class="nav-link">Poses</a>
           <a href="works.html" class="nav-link active">How It Works</a>
-          <a href="demo.html" class="nav-link">Demo</a>
+          <a href="demo.html"  class="nav-link">Demo</a>
           <a href="about.html" class="nav-link">About</a>
           <a href="developer.html" class="nav-link">Developer</a>
-          <a href="demo.html" class="nav-cta">Try Now →</a>
+          <a href="demo.html"  class="nav-cta">Try Now →</a>
           <button class="theme-btn" id="theme-toggle">🌙</button>
         </div>
       </div>
@@ -244,12 +83,11 @@
     <div class="page-hero">
       <div class="page-hero-tag"><i class="fas fa-microscope"></i> Technical Deep Dive</div>
       <h1 class="page-hero-title">How YogaVision Works</h1>
-      <p class="page-hero-desc">A step-by-step breakdown of the AI pipeline — from raw camera input to real-time pose classification using MediaPipe and OpenCV.</p>
+      <p class="page-hero-desc">A step-by-step breakdown of the AI pipeline — from raw camera input to real-time classification of 6 yoga poses using MediaPipe and OpenCV.</p>
     </div>
 
     <div class="container">
 
-      <!-- PIPELINE -->
       <section class="section">
         <h2 class="section-title">The Detection Pipeline</h2>
         <div class="pipeline">
@@ -258,7 +96,7 @@
             <span class="pipeline-icon">📷</span>
             <div class="pipeline-num">Step 01</div>
             <div class="pipeline-name">Capture Input</div>
-            <div class="pipeline-desc">OpenCV reads webcam / video frames at up to 60fps</div>
+            <div class="pipeline-desc">OpenCV reads webcam frames or the ESP32-CAM MJPEG stream at up to 60fps</div>
           </div>
           <div class="pipeline-step">
             <div class="pipeline-arrow">→</div>
@@ -278,12 +116,11 @@
             <span class="pipeline-icon">✅</span>
             <div class="pipeline-num">Step 04</div>
             <div class="pipeline-name">Pose Classification</div>
-            <div class="pipeline-desc">Angle thresholds match to known pose definitions</div>
+            <div class="pipeline-desc">Angle thresholds match to one of 6 known pose definitions</div>
           </div>
         </div>
       </section>
 
-      <!-- STEP 1 DEEP DIVE -->
       <section class="section">
         <h2 class="section-title">Step-by-Step Breakdown</h2>
 
@@ -293,10 +130,10 @@
             <div class="deep-col">
               <h4>How it works</h4>
               <ul class="info-list">
-                <li><i class="fas fa-circle" style="color:var(--pink); font-size:0.5rem; margin-top:0.5rem;"></i> OpenCV (<code>cv2</code>) opens a VideoCapture stream from webcam index 0 or a video file path</li>
-                <li><i class="fas fa-circle" style="color:var(--pink); font-size:0.5rem; margin-top:0.5rem;"></i> Each frame is read as a BGR NumPy array and converted to RGB for MediaPipe</li>
-                <li><i class="fas fa-circle" style="color:var(--pink); font-size:0.5rem; margin-top:0.5rem;"></i> FPS is calculated using <code>time.time()</code> between frames and overlaid on screen</li>
-                <li><i class="fas fa-circle" style="color:var(--pink); font-size:0.5rem; margin-top:0.5rem;"></i> Supports static images via <code>cv2.imread()</code> too — same pipeline applies</li>
+                <li><i class="fas fa-circle" style="color:var(--pink);font-size:.5rem;margin-top:.5rem;"></i> OpenCV (<code>cv2</code>) opens a VideoCapture stream from webcam index 0</li>
+                <li><i class="fas fa-circle" style="color:var(--pink);font-size:.5rem;margin-top:.5rem;"></i> For ESP32-CAM, a custom MJPEG parser reads raw bytes via <code>urllib</code>, scanning for FF D8 / FF D9 JPEG markers</li>
+                <li><i class="fas fa-circle" style="color:var(--pink);font-size:.5rem;margin-top:.5rem;"></i> Each frame is read as a BGR NumPy array and converted to RGB for MediaPipe</li>
+                <li><i class="fas fa-circle" style="color:var(--pink);font-size:.5rem;margin-top:.5rem;"></i> FPS is calculated using <code>time.time()</code> between frames and overlaid on screen</li>
               </ul>
             </div>
             <div class="deep-col">
@@ -309,6 +146,7 @@ prev_time = <span class="nu">0</span><br>
 <br>
 <span class="kw">while</span> cap.<span class="fn">isOpened</span>():<br>
 &nbsp;&nbsp;ret, frame = cap.<span class="fn">read</span>()<br>
+&nbsp;&nbsp;frame = cv2.<span class="fn">flip</span>(frame, <span class="nu">1</span>)<br>
 &nbsp;&nbsp;rgb = cv2.<span class="fn">cvtColor</span>(frame, cv2.COLOR_BGR2RGB)<br>
 <br>
 &nbsp;&nbsp;<span class="cm"># FPS calculation</span><br>
@@ -326,10 +164,10 @@ prev_time = <span class="nu">0</span><br>
             <div class="deep-col">
               <h4>MediaPipe Pose</h4>
               <ul class="info-list">
-                <li><i class="fas fa-circle" style="color:var(--yellow); font-size:0.5rem; margin-top:0.5rem;"></i> Google's MediaPipe Pose model detects <strong>33 body landmarks</strong> per frame</li>
-                <li><i class="fas fa-circle" style="color:var(--yellow); font-size:0.5rem; margin-top:0.5rem;"></i> Each landmark has normalised (x, y) coordinates plus depth (z) and visibility score</li>
-                <li><i class="fas fa-circle" style="color:var(--yellow); font-size:0.5rem; margin-top:0.5rem;"></i> The model runs BlazePose — a lightweight neural net optimised for mobile/real-time</li>
-                <li><i class="fas fa-circle" style="color:var(--yellow); font-size:0.5rem; margin-top:0.5rem;"></i> Key landmarks used: shoulders (11,12), elbows (13,14), wrists (15,16), hips (23,24), knees (25,26), ankles (27,28)</li>
+                <li><i class="fas fa-circle" style="color:var(--yellow);font-size:.5rem;margin-top:.5rem;"></i> Google's MediaPipe Pose model detects <strong>33 body landmarks</strong> per frame</li>
+                <li><i class="fas fa-circle" style="color:var(--yellow);font-size:.5rem;margin-top:.5rem;"></i> Each landmark has normalised (x, y) coordinates plus depth (z) and visibility score</li>
+                <li><i class="fas fa-circle" style="color:var(--yellow);font-size:.5rem;margin-top:.5rem;"></i> The model runs BlazePose — a lightweight neural net optimised for mobile/real-time</li>
+                <li><i class="fas fa-circle" style="color:var(--yellow);font-size:.5rem;margin-top:.5rem;"></i> Key landmarks used: shoulders (11,12), elbows (13,14), wrists (15,16), hips (23,24), knees (25,26), ankles (27,28)</li>
               </ul>
             </div>
             <div class="deep-col">
@@ -339,6 +177,7 @@ prev_time = <span class="nu">0</span><br>
 <br>
 mp_pose = mp.solutions.<span class="fn">pose</span><br>
 pose = mp_pose.<span class="fn">Pose</span>(<br>
+&nbsp;&nbsp;model_complexity=<span class="nu">0</span>,<br>
 &nbsp;&nbsp;min_detection_confidence=<span class="nu">0.5</span>,<br>
 &nbsp;&nbsp;min_tracking_confidence=<span class="nu">0.5</span><br>
 )<br>
@@ -360,30 +199,29 @@ shoulder = landmarks[mp_pose.PoseLandmark<br>
             <div class="deep-col">
               <h4>The Math</h4>
               <ul class="info-list">
-                <li><i class="fas fa-circle" style="color:var(--cyan); font-size:0.5rem; margin-top:0.5rem;"></i> Three landmarks define each joint angle: point A (proximal), B (joint), C (distal)</li>
-                <li><i class="fas fa-circle" style="color:var(--cyan); font-size:0.5rem; margin-top:0.5rem;"></i> Two vectors are formed: BA and BC from landmark coordinates</li>
-                <li><i class="fas fa-circle" style="color:var(--cyan); font-size:0.5rem; margin-top:0.5rem;"></i> The angle between them is: <code>θ = arctan2(C-B) − arctan2(A-B)</code>, converted to degrees</li>
-                <li><i class="fas fa-circle" style="color:var(--cyan); font-size:0.5rem; margin-top:0.5rem;"></i> NumPy's <code>np.degrees()</code> and <code>np.arctan2()</code> are used for precision</li>
-                <li><i class="fas fa-circle" style="color:var(--cyan); font-size:0.5rem; margin-top:0.5rem;"></i> Result is kept in 0–360° range by taking absolute value</li>
+                <li><i class="fas fa-circle" style="color:var(--cyan);font-size:.5rem;margin-top:.5rem;"></i> Three landmarks define each joint angle: point A (proximal), B (joint), C (distal)</li>
+                <li><i class="fas fa-circle" style="color:var(--cyan);font-size:.5rem;margin-top:.5rem;"></i> Two vectors are formed: BA and BC from landmark coordinates</li>
+                <li><i class="fas fa-circle" style="color:var(--cyan);font-size:.5rem;margin-top:.5rem;"></i> The angle between them: <code>θ = atan2(C-B) − atan2(A-B)</code>, converted to degrees</li>
+                <li><i class="fas fa-circle" style="color:var(--cyan);font-size:.5rem;margin-top:.5rem;"></i> Python's <code>math.atan2()</code> and <code>math.degrees()</code> are used for precision</li>
+                <li><i class="fas fa-circle" style="color:var(--cyan);font-size:.5rem;margin-top:.5rem;"></i> Result normalised to 0–360° range</li>
               </ul>
             </div>
             <div class="deep-col">
               <h4>Angle Function</h4>
               <div class="code-block">
-<span class="kw">import</span> numpy <span class="kw">as</span> np<br>
+<span class="kw">import</span> math<br>
 <br>
-<span class="kw">def</span> <span class="fn">calculate_angle</span>(a, b, c):<br>
-&nbsp;&nbsp;a = np.<span class="fn">array</span>(a)  <span class="cm"># shoulder</span><br>
-&nbsp;&nbsp;b = np.<span class="fn">array</span>(b)  <span class="cm"># elbow (joint)</span><br>
-&nbsp;&nbsp;c = np.<span class="fn">array</span>(c)  <span class="cm"># wrist</span><br>
+<span class="kw">def</span> <span class="fn">calculateAngle</span>(p1, p2, p3):<br>
+&nbsp;&nbsp;x1,y1,_ = p1<br>
+&nbsp;&nbsp;x2,y2,_ = p2<br>
+&nbsp;&nbsp;x3,y3,_ = p3<br>
 <br>
-&nbsp;&nbsp;radians = np.<span class="fn">arctan2</span>(<br>
-&nbsp;&nbsp;&nbsp;&nbsp;c[<span class="nu">1</span>] - b[<span class="nu">1</span>], c[<span class="nu">0</span>] - b[<span class="nu">0</span>]) -<br>
-&nbsp;&nbsp;&nbsp;&nbsp;np.<span class="fn">arctan2</span>(<br>
-&nbsp;&nbsp;&nbsp;&nbsp;a[<span class="nu">1</span>] - b[<span class="nu">1</span>], a[<span class="nu">0</span>] - b[<span class="nu">0</span>])<br>
-<br>
-&nbsp;&nbsp;angle = np.<span class="fn">abs</span>(np.<span class="fn">degrees</span>(radians))<br>
-&nbsp;&nbsp;<span class="kw">if</span> angle > <span class="nu">180</span>: angle = <span class="nu">360</span> - angle<br>
+&nbsp;&nbsp;angle = math.<span class="fn">degrees</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;math.<span class="fn">atan2</span>(y3-y2, x3-x2) -<br>
+&nbsp;&nbsp;&nbsp;&nbsp;math.<span class="fn">atan2</span>(y1-y2, x1-x2)<br>
+&nbsp;&nbsp;)<br>
+&nbsp;&nbsp;<span class="kw">if</span> angle &lt; <span class="nu">0</span>:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;angle += <span class="nu">360</span><br>
 &nbsp;&nbsp;<span class="kw">return</span> angle
               </div>
             </div>
@@ -391,47 +229,42 @@ shoulder = landmarks[mp_pose.PoseLandmark<br>
         </div>
 
         <div class="deep-section">
-          <div class="deep-section-header"><span>✅</span> Step 4 — Pose Classification</div>
+          <div class="deep-section-header"><span>✅</span> Step 4 — Pose Classification (6 Poses)</div>
           <div class="deep-section-body">
             <div class="deep-col">
               <h4>Classification Logic</h4>
               <ul class="info-list">
-                <li><i class="fas fa-circle" style="color:var(--green); font-size:0.5rem; margin-top:0.5rem;"></i> Calculated angles are compared against pre-defined thresholds for each pose</li>
-                <li><i class="fas fa-circle" style="color:var(--green); font-size:0.5rem; margin-top:0.5rem;"></i> All conditions for a pose must pass simultaneously (AND logic)</li>
-                <li><i class="fas fa-circle" style="color:var(--green); font-size:0.5rem; margin-top:0.5rem;"></i> The matched pose name + confidence is overlaid using <code>cv2.putText()</code></li>
-                <li><i class="fas fa-circle" style="color:var(--green); font-size:0.5rem; margin-top:0.5rem;"></i> A coloured bounding indicator changes per pose for clear visual feedback</li>
-                <li><i class="fas fa-circle" style="color:var(--green); font-size:0.5rem; margin-top:0.5rem;"></i> If no pose matches, "Unknown Pose" is displayed with a neutral indicator</li>
+                <li><i class="fas fa-circle" style="color:var(--green);font-size:.5rem;margin-top:.5rem;"></i> Calculated angles are compared against pre-defined thresholds for each of 6 poses</li>
+                <li><i class="fas fa-circle" style="color:var(--green);font-size:.5rem;margin-top:.5rem;"></i> All conditions for a pose must pass simultaneously (AND logic)</li>
+                <li><i class="fas fa-circle" style="color:var(--green);font-size:.5rem;margin-top:.5rem;"></i> Poses checked in priority order: T Pose → Warrior II → Tree → Mountain → Chair → Hand Up</li>
+                <li><i class="fas fa-circle" style="color:var(--green);font-size:.5rem;margin-top:.5rem;"></i> The matched pose name + confidence overlaid via <code>cv2.putText()</code></li>
+                <li><i class="fas fa-circle" style="color:var(--green);font-size:.5rem;margin-top:.5rem;"></i> If no pose matches, "Unknown Pose" is returned</li>
               </ul>
             </div>
             <div class="deep-col">
               <h4>Code Snippet</h4>
               <div class="code-block">
-<span class="kw">def</span> <span class="fn">detect_pose</span>(angles):<br>
-&nbsp;&nbsp;lk, rk = angles[<span class="st">'left_knee'</span>], angles[<span class="st">'right_knee'</span>]<br>
-&nbsp;&nbsp;ls, rs = angles[<span class="st">'left_shoulder'</span>], angles[<span class="st">'right_shoulder'</span>]<br>
-&nbsp;&nbsp;le, re = angles[<span class="st">'left_elbow'</span>], angles[<span class="st">'right_elbow'</span>]<br>
+<span class="cm"># T Pose check (priority 1)</span><br>
+<span class="kw">if</span> le&gt;<span class="nu">160</span> <span class="kw">and</span> re&gt;<span class="nu">160</span><br>
+&nbsp;&nbsp;<span class="kw">and</span> <span class="nu">75</span>&lt;ls&lt;<span class="nu">110</span> <span class="kw">and</span> <span class="nu">75</span>&lt;rs&lt;<span class="nu">110</span><br>
+&nbsp;&nbsp;<span class="kw">and</span> lk&gt;<span class="nu">160</span> <span class="kw">and</span> rk&gt;<span class="nu">160</span>:<br>
+&nbsp;&nbsp;label = <span class="st">"T Pose"</span>; conf = <span class="nu">98</span><br>
 <br>
-&nbsp;&nbsp;<span class="cm"># Warrior II check</span><br>
-&nbsp;&nbsp;<span class="kw">if</span> (<span class="nu">165</span> &lt;= le &lt;= <span class="nu">195</span> <span class="kw">and</span> <span class="nu">165</span> &lt;= re &lt;= <span class="nu">195</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">and</span> <span class="nu">80</span> &lt;= ls &lt;= <span class="nu">110</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">and</span> (<span class="nu">90</span> &lt;= lk &lt;= <span class="nu">120</span> <span class="kw">or</span> <span class="nu">90</span> &lt;= rk &lt;= <span class="nu">120</span>)):<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="st">"Warrior II"</span><br>
-<br>
-&nbsp;&nbsp;<span class="cm"># T-Pose check</span><br>
-&nbsp;&nbsp;<span class="kw">if</span> (<span class="nu">165</span> &lt;= le &lt;= <span class="nu">195</span> <span class="kw">and</span> <span class="nu">80</span> &lt;= ls &lt;= <span class="nu">110</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">and</span> <span class="nu">160</span> &lt;= lk &lt;= <span class="nu">195</span>):<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="st">"T-Pose"</span>
+<span class="cm"># Chair Pose check</span><br>
+<span class="kw">elif</span> <span class="nu">140</span>&lt;ls&lt;<span class="nu">180</span> <span class="kw">and</span> <span class="nu">140</span>&lt;rs&lt;<span class="nu">180</span><br>
+&nbsp;&nbsp;<span class="kw">and</span> le&gt;<span class="nu">160</span> <span class="kw">and</span> re&gt;<span class="nu">160</span><br>
+&nbsp;&nbsp;<span class="kw">and</span> <span class="nu">80</span>&lt;lk&lt;<span class="nu">130</span> <span class="kw">and</span> <span class="nu">80</span>&lt;rk&lt;<span class="nu">130</span>:<br>
+&nbsp;&nbsp;label = <span class="st">"Chair Pose"</span>; conf = <span class="nu">93</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ANGLE VISUAL -->
       <section class="section">
         <div class="angle-demo">
-          <h2 class="section-title" style="margin-bottom:0.5rem;">Angle Geometry Visualised</h2>
-          <p style="opacity:0.7; margin-bottom:1.5rem;">How three body landmarks form a measurable joint angle</p>
+          <h2 class="section-title" style="margin-bottom:.5rem;">Angle Geometry Visualised</h2>
+          <p style="opacity:.7;margin-bottom:1.5rem;">How three body landmarks form a measurable joint angle</p>
           <div class="angle-grid">
             <div class="angle-box">
               <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -484,10 +317,9 @@ shoulder = landmarks[mp_pose.PoseLandmark<br>
         </div>
       </section>
 
-      <!-- LANDMARKS USED -->
       <section class="section">
         <div class="highlight-strip">
-          <h2 style="font-size:1.5rem; font-weight:700; margin-bottom:1.5rem;">🦴 MediaPipe Landmarks Reference (33 total)</h2>
+          <h2 style="font-size:1.5rem;font-weight:700;margin-bottom:1.5rem;">🦴 MediaPipe Landmarks Reference (33 total)</h2>
           <div class="landmark-grid">
             <div class="lm-chip key">0: Nose</div>
             <div class="lm-chip">1: L. Eye Inner</div>
@@ -523,16 +355,16 @@ shoulder = landmarks[mp_pose.PoseLandmark<br>
             <div class="lm-chip">31: L. Foot Index</div>
             <div class="lm-chip">32: R. Foot Index</div>
           </div>
-          <div style="margin-top:1rem; display:flex; gap:1rem; flex-wrap:wrap;">
-            <span style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; font-weight:700;"><span style="background:var(--cyan); border:2px solid var(--border); padding:2px 8px; font-family:'Space Mono',monospace;">★ Used</span> Key landmarks used for angle detection</span>
-            <span style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; font-weight:700;"><span style="background:var(--white); border:2px solid var(--border); padding:2px 8px; font-family:'Space Mono',monospace;">□ Unused</span> Available but not used in current poses</span>
+          <div style="margin-top:1rem;display:flex;gap:1rem;flex-wrap:wrap;">
+            <span style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:700;"><span style="background:var(--cyan);border:2px solid var(--border);padding:2px 8px;font-family:'Space Mono',monospace;">★ Used</span> Key landmarks used for angle detection</span>
+            <span style="display:flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:700;"><span style="background:var(--white);border:2px solid var(--border);padding:2px 8px;font-family:'Space Mono',monospace;">□ Unused</span> Available but not used in current poses</span>
           </div>
         </div>
       </section>
 
-      <div style="text-align:center; margin:3rem 0;">
-        <a href="demo.html" class="btn btn-primary" style="font-size:1.1rem; padding:1rem 2rem; margin-right:1rem;"><i class="fas fa-play"></i> Try It Live</a>
-        <a href="poses.html" class="btn btn-secondary" style="font-size:1.1rem; padding:1rem 2rem;"><i class="fas fa-person-praying"></i> View Poses</a>
+      <div style="text-align:center;margin:3rem 0;">
+        <a href="demo.html"  class="btn btn-primary"   style="font-size:1.1rem;padding:1rem 2rem;margin-right:1rem;"><i class="fas fa-play"></i> Try It Live</a>
+        <a href="poses.html" class="btn btn-secondary" style="font-size:1.1rem;padding:1rem 2rem;"><i class="fas fa-person-praying"></i> View Poses</a>
       </div>
 
     </div>
@@ -543,7 +375,7 @@ shoulder = landmarks[mp_pose.PoseLandmark<br>
         <nav class="footer-nav">
           <a href="index.html">Home</a>
           <a href="poses.html">Poses</a>
-          <a href="how-it-works.html">How It Works</a>
+          <a href="works.html">How It Works</a>
           <a href="demo.html">Demo</a>
           <a href="about.html">About</a>
           <a href="developer.html">Developer</a>
@@ -551,7 +383,7 @@ shoulder = landmarks[mp_pose.PoseLandmark<br>
       </div>
       <div class="footer-bottom">
         <span>© 2025 YogaVision — Built with MediaPipe & OpenCV</span>
-        <span style="font-family:'Space Mono',monospace; font-size:0.85rem;">Python · AI · Computer Vision</span>
+        <span style="font-family:'Space Mono',monospace;font-size:.85rem;">Python · AI · Computer Vision</span>
       </div>
     </footer>
   </div>

@@ -23,152 +23,79 @@
     .page-hero-title { font-size: 3.5rem; font-weight: 700; line-height: 1.1; margin-bottom: 0.75rem; }
     .page-hero-desc { font-size: 1.1rem; opacity: 0.85; max-width: 600px; }
 
-    /* MISSION */
     .mission-block {
-      background: var(--white);
-      border: 4px solid var(--border);
-      box-shadow: 10px 10px 0 var(--border);
-      padding: 3rem;
-      margin-bottom: 3rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: center;
+      background: var(--white); border: 4px solid var(--border);
+      box-shadow: 10px 10px 0 var(--border); padding: 3rem; margin-bottom: 3rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
     }
-
     .mission-text h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; }
     .mission-text p { font-size: 1.05rem; line-height: 1.9; opacity: 0.85; margin-bottom: 1rem; }
-
     .mission-visual {
-      background: var(--yellow);
-      border: 4px solid var(--border);
-      box-shadow: 8px 8px 0 var(--border);
-      padding: 3rem;
-      text-align: center;
+      background: var(--yellow); border: 4px solid var(--border);
+      box-shadow: 8px 8px 0 var(--border); padding: 3rem; text-align: center;
     }
-
     .mission-emoji { font-size: 6rem; display: block; margin-bottom: 1rem; }
 
-    /* TIMELINE */
     .timeline-section {
-      background: var(--white);
-      border: 4px solid var(--border);
-      box-shadow: 8px 8px 0 var(--border);
-      overflow: hidden;
-      margin-bottom: 3rem;
+      background: var(--white); border: 4px solid var(--border);
+      box-shadow: 8px 8px 0 var(--border); overflow: hidden; margin-bottom: 3rem;
     }
-
     .timeline-header {
-      padding: 1.5rem 2rem;
-      border-bottom: 4px solid var(--border);
-      background: var(--cyan);
-      font-size: 1.4rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
+      padding: 1.5rem 2rem; border-bottom: 4px solid var(--border);
+      background: var(--cyan); font-size: 1.4rem; font-weight: 700;
+      display: flex; align-items: center; gap: 0.75rem;
     }
-
     .timeline-body { padding: 2rem; }
-
     .tl-item {
-      display: grid;
-      grid-template-columns: 80px 1fr;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-      position: relative;
+      display: grid; grid-template-columns: 80px 1fr; gap: 1.5rem;
+      margin-bottom: 2rem; position: relative;
     }
-
     .tl-item:not(:last-child)::after {
-      content: '';
-      position: absolute;
-      left: 39px;
-      top: 50px;
-      bottom: -2rem;
-      width: 3px;
-      background: var(--border);
+      content: ''; position: absolute; left: 39px; top: 50px; bottom: -2rem;
+      width: 3px; background: var(--border);
     }
-
     .tl-marker {
-      width: 50px;
-      height: 50px;
-      background: var(--yellow);
-      border: 4px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      flex-shrink: 0;
-      box-shadow: 3px 3px 0 var(--border);
-      position: relative;
-      z-index: 1;
+      width: 50px; height: 50px; background: var(--yellow); border: 4px solid var(--border);
+      display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+      flex-shrink: 0; box-shadow: 3px 3px 0 var(--border); position: relative; z-index: 1;
     }
-
     .tl-content h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.4rem; }
     .tl-content p { font-size: 0.9rem; opacity: 0.8; }
     .tl-tag {
-      display: inline-block;
-      padding: 0.15rem 0.5rem;
-      font-size: 0.75rem;
-      font-weight: 700;
-      border: 2px solid var(--border);
-      margin-bottom: 0.5rem;
+      display: inline-block; padding: 0.15rem 0.5rem; font-size: 0.75rem;
+      font-weight: 700; border: 2px solid var(--border); margin-bottom: 0.5rem;
       font-family: 'Space Mono', monospace;
     }
 
-    /* TECH DEEP DIVE */
     .tech-cards {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.5rem;
-      margin-bottom: 3rem;
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem; margin-bottom: 3rem;
     }
-
     .tech-card {
-      background: var(--white);
-      border: 4px solid var(--border);
-      box-shadow: 6px 6px 0 var(--border);
-      overflow: hidden;
+      background: var(--white); border: 4px solid var(--border);
+      box-shadow: 6px 6px 0 var(--border); overflow: hidden;
     }
-
     .tech-card-header {
-      padding: 1rem 1.5rem;
-      border-bottom: 3px solid var(--border);
-      font-weight: 700;
-      font-size: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      padding: 1rem 1.5rem; border-bottom: 3px solid var(--border);
+      font-weight: 700; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem;
     }
-
     .tech-card:nth-child(1) .tech-card-header { background: var(--pink); }
     .tech-card:nth-child(2) .tech-card-header { background: var(--yellow); }
     .tech-card:nth-child(3) .tech-card-header { background: var(--cyan); }
     .tech-card:nth-child(4) .tech-card-header { background: var(--green); }
-
     .tech-card-body { padding: 1.5rem; }
     .tech-card-body p { font-size: 0.95rem; opacity: 0.85; line-height: 1.7; }
 
-    /* CHALLENGES */
     .challenge-list { list-style: none; }
     .challenge-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      padding: 1rem 0;
-      border-bottom: 2px solid rgba(0,0,0,0.08);
-      font-size: 0.95rem;
+      display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 0;
+      border-bottom: 2px solid rgba(0,0,0,0.08); font-size: 0.95rem;
     }
     .challenge-list li:last-child { border-bottom: none; }
     .challenge-icon {
-      width: 36px;
-      height: 36px;
-      border: 3px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: 1rem;
+      width: 36px; height: 36px; border: 3px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 1rem;
     }
 
     @media (max-width: 900px) {
@@ -182,15 +109,15 @@
   <div class="page-wrapper">
     <nav class="navbar" id="navbar">
       <div class="nav-content">
-        <a href="index.html" class="nav-brand">ABOUT</a>
+        <a href="index.html" class="nav-brand">🧘 YogaVision</a>
         <div class="nav-right">
-          <a href="index.html" class="nav-link">Home</a>
-          <a href="poses.html" class="nav-link">Poses</a>
-          <a href="works.html" class="nav-link">How It Works</a>
-          <a href="demo.html" class="nav-link">Demo</a>
-          <a href="about.html" class="nav-link active">About</a>
+          <a href="index.html"     class="nav-link">Home</a>
+          <a href="poses.html"     class="nav-link">Poses</a>
+          <a href="works.html"     class="nav-link">How It Works</a>
+          <a href="demo.html"      class="nav-link">Demo</a>
+          <a href="about.html"     class="nav-link active">About</a>
           <a href="developer.html" class="nav-link">Developer</a>
-          <a href="demo.html" class="nav-cta">Try Now →</a>
+          <a href="demo.html"      class="nav-cta">Try Now →</a>
           <button class="theme-btn" id="theme-toggle">🌙</button>
         </div>
       </div>
@@ -199,31 +126,30 @@
     <div class="page-hero">
       <div class="page-hero-tag"><i class="fas fa-info-circle"></i> About This Project</div>
       <h1 class="page-hero-title">About YogaVision</h1>
-      <p class="page-hero-desc">A computer vision project combining real-time body landmark detection with rule-based pose classification — built entirely in Python.</p>
+      <p class="page-hero-desc">A computer vision project combining real-time body landmark detection with rule-based classification of 6 yoga poses — built entirely in Python.</p>
     </div>
 
     <div class="container">
 
-      <!-- MISSION -->
       <div class="mission-block">
         <div class="mission-text">
           <h2>What Is YogaVision?</h2>
-          <p>YogaVision is an AI-powered yoga pose detection system that uses Google's MediaPipe framework and OpenCV to analyse human body posture in real time. It detects 33 skeletal landmarks and classifies yoga poses by measuring joint angles against predefined thresholds.</p>
-          <p>The project demonstrates how computer vision and geometric mathematics can be applied to a health and wellness use case — making pose feedback accessible without specialised hardware or apps.</p>
+          <p>YogaVision is an AI-powered yoga pose detection system that uses Google's MediaPipe framework and OpenCV to analyse human body posture in real time. It detects 33 skeletal landmarks and classifies 6 yoga poses by measuring joint angles against predefined thresholds.</p>
+          <p>The system supports two input modes — a laptop webcam and a wireless ESP32-CAM module — making it flexible for both desktop use and remote monitoring scenarios. All processing runs locally via a Flask backend.</p>
           <div style="display:flex; gap:1rem; flex-wrap:wrap; margin-top:1.5rem;">
             <span class="badge" style="background:var(--green);">Open Source</span>
             <span class="badge" style="background:var(--cyan);">Real-Time CV</span>
             <span class="badge" style="background:var(--pink);">Python</span>
+            <span class="badge" style="background:#ff8c42;color:#000;">ESP32-CAM</span>
           </div>
         </div>
         <div class="mission-visual">
           <span class="mission-emoji">🧘‍♀️</span>
           <div style="font-family:'Caveat',cursive; font-size:1.8rem; font-weight:700; margin-bottom:1rem;">See your pose.<br>Improve your form.</div>
-          <div style="font-size:0.9rem; opacity:0.75;">Powered by MediaPipe BlazePose + OpenCV</div>
+          <div style="font-size:0.9rem; opacity:0.75;">6 poses · MediaPipe BlazePose · OpenCV · Flask</div>
         </div>
       </div>
 
-      <!-- TIMELINE -->
       <div class="timeline-section">
         <div class="timeline-header"><span>🏗️</span> Project Development</div>
         <div class="timeline-body">
@@ -232,7 +158,7 @@
             <div class="tl-content">
               <div class="tl-tag" style="background:var(--pink);">CONCEPT</div>
               <h4>Project Concept & Research</h4>
-              <p>Identified MediaPipe as the ideal framework for real-time body landmark detection. Researched existing pose estimation approaches and defined the project scope: a lightweight, angle-based classifier running entirely in Python without deep learning training overhead.</p>
+              <p>Identified MediaPipe as the ideal framework for real-time body landmark detection. Researched existing pose estimation approaches and defined the scope: a lightweight, angle-based classifier running entirely in Python without deep learning training overhead.</p>
             </div>
           </div>
           <div class="tl-item">
@@ -240,15 +166,23 @@
             <div class="tl-content">
               <div class="tl-tag" style="background:var(--yellow);">BUILD</div>
               <h4>Core Detection Engine</h4>
-              <p>Built the <code>calculate_angle()</code> function using NumPy's <code>arctan2</code> to compute joint angles from 3D landmark coordinates. Integrated OpenCV for video capture, frame processing, and visual overlay rendering.</p>
+              <p>Built the <code>calculateAngle()</code> function using Python's <code>math.atan2</code> to compute joint angles from 3D landmark coordinates. Integrated OpenCV for video capture, frame processing, and visual overlay rendering via Flask streaming.</p>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-marker">📡</div>
+            <div class="tl-content">
+              <div class="tl-tag" style="background:#ffe0cc;">ESP32-CAM</div>
+              <h4>ESP32-CAM MJPEG Integration</h4>
+              <p>Added wireless camera support by implementing a custom MJPEG stream parser using <code>urllib</code>. Manually scans for JPEG start (FF D8) and end (FF D9) markers to reliably extract frames from the ESP32-CAM firmware stream that OpenCV's VideoCapture cannot handle.</p>
             </div>
           </div>
           <div class="tl-item">
             <div class="tl-marker">🎯</div>
             <div class="tl-content">
               <div class="tl-tag" style="background:var(--cyan);">CALIBRATE</div>
-              <h4>Pose Threshold Calibration</h4>
-              <p>Manually calibrated angle thresholds for each pose by testing across multiple subjects and camera angles. Tuned ranges to balance sensitivity (catching correct poses) against specificity (avoiding false positives).</p>
+              <h4>6-Pose Threshold Calibration</h4>
+              <p>Manually calibrated angle thresholds for all 6 poses (T Pose, Warrior II, Tree, Mountain, Chair, Hand Up) by testing across multiple subjects and camera angles. Tuned ranges to minimise false positives between visually similar poses.</p>
             </div>
           </div>
           <div class="tl-item">
@@ -256,44 +190,42 @@
             <div class="tl-content">
               <div class="tl-tag" style="background:var(--green);">COMPLETE</div>
               <h4>Testing & Accuracy Measurement</h4>
-              <p>Achieved 94% accuracy on Warrior II, 91% on Tree Pose, and 96% on T Pose through systematic testing. Built this documentation website to showcase the system architecture and make the project accessible to others.</p>
+              <p>Achieved 98% on T Pose, 96% on Warrior II, 93% on Chair Pose, 92% on Tree Pose, 90% on Mountain Pose, and 88% on Hand Up Pose. Built this documentation website to showcase the system architecture.</p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- TECH DEEP DIVE -->
       <section class="section">
         <h2 class="section-title">Technology Choices</h2>
         <div class="tech-cards">
           <div class="tech-card">
             <div class="tech-card-header"><span>🤖</span> Why MediaPipe?</div>
             <div class="tech-card-body">
-              <p>Google's MediaPipe Pose (BlazePose) offers state-of-the-art landmark detection optimised for real-time performance. It runs at 30–60fps on consumer hardware, outputs 33 3D landmarks with confidence scores, and requires no GPU or specialised hardware — making it ideal for accessible, lightweight pose estimation without training a custom model.</p>
+              <p>Google's MediaPipe Pose (BlazePose) offers state-of-the-art landmark detection optimised for real-time performance. It runs at 30–60fps on consumer hardware, outputs 33 3D landmarks with confidence scores, and requires no GPU — making it ideal for accessible, lightweight pose estimation without training a custom model.</p>
             </div>
           </div>
           <div class="tech-card">
-            <div class="tech-card-header"><span>👁️</span> Why OpenCV?</div>
+            <div class="tech-card-header"><span>📡</span> Why ESP32-CAM?</div>
             <div class="tech-card-body">
-              <p>OpenCV is the industry standard for computer vision tasks in Python. It handles video capture from webcams and files, frame-by-frame processing, and drawing overlays (skeleton lines, text labels, angle readouts) directly on frames. Its tight integration with NumPy makes it perfect for this pipeline.</p>
+              <p>The ESP32-CAM is a $5 wireless camera module that streams MJPEG video over Wi-Fi. It removes the need for USB cables and allows the camera to be positioned anywhere on the yoga mat. The Flask backend handles the MJPEG stream decoding, so no special firmware changes are needed.</p>
             </div>
           </div>
           <div class="tech-card">
             <div class="tech-card-header"><span>📐</span> Why Rule-Based Classification?</div>
             <div class="tech-card-body">
-              <p>Rather than training a neural network classifier (which requires labelled datasets, training time, and hardware), YogaVision uses deterministic angle thresholds. This approach is fully explainable — each decision can be traced to exact angle values — making it easy to debug, tune, and extend with new poses.</p>
+              <p>Rather than training a neural network classifier (which requires labelled datasets, training time, and hardware), YogaVision uses deterministic angle thresholds. This approach is fully explainable — each decision can be traced to exact angle values — making it easy to debug, tune, and extend with new poses without retraining.</p>
             </div>
           </div>
           <div class="tech-card">
-            <div class="tech-card-header"><span>📊</span> Why NumPy + Matplotlib?</div>
+            <div class="tech-card-header"><span>🐍</span> Why Flask?</div>
             <div class="tech-card-body">
-              <p>NumPy provides the fast array mathematics needed for arctangent calculations across landmark coordinate pairs. Matplotlib is used for optional static analysis — plotting angle distributions, generating accuracy graphs, and visualising pose data outside of the live video loop.</p>
+              <p>Flask provides a lightweight Python web server that serves both the MJPEG video stream (<code>/video_feed</code>) and the pose JSON data (<code>/pose_data</code>). Threading support lets the ESP32 MJPEG worker and the webcam stream run concurrently, while CORS enables the frontend to connect from any origin.</p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- CHALLENGES -->
       <section class="section">
         <div style="background:var(--white); border:4px solid var(--border); box-shadow:8px 8px 0 var(--border); overflow:hidden;">
           <div style="padding:1.5rem 2rem; border-bottom:4px solid var(--border); background:var(--pink); font-size:1.4rem; font-weight:700; display:flex; align-items:center; gap:0.75rem;">
@@ -304,25 +236,25 @@
               <li>
                 <div class="challenge-icon" style="background:var(--pink);">🔁</div>
                 <div>
-                  <strong>Mirror Effect:</strong> Camera image is horizontally flipped, causing left/right landmark confusion. <em>Solution:</em> Applied <code>cv2.flip()</code> to mirror the frame before processing, aligning visual output with natural movement.
+                  <strong>Mirror Effect:</strong> Camera image is horizontally flipped, causing left/right landmark confusion. <em>Solution:</em> Applied <code>cv2.flip()</code> to mirror the webcam frame before processing, aligning visual output with natural movement.
                 </div>
               </li>
               <li>
-                <div class="challenge-icon" style="background:var(--yellow);">🌗</div>
+                <div class="challenge-icon" style="background:var(--yellow);">📡</div>
                 <div>
-                  <strong>Lighting Sensitivity:</strong> Poor lighting reduces landmark confidence scores below the detection threshold. <em>Solution:</em> Added confidence thresholds and "Low Visibility" warnings when landmarks drop below 0.5 confidence.
+                  <strong>ESP32-CAM MJPEG Parsing:</strong> OpenCV's <code>VideoCapture</code> silently fails on ESP32-CAM MJPEG streams due to multipart boundary format issues. <em>Solution:</em> Used <code>urllib</code> to read the raw stream and manually scanned for JPEG start (FF D8) and end (FF D9) byte markers to extract complete frames.
                 </div>
               </li>
               <li>
-                <div class="challenge-icon" style="background:var(--cyan);">📦</div>
+                <div class="challenge-icon" style="background:var(--cyan);">🌗</div>
                 <div>
-                  <strong>Partial Occlusion:</strong> Poses near frame edges cause landmarks to be clipped. <em>Solution:</em> Implemented bounding box checks that warn when key landmarks are near frame edges, prompting the user to step back.
+                  <strong>Pose Overlap:</strong> Warrior II and T Pose both have arms at shoulder height. Mountain Pose and Hand Up Pose both have straight legs. <em>Solution:</em> Added distinguishing conditions — Warrior II requires one bent knee; Hand Up requires shoulder angle &gt;140° vs Mountain's 10–60°.
                 </div>
               </li>
               <li>
                 <div class="challenge-icon" style="background:var(--green);">🔧</div>
                 <div>
-                  <strong>Warrior II vs T-Pose Overlap:</strong> Both poses have extended arms at shoulder height. <em>Solution:</em> Added knee angle as a distinguishing condition — Warrior II requires one bent knee (90–120°), while T-Pose requires both legs straight (160–195°).
+                  <strong>Threading & Frame Safety:</strong> The ESP32 worker, webcam stream, and Flask request handlers all access shared data concurrently. <em>Solution:</em> Used separate <code>threading.Lock()</code> instances for the frame buffer and pose data to prevent race conditions.
                 </div>
               </li>
             </ul>
@@ -330,22 +262,21 @@
         </div>
       </section>
 
-      <!-- FUTURE -->
       <section class="section">
         <div class="highlight-strip">
           <h2 style="font-size:1.5rem; font-weight:700; margin-bottom:1.5rem;">🔮 Future Plans</h2>
           <div class="grid-2">
             <div>
               <div style="font-weight:700; margin-bottom:0.5rem;">📱 More Poses</div>
-              <p style="font-size:0.9rem; opacity:0.85; margin-bottom:1.5rem;">Extend to 10+ poses including Downward Dog, Cobra, Child's Pose, Triangle, and Mountain Pose.</p>
+              <p style="font-size:0.9rem; opacity:0.85; margin-bottom:1.5rem;">Extend beyond the current 6 to include Downward Dog, Cobra, Child's Pose, Triangle, and Plank.</p>
               <div style="font-weight:700; margin-bottom:0.5rem;">🗣️ Voice Feedback</div>
               <p style="font-size:0.9rem; opacity:0.85;">Add text-to-speech pose cues using Python's <code>pyttsx3</code> library for hands-free coaching.</p>
             </div>
             <div>
-              <div style="font-weight:700; margin-bottom:0.5rem;">🌐 Web Interface</div>
-              <p style="font-size:0.9rem; opacity:0.85; margin-bottom:1.5rem;">Build a Flask/FastAPI backend to stream detection to a browser using WebSockets — no Python install needed.</p>
               <div style="font-weight:700; margin-bottom:0.5rem;">📈 Session Analytics</div>
-              <p style="font-size:0.9rem; opacity:0.85;">Log pose hold duration, form accuracy over time, and generate post-session PDF reports using Matplotlib.</p>
+              <p style="font-size:0.9rem; opacity:0.85; margin-bottom:1.5rem;">Log pose hold duration, form accuracy over time, and generate post-session PDF reports.</p>
+              <div style="font-weight:700; margin-bottom:0.5rem;">🤖 ML Classifier</div>
+              <p style="font-size:0.9rem; opacity:0.85;">Replace threshold rules with a trained scikit-learn classifier for more nuanced pose recognition across body types.</p>
             </div>
           </div>
         </div>
@@ -364,7 +295,7 @@
         <nav class="footer-nav">
           <a href="index.html">Home</a>
           <a href="poses.html">Poses</a>
-          <a href="how-it-works.html">How It Works</a>
+          <a href="works.html">How It Works</a>
           <a href="demo.html">Demo</a>
           <a href="about.html">About</a>
           <a href="developer.html">Developer</a>

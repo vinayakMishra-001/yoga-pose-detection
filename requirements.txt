@@ -3,3 +3,4 @@ opencv-python
 mediapipe==0.10.9
 numpy==1.23.5
 matplotlib
+flask-cors
